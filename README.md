@@ -191,6 +191,11 @@ systemctl start chataitFrontend.service
 ## 注意事项
 以上步骤没有涉及到防火墙等一些其他安全措施，还可以做进一步的安全调整，这个需要有一定服务器运维经验才能完成，所以，一旦有了一定的运维经验，也就不用非常严格的按照我的步骤来部署了。为了让新手能够以最快的速度和最简单的流程完成部署，所以我写的这些流程省去了一些安全设置。
 
+## 捐赠
+<div align=center>
+<img src="https://github.com/anlityli/chatait-free/blob/main/doc/donate.jpg?raw=true" width="375"/>
+</div>
+
 ## 入群联系群主购买正式版或定制开发
 群号: 791133985
 
