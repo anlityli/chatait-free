@@ -1,15 +1,13 @@
 module github.com/anlityli/chatait-free/chatait-frontend-server
 
 require (
-	github.com/anlityli/chatait-free/chatait-public-lib v0.0.0-20230819010708-ef4abe680106
+	github.com/anlityli/chatait-free/chatait-public-lib v0.0.0-20230909095627-673c7b08fd83
 	github.com/gogf/gf v1.16.9
 )
 
 require (
 	github.com/BurntSushi/toml v0.3.1 // indirect
-	github.com/TannerKvarfordt/hfapigo v1.3.1 // indirect
 	github.com/beevik/ntp v1.3.0 // indirect
-	github.com/bwmarrin/discordgo v0.27.1 // indirect
 	github.com/clbanning/mxj v1.8.5-0.20200714211355-ff02cfb8ea28 // indirect
 	github.com/fatih/color v1.12.0 // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
