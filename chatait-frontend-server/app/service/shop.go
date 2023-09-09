@@ -283,5 +283,6 @@ func (s *shopService) PayOrder(r *ghttp.Request) (re *response.ShopPayOrder, err
 	}
 	re = &response.ShopPayOrder{}
 	// todo 不同的支付方式返回不同的payment
+	glog.Line().Debug(payment)
 	return re, nil
 }

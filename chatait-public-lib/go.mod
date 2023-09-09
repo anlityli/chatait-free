@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/beevik/ntp v1.3.0
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gogf/gf v1.16.9
 	github.com/satori/go.uuid v1.2.0
 	github.com/thinkeridea/go-extend v1.3.2

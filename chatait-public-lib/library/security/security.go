@@ -12,6 +12,7 @@ import (
 	"github.com/anlityli/chatait-free/chatait-public-lib/library/helper"
 	"github.com/anlityli/chatait-free/chatait-public-lib/library/snowflake"
 	"github.com/anlityli/chatait-free/chatait-public-lib/library/xtime"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gogf/gf/crypto/gsha1"
 	"github.com/gogf/gf/database/gdb"
 	"github.com/gogf/gf/encoding/gbase64"
