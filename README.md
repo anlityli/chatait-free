@@ -1,4 +1,9 @@
 # ChatAIT
+
+<div align=center>
+<img src="https://github.com/anlityli/chatait-free/blob/main/doc/logo.png?raw=true" width="200"/>
+</div>
+
 ChatAIT是用golang+vue开发的AI对话网站，对话模式模仿ChatGPT和Midjourney的形式。
 
 正式版支持：
@@ -35,6 +40,13 @@ ChatAIT是用golang+vue开发的AI对话网站，对话模式模仿ChatGPT和Mid
 
 ## 演示地址
 [ChaiAIT官网](https://chat.chatait.top/)
+
+## 截图
+<div align=center>
+<img src="https://github.com/anlityli/chatait-free/blob/main/doc/screenshot_1.jpg?raw=true" width="800"/>
+<img src="https://github.com/anlityli/chatait-free/blob/main/doc/screenshot_2.png?raw=true" width="200"/>
+<img src="https://github.com/anlityli/chatait-free/blob/main/doc/screenshot_3.png?raw=true" width="200"/>
+</div>
 
 ## 视频部署教程
 [https://www.bilibili.com/video/BV1gP411Y7oj](https://www.bilibili.com/video/BV1gP411Y7oj)
