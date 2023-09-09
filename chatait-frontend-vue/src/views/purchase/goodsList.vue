@@ -11,6 +11,7 @@ import { useRoute, useRouter } from 'vue-router'
 import http from '@/utils/network/http.js'
 import { ResponseShopGoodsItem } from '@/utils/model/response/shop.js'
 import tool from '../../utils/tool/tool'
+import { ShopGoodsBuyTypeLevel } from '@/utils/constant/shop'
 
 const route = useRoute()
 const router = useRouter()
@@ -36,8 +37,8 @@ onMounted(() => {
         <t-card :title="item.title">
           <template #actions>
             <span
-              >￥{{ tool.centToYuan(item.real_price)
-              }}{{
+              >￥{{ tool.centToYuan(item.real_price) }}
+              <template v-if="item.buy_type === ShopGoodsBuyTypeLevel">{{
                 item.active_expire_type === 1
                   ? '/天'
                   : item.active_expire_type === 2
@@ -45,8 +46,8 @@ onMounted(() => {
                   : item.active_expire_type === 3
                   ? '/年'
                   : ''
-              }}</span
-            >
+              }}</template>
+            </span>
           </template>
           <div class="goods-space">
             <div v-for="(featItem, featIndex) in item.feat_items_slice" :key="featIndex" class="goods-introduce-list">

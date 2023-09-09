@@ -222,11 +222,17 @@ const handleDeleteFeatItem = (index: number) => {
 
 const handleSubmit = async () => {
   try {
+    const requestFeatItems = []
+    for (let i = 0; i < formData.value.feat_items.length; i++) {
+      if (formData.value.feat_items[i].icon !== '' && formData.value.feat_items[i].text !== '') {
+        requestFeatItems.push(formData.value.feat_items[i])
+      }
+    }
     const requestData = {
       id: formData.value.id,
       title: formData.value.title,
       content: formData.value.content,
-      feat_items: JSON.stringify(formData.value.feat_items),
+      feat_items: JSON.stringify(requestFeatItems),
       buy_type: formData.value.buy_type,
       active_level_id: formData.value.active_level_id,
       active_expire_type: formData.value.active_expire_type,

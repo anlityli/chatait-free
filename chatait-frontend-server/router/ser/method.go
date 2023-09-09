@@ -37,7 +37,7 @@ func Middleware(r *ghttp.Request) {
 			if err != nil {
 				// 如果路由权限里面没有none，说明该接口需要登录才能访问
 				if !item.NoLogin {
-					notice.Write(r, notice.NotAuth, err.Error())
+					notice.Write(r, notice.NotAuth, "尚未登录，请登录")
 					return
 				}
 			}

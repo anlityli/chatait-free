@@ -6,4 +6,6 @@ package constant
 
 const (
 	TopicTypeOpenaiGPT3 = 1 // openai3.5
+	TopicTypeOpenaiGPT4 = 2 // openai4
+	TopicTypeMidjourney = 3 // midjourney
 )

@@ -30,7 +30,7 @@ const handleClickItem = () => {
 }
 
 onMounted(async () => {
-  if (!tool.isLogin()) {
+  if (import.meta.env.VITE_DEFAULT_HOMEPAGE === 'login' && !tool.isLogin()) {
     await router.push('/login')
   }
   await websocket.connect()

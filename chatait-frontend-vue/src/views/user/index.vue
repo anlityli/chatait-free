@@ -35,10 +35,6 @@ onMounted(() => {
       ></t-tab-panel>
       <t-tab-panel value="/user/finance/flow/gpt3" :label="`${configStore.walletName(WalletType.gpt3)}`"></t-tab-panel>
       <t-tab-panel value="/user/finance/flow/gpt4" :label="`${configStore.walletName(WalletType.gpt4)}`"></t-tab-panel>
-      <t-tab-panel
-        value="/user/finance/flow/midjourney"
-        :label="`${configStore.walletName(WalletType.midjourney)}`"
-      ></t-tab-panel>
     </t-tabs>
     <div class="user-content">
       <router-view :key="route.fullPath"></router-view>

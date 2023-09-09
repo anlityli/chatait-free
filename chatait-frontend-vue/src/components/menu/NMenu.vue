@@ -15,6 +15,7 @@ import {
   UserIcon,
   ImageIcon,
   ChatIcon,
+  IconFont,
 } from 'tdesign-icons-vue-next'
 import { useRoute, useRouter } from 'vue-router'
 import { getTopicStore } from '@/store'
@@ -22,6 +23,7 @@ import http from '@/utils/network/http'
 import storage from '@/utils/storage/storage'
 import logoPath from '@/assets/image/logo.png'
 import { TopicTypeMidjourney, TopicTypeOpenaiGPT3, TopicTypeOpenaiGPT4 } from '@/utils/constant/topic'
+import tool from '@/utils/tool/tool'
 
 const props = defineProps({
   isDrawer: Boolean,
@@ -32,6 +34,19 @@ const router = useRouter()
 const tMenuEle = ref<any | null>(null)
 
 const emit = defineEmits(['clickItem'])
+
+const operationsLastItem = computed(() => {
+  if (tool.isLogin()) {
+    return {
+      icon: 'logout',
+      text: '退出登录',
+    }
+  }
+  return {
+    icon: 'login',
+    text: '点击登录',
+  }
+})
 
 const handleClickItem = (type: string, index: number, item: any) => {
   emit('clickItem', type, index, item)
@@ -184,9 +199,9 @@ onMounted(async () => {
             <template #content>
               <div class="menu-operations-item-content">
                 <div class="menu-operations-item-icon">
-                  <logout-icon></logout-icon>
+                  <icon-font :name="operationsLastItem.icon"></icon-font>
                 </div>
-                <div class="menu-operations-item-label">退出登录</div>
+                <div class="menu-operations-item-label">{{ operationsLastItem.text }}</div>
               </div>
             </template>
           </t-list-item>

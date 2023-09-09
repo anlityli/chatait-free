@@ -7,11 +7,13 @@ package file
 import (
 	"github.com/anlityli/chatait-free/chatait-public-lib/library/helper"
 	"github.com/anlityli/chatait-free/chatait-public-lib/library/snowflake"
+	"github.com/disintegration/imaging"
 	"github.com/gogf/gf/crypto/gsha1"
 	"github.com/gogf/gf/encoding/gurl"
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
 	"github.com/gogf/gf/os/gfile"
+	"github.com/gogf/gf/os/glog"
 	"github.com/gogf/gf/text/gstr"
 	"github.com/gogf/gf/util/gconv"
 	"io"
@@ -86,8 +88,12 @@ func RemoteFileSave(url string, proxy ...string) (re *RemoteFileSaveResult, err 
 		}
 	}
 	fileName := sha1 + fileExt
+	thumbnailFileName := sha1 + "_thumbnail" + fileExt
+	thumbnailPath := savePath + thumbnailFileName
+	thumbnailRelativePath := relativePath + thumbnailFileName
 	savePath += fileName
 	relativePath += fileName
+	// 如果已经存在这个文件就不在存了，直接删了临时文件就行了
 	if !gfile.IsFile(savePath) {
 		// 把临时文件转移到最终目录
 		if err := gfile.Move(tmpPath, savePath); err != nil {
@@ -99,18 +105,35 @@ func RemoteFileSave(url string, proxy ...string) (re *RemoteFileSaveResult, err 
 				return nil, err
 			}
 		}
+		// 把文件生成一张缩略图
+		imageData, err := imaging.Open(savePath)
+		if err == nil {
+			resizeImage := imaging.Resize(imageData, 300, 0, imaging.Lanczos)
+			err = imaging.Save(resizeImage, thumbnailPath)
+			if err != nil {
+				thumbnailPath = ""
+				thumbnailRelativePath = ""
+				glog.Line(true).Println("生成缩略图错误", savePath, thumbnailPath, err)
+			}
+		} else {
+			thumbnailPath = ""
+			thumbnailRelativePath = ""
+			glog.Line(true).Println("生成缩略图错误", savePath, err)
+		}
 	} else {
 		// 删除临时文件
 		_ = gfile.Remove(tmpPath)
 	}
 
 	re = &RemoteFileSaveResult{
-		SavePath:     savePath,
-		RelativePath: relativePath,
-		FileName:     fileName,
-		FileSize:     fileSize,
-		OriUrl:       url,
-		OriFileName:  oriFileName,
+		SavePath:              savePath,
+		RelativePath:          relativePath,
+		ThumbnailPath:         thumbnailPath,
+		ThumbnailRelativePath: thumbnailRelativePath,
+		FileName:              fileName,
+		FileSize:              fileSize,
+		OriUrl:                url,
+		OriFileName:           oriFileName,
 	}
 	return re, nil
 }

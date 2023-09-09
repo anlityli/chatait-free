@@ -118,6 +118,19 @@ func (s *shopService) SetOrderPaid(ctx context.Context, tx *gdb.TX, orderId int6
 								return err
 							}
 						}
+						if balance.Gpt4 > 0 {
+							err = Wallet.ChangeWalletBalance(ctx, tx, &ChangeWalletParam{
+								UserId:     orderData.UserId,
+								WalletType: constant.WalletTypeGpt4,
+								Amount:     -gconv.Int(balance.Gpt4),
+								Remark:     "续费或购买计划扣除之前余额",
+								TargetType: constant.WalletChangeTargetTypeShopOrderGoods,
+								TargetID:   item.Id,
+							})
+							if err != nil {
+								return err
+							}
+						}
 						configLevelData, err := helper.GetConfigLevel(goodsData.ActiveLevelId)
 						if err != nil {
 							return err
@@ -128,6 +141,19 @@ func (s *shopService) SetOrderPaid(ctx context.Context, tx *gdb.TX, orderId int6
 								UserId:     orderData.UserId,
 								WalletType: constant.WalletTypeGpt3,
 								Amount:     configLevelData.MonthGpt3,
+								Remark:     "续费或购买计划增加",
+								TargetType: constant.WalletChangeTargetTypeShopOrderGoods,
+								TargetID:   item.Id,
+							})
+							if err != nil {
+								return err
+							}
+						}
+						if configLevelData.MonthGpt4 > 0 {
+							err = Wallet.ChangeWalletBalance(ctx, tx, &ChangeWalletParam{
+								UserId:     orderData.UserId,
+								WalletType: constant.WalletTypeGpt4,
+								Amount:     configLevelData.MonthGpt4,
 								Remark:     "续费或购买计划增加",
 								TargetType: constant.WalletChangeTargetTypeShopOrderGoods,
 								TargetID:   item.Id,
@@ -148,6 +174,8 @@ func (s *shopService) SetOrderPaid(ctx context.Context, tx *gdb.TX, orderId int6
 						walletType = constant.WalletTypeBalance
 					case constant.ShopGoodsBuyTypeGpt3:
 						walletType = constant.WalletTypeGpt3
+					case constant.ShopGoodsBuyTypeGpt4:
+						walletType = constant.WalletTypeGpt4
 					}
 					err = Wallet.ChangeWalletBalance(ctx, tx, &ChangeWalletParam{
 						UserId:     orderData.UserId,

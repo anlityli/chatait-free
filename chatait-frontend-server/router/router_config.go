@@ -14,4 +14,5 @@ var configApi = &config.Config{}
 var configRouter = []*utils.RouterItem{
 	{Method: "GET", Pattern: "/wallet-list", Object: configApi.WalletList, NoLogin: true},
 	{Method: "GET", Pattern: "/options", Object: configApi.Options, NoLogin: true},
+	{Method: "GET", Pattern: "/pay-list", Object: configApi.PayList},
 }

@@ -126,6 +126,19 @@ func (s *userService) clearExpireMembers(today *gtime.Time, offset int) {
 						return err
 					}
 				}
+				if balanceData.Gpt4 > 0 {
+					err = Wallet.ChangeWalletBalance(ctx, tx, &ChangeWalletParam{
+						UserId:     userData.Id,
+						WalletType: constant.WalletTypeGpt4,
+						Amount:     -gconv.Int(balanceData.Gpt4),
+						Remark:     "会员级别过期扣除",
+						TargetType: constant.WalletChangeTargetTypeLevelMonth,
+						TargetID:   userData.Id,
+					})
+					if err != nil {
+						return err
+					}
+				}
 				return nil
 			}); err != nil {
 				s.handOutErrLog(userData.Id, userData.LevelId, err.Error())
@@ -191,6 +204,32 @@ func (s *userService) handout(day, offset int) {
 						UserId:     userData.Id,
 						WalletType: constant.WalletTypeGpt3,
 						Amount:     leveData.MonthGpt3,
+						Remark:     "每月会员级别充值",
+						TargetType: constant.WalletChangeTargetTypeLevelMonth,
+						TargetID:   userData.Id,
+					})
+					if err != nil {
+						return err
+					}
+				}
+				if balanceData.Gpt4 > 0 {
+					err = Wallet.ChangeWalletBalance(ctx, tx, &ChangeWalletParam{
+						UserId:     userData.Id,
+						WalletType: constant.WalletTypeGpt4,
+						Amount:     -gconv.Int(balanceData.Gpt4),
+						Remark:     "每月会员级别扣除",
+						TargetType: constant.WalletChangeTargetTypeLevelMonth,
+						TargetID:   userData.Id,
+					})
+					if err != nil {
+						return err
+					}
+				}
+				if leveData.MonthGpt4 > 0 {
+					err = Wallet.ChangeWalletBalance(ctx, tx, &ChangeWalletParam{
+						UserId:     userData.Id,
+						WalletType: constant.WalletTypeGpt4,
+						Amount:     leveData.MonthGpt4,
 						Remark:     "每月会员级别充值",
 						TargetType: constant.WalletChangeTargetTypeLevelMonth,
 						TargetID:   userData.Id,

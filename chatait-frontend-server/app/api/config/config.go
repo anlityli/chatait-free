@@ -28,3 +28,11 @@ func (c *Config) Options(r *ghttp.Request) {
 	}
 	notice.Write(r, notice.NoError, re)
 }
+
+func (c *Config) PayList(r *ghttp.Request) {
+	re, err := service.Config.PayList(r)
+	if err != nil {
+		notice.Write(r, notice.OtherError, err.Error())
+	}
+	notice.Write(r, notice.NoError, re)
+}

@@ -15,8 +15,10 @@ export interface ResponseShopGoodsItem {
   content: string
   feat_items: string
   feat_items_slice: ResponseShopGoodsItemFeatItems[]
+  buy_type: number
   active_level_id: number
   active_expire_type: number
+  buy_value: number
   market_price: number
   real_price: number
   status: number

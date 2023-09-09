@@ -14,14 +14,15 @@ import http from '@/utils/network/http'
 import { ResponseShopOrder } from '@/utils/model/response/shop'
 import tool from '@/utils/tool/tool'
 import iconPath from '@/assets/image/icon_back.png'
+import { ResponseConfigPayListItem } from '@/utils/model/response/config'
 
 const route = useRoute()
 const router = useRouter()
 
+const configPayList = ref<ResponseConfigPayListItem[]>([])
 const orderDetail = ref<ResponseShopOrder | null>(null)
 const payment = ref<any>(null)
 const timerText = ref('')
-const configPayId = ref(2)
 
 const payAmount = computed((): string => {
   if (payment.value !== null) {
@@ -31,6 +32,7 @@ const payAmount = computed((): string => {
 })
 
 const handleGetData = async () => {
+  configPayList.value = (await http.get('config/pay-list')) as ResponseConfigPayListItem[]
   orderDetail.value = (await http.get('shop/order-detail', {
     order_id: route.params.orderId,
   })) as ResponseShopOrder
@@ -41,10 +43,10 @@ const handleServerRemainSecond = async (targetTime: number) => {
   return targetTime - serverTime
 }
 
-const handlePay = async (channel: string) => {
+const handlePay = async (configPayId: number, channel: string) => {
   payment.value = await http.post('shop/pay-order', {
     order_id: route.params.orderId,
-    config_pay_id: configPayId.value,
+    config_pay_id: configPayId,
     pay_channel: channel,
   })
   // 二维码
@@ -106,12 +108,23 @@ onMounted(async () => {
           </template>
         </div>
         <div class="pay-order-sn">SN: {{ orderDetail?.order_sn }}</div>
-        <div v-if="payment === null && orderDetail?.status === 0" class="pay-order-type">
-          <div class="pay-order-btn">
-            <t-button block theme="success" @click="handlePay('1')">微信支付</t-button>
-          </div>
-          <div class="pay-order-btn">
-            <t-button block theme="primary" @click="handlePay('2')">支付宝支付</t-button>
+        <div v-if="payment === null && orderDetail?.status === 0" class="pay-order-pay-list">
+          <div v-for="(item, index) in configPayList" :key="index" class="pay-order-type">
+            <div v-for="(channelItem, channelIndex) in item.pay_channel" :key="channelIndex" class="pay-order-btn">
+              <t-button
+                block
+                :theme="
+                  channelItem.channel_name.indexOf('微信') !== -1
+                    ? 'success'
+                    : channelItem.channel_name.indexOf('支付宝') !== -1
+                    ? 'primary'
+                    : 'warning'
+                "
+                @click="handlePay(item.id, channelItem.channel)"
+              >
+                {{ channelItem.channel_name }}{{ configPayList.length > 1 ? `(${item.api_name})` : '' }}
+              </t-button>
+            </div>
           </div>
         </div>
         <div v-show="payment !== null && orderDetail?.status === 0" class="pay-order-timer">

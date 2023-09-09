@@ -8,6 +8,7 @@ const (
 	ShopGoodsBuyTypeLevel   = 1 // 购买级别
 	ShopGoodsBuyTypeBalance = 2 // 购买balance
 	ShopGoodsBuyTypeGpt3    = 3 // 购买gpt3
+	ShopGoodsBuyTypeGpt4    = 4 // 购买gpt4
 )
 
 const (

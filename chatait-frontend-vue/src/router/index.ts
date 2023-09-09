@@ -16,7 +16,7 @@ import user from '@/router/modules/user'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/login',
+    redirect: import.meta.env.VITE_DEFAULT_HOMEPAGE === 'login' ? '/login' : '/conversation/0',
   },
   conversation,
   findPassword,

@@ -5,10 +5,12 @@
 package file
 
 type RemoteFileSaveResult struct {
-	SavePath     string
-	RelativePath string
-	FileName     string
-	FileSize     int64
-	OriUrl       string
-	OriFileName  string
+	SavePath              string
+	RelativePath          string
+	ThumbnailPath         string
+	ThumbnailRelativePath string
+	FileName              string
+	FileSize              int64
+	OriUrl                string
+	OriFileName           string
 }

@@ -65,7 +65,10 @@ const route = useRoute()
 const midjourneyInputEle = ref<any>(null)
 const pageLoading = ref(true)
 
-const topicTypes = ref([{ label: '文字聊天 GPT3.5', value: TopicTypeOpenaiGPT3 }])
+const topicTypes = ref([
+  { label: '文字聊天 GPT3.5', value: TopicTypeOpenaiGPT3 },
+  { label: '文字聊天 GPT4', value: TopicTypeOpenaiGPT4 },
+])
 const currentTopicType = ref(TopicTypeOpenaiGPT3)
 const currentTopicId = ref('0')
 const speakList = reactive<ResponseConversationSpeakItem[]>([])
@@ -251,7 +254,9 @@ const handleScroll = (event: any) => {
 
 const handleScrollToBottom = () => {
   setTimeout(() => {
-    conversationListEle.value.$el.scrollTop = conversationListEle.value.$el.firstElementChild.clientHeight
+    if (conversationListEle.value !== null) {
+      conversationListEle.value.$el.scrollTop = conversationListEle.value.$el.firstElementChild.clientHeight
+    }
   }, 100)
 }
 
@@ -389,6 +394,7 @@ const handleOnMidjourneyEnd = (speakListIndex: number, data: WSConversationMidjo
   console.log('图片创建完成', data)
   speakList[speakListIndex].content = data.content
   speakList[speakListIndex].mj_data.img_url = data.img_url
+  speakList[speakListIndex].mj_data.thumbnail_img_url = data.thumbnail_img_url
   speakList[speakListIndex].mj_data.action_type = data.action_type
   speakList[speakListIndex].mj_data.components = data.components
   if (data.referenced_components.length > 0) {
@@ -498,6 +504,7 @@ const handleSubmitSpeak = async (formName: string) => {
     mj_data: {
       action_type: 0,
       img_url: '',
+      thumbnail_img_url: '',
       progress: 0,
       components: [],
       error: '',
@@ -514,6 +521,7 @@ const handleSubmitSpeak = async (formName: string) => {
     mj_data: {
       action_type: 0,
       img_url: '',
+      thumbnail_img_url: '',
       progress: 0,
       components: [],
       error: '',
@@ -635,7 +643,7 @@ onBeforeUnmount(() => {
                   <template #trigger="{ open }">
                     <t-image
                       class="conversation-content-midjourney-image"
-                      :src="item.mj_data.img_url"
+                      :src="item.mj_data.thumbnail_img_url"
                       shape="round"
                       fit="contain"
                       position="left"
@@ -656,7 +664,8 @@ onBeforeUnmount(() => {
                             v-if="
                               btnItem.label !== 'Web' &&
                               btnItem.custom_id.indexOf('BOOKMARK') === -1 &&
-                              btnItem.custom_id.indexOf('CustomZoom') === -1
+                              btnItem.custom_id.indexOf('CustomZoom') === -1 &&
+                              btnItem.custom_id.indexOf('Inpaint') === -1
                             "
                             :key="btnIndex"
                             :theme="btnItem.style === 1 ? 'success' : 'default'"
@@ -723,6 +732,7 @@ onBeforeUnmount(() => {
 
     <div class="input-space">
       <t-input
+        v-if="currentTopicType === TopicTypeOpenaiGPT3 || currentTopicType === TopicTypeOpenaiGPT4"
         v-model="inputContent"
         class="content-input"
         size="large"

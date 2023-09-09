@@ -58,8 +58,8 @@ func ChatCompletion(params *ChatCompletionParams, callback CreateChatCompletionC
 		glog.Line(true).Println(err.Error())
 		return err
 	}
-	defer resp.Close()
 	defer resp.Body.Close()
+	defer resp.Close()
 	glog.Line(true).Debug("请求完成")
 	reader := bufio.NewReader(resp.Body)
 	emptyMessagesCount := 0

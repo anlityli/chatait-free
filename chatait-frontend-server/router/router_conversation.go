@@ -14,10 +14,10 @@ var conversationApi = &conversation.Conversation{}
 var conversationRouter = []*utils.RouterItem{
 	{Method: "GET", Pattern: "/topic-list", Object: conversationApi.TopicList},
 	{Method: "GET", Pattern: "/topic-detail", Object: conversationApi.TopicDetail},
-	{Method: "GET", Pattern: "/topic-list-by-last-id", Object: conversationApi.TopicListByLastId},
+	{Method: "GET", Pattern: "/topic-list-by-last-id", Object: conversationApi.TopicListByLastId, NoLogin: true},
 	{Method: "POST", Pattern: "/topic-edit", Object: conversationApi.TopicEdit},
 	{Method: "POST", Pattern: "/topic-del", Object: conversationApi.TopicDel},
-	{Method: "GET", Pattern: "/speak-list", Object: conversationApi.SpeakList},
+	{Method: "GET", Pattern: "/speak-list", Object: conversationApi.SpeakList, NoLogin: true},
 	{Method: "POST", Pattern: "/speak", Object: conversationApi.Speak},
 	{Method: "GET", Pattern: "/stream-uuid", Object: conversationApi.StreamUuid},
 	{Method: "GET", Pattern: "/es/speak-stream", Object: conversationApi.SpeakStream, NoSign: true, NoLogin: true},

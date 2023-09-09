@@ -62,14 +62,18 @@ func (s *conversationService) TopicListByLastId(r *ghttp.Request) (re *response.
 	if requestModel.Limit == 0 {
 		requestModel.Limit = 10
 	}
+	re = &response.ConversationTopicList{}
 	userId := auth.GetUserId(r)
+	if userId == 0 {
+		*re = make(response.ConversationTopicList, 0)
+		return re, nil
+	}
 	where := "user_id=?"
 	params := g.Slice{userId}
 	if gconv.Int64(requestModel.LastId) != 0 {
 		where += " AND id<?"
 		params = append(params, requestModel.LastId)
 	}
-	re = &response.ConversationTopicList{}
 	err = dao.Topic.Where(where, params).Order("id DESC").Limit(requestModel.Limit).Scan(re)
 	if err != nil {
 		return nil, err

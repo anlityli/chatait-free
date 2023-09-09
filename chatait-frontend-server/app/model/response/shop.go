@@ -10,8 +10,10 @@ type ShopGoods struct {
 	Content          string               `json:"content"`
 	FeatItems        string               `json:"feat_items"`
 	FeatItemsSlice   []*ShopGoodsFeatItem `json:"feat_items_slice"`
+	BuyType          int                  `json:"buy_type"`
 	ActiveLevelId    int                  `json:"active_level_id"`
 	ActiveExpireType int                  `json:"active_expire_type"`
+	BuyValue         int                  `json:"buy_value"`
 	MarketPrice      int                  `json:"market_price"`
 	RealPrice        int                  `json:"real_price"`
 	CreatedAt        int                  `json:"created_at"`

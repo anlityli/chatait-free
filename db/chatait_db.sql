@@ -241,6 +241,7 @@ CREATE TABLE `c_file_midjourney` (
   `queue_id` bigint NOT NULL DEFAULT '0' COMMENT '生成该图片的队列id',
   `file_name` varchar(255) CHARACTER SET utf8mb4  NOT NULL COMMENT '文件名',
   `path` varchar(1000) NOT NULL COMMENT '本地储存路径',
+  `thumbnail` varchar(1000) NOT NULL DEFAULT '' COMMENT '缩略图的本地保存路径',
   `prompt` text COMMENT '生成该图片的提示词',
   `mj_file_name` varchar(255) NOT NULL COMMENT 'midjourney的文件名',
   `mj_url` varchar(2000) NOT NULL COMMENT 'midjourney的路径',
@@ -603,6 +604,7 @@ INSERT INTO `c_config` (`config_name`, `title`, `unit`, `input_type`, `options`,
 INSERT INTO `c_config` (`config_name`, `title`, `unit`, `input_type`, `options`, `value`, `type`, `sort`, `created_at`, `updated_at`) VALUES ('gpt4UseBalance', 'gpt4提问使用balance', '', 1, '', '50', 'conversation', 2, 0, 0);
 INSERT INTO `c_config` (`config_name`, `title`, `unit`, `input_type`, `options`, `value`, `type`, `sort`, `created_at`, `updated_at`) VALUES ('midjourneyUseBalance', 'midjourney提问使用balance', '', 1, '', '50', 'conversation', 3, 0, 0);
 INSERT INTO `c_config` (`config_name`, `title`, `unit`, `input_type`, `options`, `value`, `type`, `sort`, `created_at`, `updated_at`) VALUES ('midjourneyDailyLimit', 'midjourney每天最多提问次数', '次', 1, '', '10', 'midjourney', 7, 0, 0);
+INSERT INTO `c_config` (`config_name`, `title`, `unit`, `input_type`, `options`, `value`, `type`, `sort`, `created_at`, `updated_at`) VALUES ('gptSystemContent', 'gpt对话式系统身份描述', '', 1, '', 'You are an interesting and helpful assistant who can give accurate answers.', 'conversation', 3, 0, 0);
 
 # c_config_level
 INSERT INTO `c_config_level` (`id`, `level_name`, `month_gpt3`, `month_gpt4`, `month_midjourney`) VALUES (1, 'member', 0, 0, 0);

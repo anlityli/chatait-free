@@ -10,3 +10,19 @@ type ConfigWallet struct {
 }
 
 type ConfigWalletList []*ConfigWallet
+
+type ConfigPay struct {
+	Id                  int                     `json:"id"`
+	ApiName             string                  `json:"api_name"`
+	PayChannel          []*ConfigPayChannelItem `json:"pay_channel"`
+	FrontendDescription string                  `json:"frontend_description"`
+}
+
+type ConfigPayChannelItem struct {
+	Id          int    `json:"id"`
+	ChannelName string `json:"channel_name"`
+	Channel     string `json:"channel"`
+	Status      int    `json:"status"`
+}
+
+type ConfigPayList []*ConfigPay

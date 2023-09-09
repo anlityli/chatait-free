@@ -47,9 +47,9 @@ func (s *conversationOpenaiService) Speak(r *ghttp.Request) (re *response.Conver
 	model := openai.ModelGPT35Turbo
 	// 如果用户次数不足直接报错
 	walletData := libservice.Wallet.GetAllBalance(userId)
-	if gconv.Int(walletData.Gpt3) < amount {
-		walletType = constant.WalletTypeBalance
-		if requestModel.TopicType == constant.TopicTypeOpenaiGPT3 {
+	if requestModel.TopicType == constant.TopicTypeOpenaiGPT3 {
+		if gconv.Int(walletData.Gpt3) < amount {
+			walletType = constant.WalletTypeBalance
 			gpt3UseBalance, err := helper.GetConfig("gpt3UseBalance")
 			if err != nil {
 				return nil, err
@@ -63,9 +63,28 @@ func (s *conversationOpenaiService) Speak(r *ghttp.Request) (re *response.Conver
 				})
 				return nil, nil
 			}
-		} else {
-			return nil, errors.New("话题类型不正确")
 		}
+	} else if requestModel.TopicType == constant.TopicTypeOpenaiGPT4 {
+		walletType = constant.WalletTypeGpt4
+		model = openai.ModelGPT4
+		if gconv.Int(walletData.Gpt4) < amount {
+			walletType = constant.WalletTypeBalance
+			gpt4UseBalance, err := helper.GetConfig("gpt4UseBalance")
+			if err != nil {
+				return nil, err
+			}
+			amount = gconv.Int(gpt4UseBalance)
+			if gconv.Int(walletData.Balance) < gconv.Int(gpt4UseBalance) {
+				notice.Write(r, notice.ShowDialog, &notice.HttpShowDialogMessage{
+					Data:        "您的" + helper.GetWalletName(constant.WalletTypeGpt4) + "次数或" + helper.GetWalletName(constant.WalletTypeBalance) + "不足请充值",
+					ConfirmText: "去购买",
+					ConfirmJump: "/purchase/goods-list",
+				})
+				return nil, nil
+			}
+		}
+	} else {
+		return nil, errors.New("话题类型不正确")
 	}
 	streamItem := s.getFromStreamMap(requestModel.StreamUuid)
 	if streamItem == nil {
@@ -171,17 +190,20 @@ func (s *conversationOpenaiService) speakLogic(streamItem *StreamMapItem, r *ght
 	if topicId == 0 && newTopicId == 0 {
 		return errors.New("未知话题")
 	}
+
 	// 构造请求内容
 	openaiMessages := make(openai.RequestChatParamsMessages, 0)
-	systemInsertId := int64(0)
-	systemContent := "You are an interesting and helpful assistant who can give accurate answers."
-	// 如果话题ID为0，则说明是新开始话题，要构建一个系统角色指定gpt的身份
-	if topicId == 0 {
+	// 获取系统身份的内容
+	systemContent, err := helper.GetConfig("gptSystemContent")
+	if err != nil {
+		return err
+	}
+	// 系统每次都参与对话
+	if systemContent != "" {
 		openaiMessages = append(openaiMessages, &openai.RequestChatParamsMessageItem{
 			Role:    "system",
 			Content: systemContent,
 		})
-		systemInsertId = snowflake.GenerateID()
 	}
 	// 拿到会员的前几次聊天内容
 	conversationList := &[]*entity.Conversation{}
@@ -275,19 +297,6 @@ func (s *conversationOpenaiService) speakLogic(streamItem *StreamMapItem, r *ght
 				glog.Line(true).Println("话题入库失败", topicInsertData, err)
 				return err
 			}
-			// 初始system角色对话内容也入库
-			systemInsertData := g.Map{
-				"id":         systemInsertId,
-				"user_id":    userId,
-				"topic_id":   topicId,
-				"role":       "system",
-				"content":    systemContent,
-				"created_at": nowTime,
-			}
-			if _, err = dao.Conversation.Ctx(ctx).TX(tx).Data(systemInsertData).Insert(); err != nil {
-				glog.Line(true).Println("系统对话入库失败", systemInsertData, err)
-				return err
-			}
 		}
 		// 把对话内容入库
 		speakInsertData["topic_id"] = topicId
@@ -302,6 +311,9 @@ func (s *conversationOpenaiService) speakLogic(streamItem *StreamMapItem, r *ght
 		}
 		// 扣除token次数
 		targetType := constant.WalletChangeTargetTypeConversationGpt3
+		if requestModel.TopicType == constant.TopicTypeOpenaiGPT4 {
+			targetType = constant.WalletChangeTargetTypeConversationGpt4
+		}
 		if err = libservice.Wallet.ChangeWalletBalance(ctx, tx, &libservice.ChangeWalletParam{
 			UserId:     userId,
 			WalletType: walletType,

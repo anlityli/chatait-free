@@ -51,7 +51,7 @@ func (s *oauthService) SignupSendCode(r *ghttp.Request) (re *response.OauthSignU
 	}
 	// 发送短信验证码
 	// 从配置文件中获取是否真的发送短信验证码如果不真的发送，则验证码通过接口返回
-	if g.Config().GetBool("frontendConf.isRealSendEmailCode") {
+	if g.Config().GetBool("commonConf.isRealSendEmailCode") {
 		err = mail.SendMail(&mail.SendMailParams{
 			ReceiverEmails: []string{requestModel.Username},
 			MsgSubject:     fmt.Sprintf("ChatAIT 注册验证码 %s", xtime.GetNow().Format("Y-m-d H:i:s")),
@@ -164,7 +164,7 @@ func (s *oauthService) Login(r *ghttp.Request) (re *response.OauthUserToken, err
 		return nil, err
 	}
 	if userModel.IsBan == 1 {
-		return nil, errors.New("用户名或密码错误")
+		return nil, errors.New("该用户已被禁用")
 	}
 	if !security.ValidatePassword(requestModel.Password, userModel.Password) {
 		return nil, errors.New("用户名或密码错误")
@@ -255,6 +255,7 @@ func (s *oauthService) AddUser(ctx context.Context, tx *gdb.TX, addUserParam *Ad
 	}
 	newUserAddBalance, err := helper.GetConfig("newUserAddBalance")
 	newUserAddGpt3, err := helper.GetConfig("newUserAddGpt3")
+	newUserAddGpt4, err := helper.GetConfig("newUserAddGpt4")
 	if err != nil {
 		return nil, err
 	}
@@ -278,6 +279,20 @@ func (s *oauthService) AddUser(ctx context.Context, tx *gdb.TX, addUserParam *Ad
 			UserId:     userID,
 			WalletType: constant.WalletTypeGpt3,
 			Amount:     gconv.Int(newUserAddGpt3),
+			Remark:     "注册免费赠送",
+			TargetType: constant.WalletChangeTargetTypeAddUser,
+			TargetID:   userID,
+		})
+		if err != nil {
+			return nil, err
+		}
+	}
+	if gconv.Int(newUserAddGpt4) > 0 {
+		// 赠送提问次数
+		err = libservice.Wallet.ChangeWalletBalance(ctx, tx, &libservice.ChangeWalletParam{
+			UserId:     userID,
+			WalletType: constant.WalletTypeGpt4,
+			Amount:     gconv.Int(newUserAddGpt4),
 			Remark:     "注册免费赠送",
 			TargetType: constant.WalletChangeTargetTypeAddUser,
 			TargetID:   userID,

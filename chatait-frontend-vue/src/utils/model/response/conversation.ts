@@ -28,6 +28,7 @@ export interface ResponseConversationSpeakItemMjDataComponents {
 export interface ResponseConversationSpeakItemMjData {
   action_type: number
   img_url: string
+  thumbnail_img_url: string
   progress: number
   components: ResponseConversationSpeakItemMjDataComponents[]
   error: string

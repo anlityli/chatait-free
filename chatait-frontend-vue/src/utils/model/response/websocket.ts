@@ -21,6 +21,7 @@ export interface WSConversationMidjourneyListenerEvent {
   action_type: number
   content: string
   img_url: string
+  thumbnail_img_url: string
   progress: number
   components: ResponseConversationSpeakItemMjDataComponents[]
   referenced_conversation_id: string
