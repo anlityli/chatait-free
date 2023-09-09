@@ -33,6 +33,9 @@ ChatAIT是用golang+vue开发的AI对话网站，对话模式模仿ChatGPT和Mid
 - [x] 会员等级
 - [ ] 更多实用功能
 
+## 演示地址
+[ChaiAIT官网](https://chat.chatait.top/)
+
 ## 视频部署教程
 [https://www.bilibili.com/video/BV1gP411Y7oj](https://www.bilibili.com/video/BV1gP411Y7oj)
 
