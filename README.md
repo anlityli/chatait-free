@@ -197,11 +197,11 @@ systemctl start chataitFrontend.service
 </div>
 
 ## 入群联系群主购买正式版或定制开发
-邮箱: leo@leocode.net
+邮箱: leo@leocode.net   
 群号: 791133985
 
 ## 框架
-golang: [Goframe](https://github.com/gogf/gf)
+golang: [Goframe](https://github.com/gogf/gf)   
 Vue: [TDesign](https://tdesign.tencent.com/)
 
 
