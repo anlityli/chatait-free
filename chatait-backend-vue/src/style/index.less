@@ -1,0 +1,27 @@
+/*
+ * Copyright 2023 Anlity <leo@leocode.net>. All rights reserved.
+ * Use of this source code is governed by a AGPL v3.0 style
+ * license that can be found in the LICENSE file.
+ */
+
+@import './font-family.less';
+
+@import './reset.less';
+
+.main-content-container {
+  background-color: var(--td-bg-color-container);
+  padding: var(--td-comp-paddingTB-xxl) var(--td-comp-paddingLR-xxl);
+  border-radius: var(--td-radius-medium);
+
+  .edit-form .edit-input {
+    flex: 0 0 auto !important;
+    width: 400px !important;
+  }
+
+  .edit-form .edit-input-explain {
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    padding: 0 0 0 10px;
+    box-sizing: border-box;
+  }
+}

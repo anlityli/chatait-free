@@ -1,0 +1,14 @@
+# 数据库
+[database]
+[[database.default]]
+host = "192.168.0.254"
+port = "33066"
+user = "root"
+pass = "123456"
+name = "wqchat_db_dev"
+type = "mysql"
+charset = "utf8mb4"
+debug = "false"
+timeMaintainDisabled = true
+
+

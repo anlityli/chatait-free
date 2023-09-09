@@ -1,0 +1,24 @@
+# Windows:
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+*/Thumbs.db
+*/ehthumbs.db
+*/Desktop.ini
+
+# Mac:
+.DS_Store
+*/.DS_Store
+
+# PhpStorm:
+.idea
+*/.idea
+/.idea/*
+
+#composer.json
+
+#App
+go.work
+go.work.sum
+config/config.toml
+config/cert

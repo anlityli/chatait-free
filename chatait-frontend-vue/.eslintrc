@@ -1,0 +1,85 @@
+{
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "eslint-config-airbnb-base",
+    "plugin:vue/vue3-recommended",
+    "plugin:prettier/recommended"
+  ],
+  "env": {
+    "browser": true,
+    "node": true,
+    "jest": true,
+    "es6": true,
+    "vue/setup-compiler-macros": true
+  },
+  "globals": {
+    "defineProps": "readonly",
+    "defineEmits": "readonly",
+    "NodeJS": true
+  },
+  "plugins": [
+    "vue",
+    "@typescript-eslint"
+  ],
+  "parserOptions": {
+    "parser": "@typescript-eslint/parser",
+    "sourceType": "module",
+    "allowImportExportEverywhere": true,
+    "ecmaFeatures": {
+      "jsx": false
+    }
+  },
+  "settings": {
+    "import/extensions": [
+      ".js",
+      ".jsx",
+      ".ts",
+      ".tsx"
+    ]
+  },
+  "rules": {
+    "no-console": "off",
+    "no-continue": "off",
+    "no-restricted-syntax": "off",
+    "no-plusplus": "off",
+    "no-param-reassign": "off",
+    "no-shadow": "off",
+    "no-use-before-define": [
+      "error",
+      {
+        "variables": false,
+        "functions": false,
+        "classes": false
+      }
+    ],
+    "guard-for-in": "off",
+    "import/extensions": "off",
+    "import/no-unresolved": "off",
+    "import/no-extraneous-dependencies": "off",
+    "import/prefer-default-export": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "error"
+    ],
+    "vue/first-attribute-linebreak": 0,
+    "lines-between-class-members": "off"
+  },
+  "overrides": [
+    {
+      "files": [
+        "*.vue"
+      ],
+      "rules": {
+        "vue/component-name-in-template-casing": [
+          2,
+          "kebab-case"
+        ],
+        "vue/require-default-prop": 0,
+        "vue/multi-word-component-names": 0,
+        "vue/no-reserved-props": 0,
+        "vue/no-v-html": 0
+      }
+    }
+  ]
+}

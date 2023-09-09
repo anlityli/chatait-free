@@ -1,0 +1,39 @@
+# Windows:
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+*/Thumbs.db
+*/ehthumbs.db
+*/Desktop.ini
+
+# Mac:
+.DS_Store
+*/.DS_Store
+
+# PhpStorm:
+.idea
+*/.idea
+/.idea/*
+
+#composer.json
+
+#App
+.buildpath
+.hgignore.swp
+.project
+.orig
+.swp
+.settings/
+.vscode/
+vender/
+vendor/
+log/
+composer.lock
+gitpush.sh
+pkg/
+bin/
+cbuild
+config/config.toml
+main
+go.sum
+server.pid

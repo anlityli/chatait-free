@@ -1,0 +1,54 @@
+/*!
+ * Copyright 2023 Anlity <leo@leocode.net>. All rights reserved.
+ * Use of this source code is governed by a AGPL v3.0 style
+ * license that can be found in the LICENSE file.
+ */
+
+html {
+  height: 100%;
+}
+
+body {
+  font-family: BlinkMacSystemFont, -apple-system, sans-serif;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#app {
+  height: 100%;
+}
+
+.info-block {
+  column-count: 2;
+
+  .info-item {
+    display: flex;
+    color: var(--td-text-color-primary);
+
+    .info-item-label {
+      flex: 0 0 auto;
+      width: 150px;
+      font: var(--td-font-body-medium);
+      color: var(--td-text-color-secondary);
+      font-weight: 400;
+      text-align: left;
+    }
+
+    .info-item-value {
+      flex: 1 1 auto;
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      margin-left: var(--td-comp-margin-xxl);
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .info-block {
+    column-count: 1;
+  }
+}
+

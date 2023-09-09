@@ -1,0 +1,37 @@
+# 后台参数
+[backendConf]
+serverPort = "18002"
+privateKey = "aaaa"
+appPath = "/xxx/chatait-backend-server/"
+logPath = "/xxx/chatait-backend-server/runtime/log/"
+accessTokenExp = "8h"
+refreshTokenExp = "720h"
+forcedReLoginTime = "1608254467"
+debugStatus = true
+simulationArgs = [ ]
+
+# 通用参数
+[commonConf]
+fileTmpPath = "/xxx/chatait-frontend-server/runtime/tmp/"
+fileSavePath = "/xxx/chatait-frontend-server/runtime/files/"
+certPath = "/xxx/chatait-backend-server/config/cert"
+certKey = "aaaa"
+diffTime = "0"
+isRealSendEmailCode = false
+emailCodeIntervalSecond = 60
+emailCodeExpireIn = 600
+
+# 数据库
+[database]
+[[database.default]]
+host = "127.0.0.1"
+port = "3306"
+user = "root"
+pass = "123456"
+name = "chatait_db"
+type = "mysql"
+charset = "utf8mb4"
+debug = "false"
+timeMaintainDisabled = true
+
+
