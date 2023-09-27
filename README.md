@@ -196,9 +196,9 @@ systemctl start chataitFrontend.service
 <img src="https://github.com/anlityli/chatait-free/blob/main/doc/donate.jpg?raw=true" width="375"/>
 </div>
 
-## 入群联系群主购买正式版或定制开发
+## 联系QQ购买正式版或定制开发
 邮箱: leo@leocode.net   
-群号: 791133985
+QQ: 88511136
 
 ## 框架
 golang: [Goframe](https://github.com/gogf/gf)   
