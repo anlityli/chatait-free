@@ -1,0 +1,5 @@
+# 构建
+docker build -t chataitvue .
+
+# 运行
+docker run -p 18003:18003 -p 18004:18004 -d --name chataitVueApp chataitvue
