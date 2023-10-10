@@ -1,0 +1,49 @@
+# 前台参数
+[frontendConf]
+serverPort = "18001"                                 # 前台服务端口 这里与nginx的配置要对应，无特殊情况不需修改
+privateKey = "yh6wUEb4jkd06x9kn72uyPpb3Tm4JuQe"      # 前台服务端和前台前端通信的私钥，无特殊情况不需修改
+appPath = "/chatait/frontendServer/"    # 前台服务端所在目录，按照你的程序所在目录进行修改
+logPath = "/chatait/frontendServer/runtime/log/"  # 前台服务端日志所在路径，按照你的程序所在目录进行修改
+accessTokenExp = "8h"                                # 前台登录token有效时长，无特殊情况不需修改
+refreshTokenExp = "720h"                             # 前台登录token刷新有效时长，无特殊情况不需修改
+forcedReLoginTime = "1608254467"                     # 前台所有登录用户被强制踢下线的时间戳，无特殊情况不需修改
+debugStatus = true                                   # debug日志是否开启，无特殊情况不需修改
+simulationArgs = [ ]                                 # debug参数，无特殊情况不需修改
+
+# 后台参数 基本与前台参数功能一致无特殊情况不需修改
+[backendConf]
+serverPort = "18002"
+privateKey = "yh6wUEb4jkd06x9kn72uyPpb3Tm4JuQe"
+appPath = "/chatait/backendServer/"
+logPath = "/chatait/backendServer/runtime/log/"
+accessTokenExp = "8h"
+refreshTokenExp = "720h"
+forcedReLoginTime = "1608254467"
+debugStatus = true
+simulationArgs = [ ]
+
+
+# 通用参数
+[commonConf]
+fileTmpPath = "/chatait/tmp/"     # 正式版 midjourney 图片下载到本地的临时目录
+fileSavePath = "/chatait/files/"  # 正式版 midjourney 图片下载到本地的保存目录
+certPath = ""                                  # 正式版 域名授权证书路径
+certKey = ""                                   # 正式版 域名授权证书密钥
+diffTime = "0"                                 # debug时差调整，无特殊情况不需修改
+isRealSendEmailCode = false                    # debug邮件发送，无特殊情况不需修改    
+emailCodeIntervalSecond = 60                   # 邮件验证码间隔时长，无特殊情况不需修改
+emailCodeExpireIn = 600                        # 邮件验证码有效时长，无特殊情况不需修改
+
+
+# 数据库 根据实际数据库情况修改
+[database]
+[[database.default]]
+host = "127.0.0.1"
+port = "3306"
+user = "root"
+pass = "123456"
+name = "chatait_db"
+type = "mysql"
+charset = "utf8mb4"
+debug = "false"
+timeMaintainDisabled = true
