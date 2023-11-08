@@ -81,6 +81,24 @@ export default [
         component: () => import('@/pages/config/openaiEdit.vue'),
         meta: { title: '编辑Openai配置', highlight: 'configOpenaiList' },
       },
+      {
+        path: 'baidu-list',
+        name: 'configBaiduList',
+        component: () => import('@/pages/config/baiduList.vue'),
+        meta: { title: '百度配置列表' },
+      },
+      {
+        path: 'baidu-add',
+        name: 'configBaiduAdd',
+        component: () => import('@/pages/config/baiduEdit.vue'),
+        meta: { title: '添加百度配置', highlight: 'configBaiduList' },
+      },
+      {
+        path: 'baidu-edit',
+        name: 'configBaiduEdit',
+        component: () => import('@/pages/config/baiduEdit.vue'),
+        meta: { title: '编辑百度配置', highlight: 'configBaiduList' },
+      },
     ],
   },
 ]

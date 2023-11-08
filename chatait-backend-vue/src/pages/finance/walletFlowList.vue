@@ -5,7 +5,7 @@
   -->
 
 <template>
-  <div v-if="route.name === 'financeWalletFlowListBalance' || route.name === 'financeWalletFlowListGpt3'">
+  <div>
     <common-table
       ref="tableEle"
       :request-path="
@@ -27,11 +27,6 @@
     >
     </common-table>
   </div>
-  <div v-else>
-    <t-card :bordered="false"
-      ><div style="text-align: center">您当前的版本为免费版，购买正式版开通此功能！</div></t-card
-    >
-  </div>
 </template>
 
 <script setup lang="ts">
@@ -49,5 +44,6 @@ const handleExport = () => {
 }
 
 onMounted(async () => {
+  console.log(route.name)
 })
 </script>

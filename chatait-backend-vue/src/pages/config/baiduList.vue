@@ -8,7 +8,7 @@
   <div>
     <common-table
       ref="tableEle"
-      :request-path="`config/midjourney-list`"
+      :request-path="`config/baidu-list`"
       :operation-column="true"
       :primary-filter-field="'title'"
       :show-add-button="true"
@@ -64,11 +64,11 @@ const router = useRouter()
 const tableEle = ref(null)
 
 const handleAdd = () => {
-  router.push('/config/midjourney-add')
+  router.push('/config/baidu-add')
 }
 
 const handleEdit = (id: string) => {
-  router.push(`/config/midjourney-edit?id=${id}`)
+  router.push(`/config/baidu-edit?id=${id}`)
 }
 
 const deleteDialogVisible = ref(false)
@@ -87,7 +87,7 @@ const handleDelete = async () => {
     requestData.selected.push(selectedRows[i].ori_value)
   }
   if (requestData.selected.length > 0) {
-    await http.post('config/midjourney-delete', requestData)
+    await http.post('config/baidu-delete', requestData)
     tableEle.value.handleRefresh()
   }
   deleteDialogVisible.value = false

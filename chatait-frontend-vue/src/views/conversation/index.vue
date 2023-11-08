@@ -45,6 +45,7 @@ import {
   ActionTypeVary,
   ActionTypeZoomOut,
 } from '@/utils/constant/conversation'
+import InputParams from '@/views/conversation/inputParams.vue'
 import AvatarImage from '@/components/avatarImage/AvatarImage.vue'
 import {
   MidjourneyCustomForm,
@@ -68,6 +69,10 @@ const pageLoading = ref(true)
 const topicTypes = ref([
   { label: '文字聊天 GPT3.5', value: TopicTypeOpenaiGPT3 },
   { label: '文字聊天 GPT4', value: TopicTypeOpenaiGPT4 },
+  {
+    label: '绘画聊天 Midjourney',
+    value: TopicTypeMidjourney,
+  },
 ])
 const currentTopicType = ref(TopicTypeOpenaiGPT3)
 const currentTopicId = ref('0')
@@ -748,6 +753,14 @@ onBeforeUnmount(() => {
           </template>
         </template>
       </t-input>
+      <input-params
+        v-else-if="currentTopicType === TopicTypeMidjourney"
+        ref="midjourneyInputEle"
+        v-model="inputContent"
+        :disabled="submitBtnLoading"
+        @enter="handleMidjourneyInputSubmit"
+        @submit="handleMidjourneyInputSubmit"
+      ></input-params>
     </div>
   </div>
 </template>
