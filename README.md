@@ -6,7 +6,7 @@
 
 ChatAIT是用golang+vue开发的AI对话网站，对话模式模仿ChatGPT和Midjourney的形式。
 
-正式版支持：
+支持：
 - [x] GPT4
 - [x] GPT3.5
 - [x] Midjourney
@@ -26,16 +26,6 @@ ChatAIT是用golang+vue开发的AI对话网站，对话模式模仿ChatGPT和Mid
 - [ ] 敏感词过滤
 - [ ] 站内公告文章系统
 - [ ] 百度文心一言
-- [ ] 更多实用功能
-
-免费版支持：
-- [x] GPT4
-- [x] GPT3.5
-- [x] 充值和购买次数
-- [x] openai接口循环调用
-- [x] 管理员及角色管理
-- [x] 会员管理
-- [x] 会员等级
 - [ ] 更多实用功能
 
 ## 演示地址
@@ -201,7 +191,7 @@ systemctl start chataitFrontend.service
 <img src="https://github.com/anlityli/chatait-free/blob/main/doc/donate.jpg?raw=true" width="375"/>
 </div>
 
-## 联系QQ购买正式版或定制开发
+## 联系邮箱或QQ定制开发
 邮箱: leo@leocode.net   
 QQ: 88511136
 
