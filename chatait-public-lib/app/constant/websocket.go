@@ -11,4 +11,10 @@ const (
 const (
 	WSMsgResponseTypeError  = "response_error"
 	WSMsgResponseTypeIgnore = "response_ignore"
+
+	WSMsgResponseTypeMidjourneyInsertQueue = "response_mj_insert_queue"
+	WSMsgResponseTypeMidjourneyCreate      = "response_mj_create"
+	WSMsgResponseTypeMidjourneyEnd         = "response_mj_end"
+	WSMsgResponseTypeMidjourneyError       = "response_mj_error"
+	WSMsgResponseTypeMidjourneyProgress    = "response_mj_progress"
 )

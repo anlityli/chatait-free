@@ -11,4 +11,6 @@ import (
 
 var notifyApi = &notify.Notify{}
 
-var notifyRouter = []*utils.RouterItem{}
+var notifyRouter = []*utils.RouterItem{
+	{Method: "GET", Pattern: "/vmq", Object: notifyApi.Vmq, NoLogin: true, NoSign: true},
+}

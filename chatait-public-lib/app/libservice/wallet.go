@@ -61,6 +61,8 @@ func (s *walletService) ChangeWalletBalance(ctx context.Context, tx *gdb.TX, cha
 			balance = gconv.Int(data[constant.WalletTypeGpt3])
 		} else if changeParam.WalletType == constant.WalletTypeGpt4 {
 			balance = gconv.Int(data[constant.WalletTypeGpt4])
+		} else if changeParam.WalletType == constant.WalletTypeMidjourney {
+			balance = gconv.Int(data[constant.WalletTypeMidjourney])
 		} else {
 			return errors.New("余额格式不正确")
 		}
@@ -91,6 +93,8 @@ func (s *walletService) ChangeWalletBalance(ctx context.Context, tx *gdb.TX, cha
 		flowModel = dao.WalletFlowGpt3.TX(tx).Ctx(ctx)
 	} else if changeParam.WalletType == constant.WalletTypeGpt4 {
 		flowModel = dao.WalletFlowGpt4.TX(tx).Ctx(ctx)
+	} else if changeParam.WalletType == constant.WalletTypeMidjourney {
+		flowModel = dao.WalletFlowMidjourney.TX(tx).Ctx(ctx)
 	} else {
 		return errors.New("余额格式不正确")
 	}
@@ -145,6 +149,8 @@ func (s *walletService) GetBalance(params *GetBalanceParams) (balance int, err e
 			balance = gconv.Int(data[constant.WalletTypeGpt3])
 		} else if params.WalletType == constant.WalletTypeGpt4 {
 			balance = gconv.Int(data[constant.WalletTypeGpt4])
+		} else if params.WalletType == constant.WalletTypeMidjourney {
+			balance = gconv.Int(data[constant.WalletTypeMidjourney])
 		} else {
 			return 0, errors.New("钱包格式不正确")
 		}

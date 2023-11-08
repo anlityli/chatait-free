@@ -8,3 +8,14 @@ const (
 	ConfigLevelMember = 1
 	ConfigLevelPlus   = 2
 )
+
+const (
+	ConfigMidjourneyListenModelBot     = 0
+	ConfigMidjourneyListenModelUserWss = 1
+)
+
+const (
+	ConfigMidjourneyCreateModelFast  = "fast"
+	ConfigMidjourneyCreateModelRelax = "relax"
+	ConfigMidjourneyCreateModelTurbo = "turbo"
+)

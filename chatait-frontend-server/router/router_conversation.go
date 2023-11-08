@@ -21,4 +21,6 @@ var conversationRouter = []*utils.RouterItem{
 	{Method: "POST", Pattern: "/speak", Object: conversationApi.Speak},
 	{Method: "GET", Pattern: "/stream-uuid", Object: conversationApi.StreamUuid},
 	{Method: "GET", Pattern: "/es/speak-stream", Object: conversationApi.SpeakStream, NoSign: true, NoLogin: true},
+	{Method: "POST", Pattern: "/midjourney-speak", Object: conversationApi.MidjourneySpeak},
+	{Method: "POST", Pattern: "/midjourney-custom", Object: conversationApi.MidjourneyCustom},
 }

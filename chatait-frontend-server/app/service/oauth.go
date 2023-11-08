@@ -256,6 +256,7 @@ func (s *oauthService) AddUser(ctx context.Context, tx *gdb.TX, addUserParam *Ad
 	newUserAddBalance, err := helper.GetConfig("newUserAddBalance")
 	newUserAddGpt3, err := helper.GetConfig("newUserAddGpt3")
 	newUserAddGpt4, err := helper.GetConfig("newUserAddGpt4")
+	newUserAddMidjourney, err := helper.GetConfig("newUserAddMidjourney")
 	if err != nil {
 		return nil, err
 	}
@@ -293,6 +294,20 @@ func (s *oauthService) AddUser(ctx context.Context, tx *gdb.TX, addUserParam *Ad
 			UserId:     userID,
 			WalletType: constant.WalletTypeGpt4,
 			Amount:     gconv.Int(newUserAddGpt4),
+			Remark:     "注册免费赠送",
+			TargetType: constant.WalletChangeTargetTypeAddUser,
+			TargetID:   userID,
+		})
+		if err != nil {
+			return nil, err
+		}
+	}
+	if gconv.Int(newUserAddMidjourney) > 0 {
+		// 赠送提问次数
+		err = libservice.Wallet.ChangeWalletBalance(ctx, tx, &libservice.ChangeWalletParam{
+			UserId:     userID,
+			WalletType: constant.WalletTypeMidjourney,
+			Amount:     gconv.Int(newUserAddMidjourney),
 			Remark:     "注册免费赠送",
 			TargetType: constant.WalletChangeTargetTypeAddUser,
 			TargetID:   userID,

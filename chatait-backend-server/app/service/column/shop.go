@@ -52,6 +52,8 @@ func (c *Shop) GoodsListColumns() (re *datalist.Columns) {
 					return "购买" + helper.GetWalletName(constant.WalletTypeGpt3)
 				} else if row.BuyType == constant.ShopGoodsBuyTypeGpt4 {
 					return "购买" + helper.GetWalletName(constant.WalletTypeGpt4)
+				} else if row.BuyType == constant.ShopGoodsBuyTypeMidjourney {
+					return "购买" + helper.GetWalletName(constant.WalletTypeMidjourney)
 				}
 				return ""
 			},
@@ -351,6 +353,10 @@ func (c *Shop) buyTypeFilterType() (re *datalist.FilterType) {
 		g.Map{
 			"label": "购买" + helper.GetWalletName(constant.WalletTypeGpt4),
 			"value": constant.ShopGoodsBuyTypeGpt4,
+		},
+		g.Map{
+			"label": "购买" + helper.GetWalletName(constant.WalletTypeMidjourney),
+			"value": constant.ShopGoodsBuyTypeMidjourney,
 		},
 	}
 	return &datalist.FilterType{

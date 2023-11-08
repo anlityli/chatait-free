@@ -60,6 +60,7 @@ func (m *Menu) list() {
 		&ItemModel{Key: "conversation", Title: "对话管理", RoutePath: "conversation", Show: true, Children: m.conversationChildren()},
 		&ItemModel{Key: "shop", Title: "商城管理", RoutePath: "shop", Show: true, Children: m.shopChildren()},
 		&ItemModel{Key: "finance", Title: "财务管理", RoutePath: "finance", Show: true, Children: m.financeChildren()},
+		&ItemModel{Key: "file", Title: "文件管理", RoutePath: "file", Show: true, Children: m.fileChildren()},
 		&ItemModel{Key: "admin", Title: "管理员管理", RoutePath: "admin", Show: true, Children: m.adminChildren()},
 		&ItemModel{Key: "config", Title: "系统设置", RoutePath: "config", Show: true, Children: m.configChildren()},
 	}
@@ -116,6 +117,12 @@ func (m *Menu) financeChildren() (re ListModel) {
 	}
 }
 
+func (m *Menu) fileChildren() (re ListModel) {
+	return ListModel{
+		&ItemModel{Key: "fileMidjourneyList", Title: "Midjourney文件列表", RoutePath: "file/midjourney-list", Show: true, Leaf: true},
+	}
+}
+
 // adminChild 管理员
 func (m *Menu) adminChildren() (re ListModel) {
 	return ListModel{
@@ -149,5 +156,9 @@ func (m *Menu) configChildren() (re ListModel) {
 		&ItemModel{Key: "configOpenaiAdd", Title: "Openai配置添加", RoutePath: "config/openai-add", Show: false, Leaf: false},
 		&ItemModel{Key: "configOpenaiEdit", Title: "Openai配置编辑", RoutePath: "config/openai-edit", RelevantRoutePath: []string{"config/openai-one"}, Show: false, Leaf: false},
 		&ItemModel{Key: "configOpenaiDelete", Title: "Openai配置删除", RoutePath: "config/openai-delete", Show: false, Leaf: false},
+		&ItemModel{Key: "configBaiduList", Title: "百度配置列表", RoutePath: "config/baidu-list", Show: true, Leaf: true},
+		&ItemModel{Key: "configBaiduAdd", Title: "百度配置添加", RoutePath: "config/baidu-add", Show: false, Leaf: false},
+		&ItemModel{Key: "configBaiduEdit", Title: "百度配置编辑", RoutePath: "config/baidu-edit", RelevantRoutePath: []string{"config/baidu-one"}, Show: false, Leaf: false},
+		&ItemModel{Key: "configBaiduDelete", Title: "百度配置删除", RoutePath: "config/baidu-delete", Show: false, Leaf: false},
 	}
 }

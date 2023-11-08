@@ -14,6 +14,7 @@ import (
 	"github.com/anlityli/chatait-free/chatait-public-lib/app/constant"
 	"github.com/anlityli/chatait-free/chatait-public-lib/app/dao"
 	"github.com/anlityli/chatait-free/chatait-public-lib/app/model/entity"
+	"github.com/anlityli/chatait-free/chatait-public-lib/library/api/vmq"
 	"github.com/anlityli/chatait-free/chatait-public-lib/library/helper"
 	"github.com/anlityli/chatait-free/chatait-public-lib/library/page"
 	"github.com/anlityli/chatait-free/chatait-public-lib/library/snowflake"
@@ -282,7 +283,14 @@ func (s *shopService) PayOrder(r *ghttp.Request) (re *response.ShopPayOrder, err
 		return nil, err
 	}
 	re = &response.ShopPayOrder{}
-	// todo 不同的支付方式返回不同的payment
-	glog.Line().Debug(payment)
+	if requestModel.ConfigPayId == constant.PayConfigVmq {
+		paymentData := payment.(*vmq.CreateOrderResponse)
+		re.PayAmount = helper.YuanToCent(paymentData.ReallyPrice)
+		re.PayUrl = paymentData.PayUrl
+		re.Timeout = paymentData.TimeOut
+		re.DueExpireAt = gconv.Int(xtime.GetNowTime()) + paymentData.TimeOut*60
+	} else {
+		return nil, errors.New("支付方式不正确")
+	}
 	return re, nil
 }

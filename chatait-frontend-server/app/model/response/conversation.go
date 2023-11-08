@@ -4,6 +4,8 @@
 
 package response
 
+import "github.com/anlityli/chatait-free/chatait-public-lib/library/api/midjourney"
+
 type ConversationTopic struct {
 	Id        string `json:"id"`
 	Title     string `json:"title"`
@@ -24,10 +26,12 @@ type ConversationSpeakItem struct {
 }
 
 type ConversationSpeakItemMjData struct {
-	ActionType int    `json:"action_type"`
-	ImgUrl     string `json:"img_url"`
-	Progress   int    `json:"progress"`
-	Error      string `json:"error"`
+	ActionType      int                                           `json:"action_type"`
+	ImgUrl          string                                        `json:"img_url"`
+	ThumbnailImgUrl string                                        `json:"thumbnail_img_url"`
+	Progress        int                                           `json:"progress"`
+	Components      []*midjourney.WsReceiveMessageDComponentsItem `json:"components"`
+	Error           string                                        `json:"error"`
 }
 
 type ConversationSpeakList []*ConversationSpeakItem

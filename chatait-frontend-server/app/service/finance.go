@@ -35,6 +35,8 @@ func (s *financeService) WalletFlowList(r *ghttp.Request) (re *page.Response, er
 		tableName = dao.WalletFlowGpt3.Table
 	} else if requestModel.WalletType == constant.WalletTypeGpt4 {
 		tableName = dao.WalletFlowGpt4.Table
+	} else if requestModel.WalletType == constant.WalletTypeMidjourney {
+		tableName = dao.WalletFlowMidjourney.Table
 	} else {
 		return nil, errors.New("钱包类型不正确")
 	}

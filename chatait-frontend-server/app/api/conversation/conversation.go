@@ -80,3 +80,20 @@ func (c *Conversation) SpeakStream(r *ghttp.Request) {
 func (c *Conversation) StreamUuid(r *ghttp.Request) {
 	notice.Write(r, notice.NoError, service.ConversationOpenai.StreamUuid())
 }
+
+// MidjourneySpeak mj的对话
+func (c *Conversation) MidjourneySpeak(r *ghttp.Request) {
+	if re, err := service.ConversationMidjourney.Speak(r); err != nil {
+		notice.Write(r, notice.OtherError, err.Error())
+	} else {
+		notice.Write(r, notice.NoError, re)
+	}
+}
+
+func (c *Conversation) MidjourneyCustom(r *ghttp.Request) {
+	if re, err := service.ConversationMidjourney.Custom(r); err != nil {
+		notice.Write(r, notice.OtherError, err.Error())
+	} else {
+		notice.Write(r, notice.NoError, re)
+	}
+}

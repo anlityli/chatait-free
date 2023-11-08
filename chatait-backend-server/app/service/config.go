@@ -254,22 +254,107 @@ func (s *configService) PayEdit(r *ghttp.Request) (err error) {
 
 // MidjourneyList Midjourney配置列表
 func (s *configService) MidjourneyList(r *ghttp.Request) (re *datalist.Result, err error) {
-	return nil, nil
+	columnsModel := &column.Config{}
+	listColumns := columnsModel.MidjourneyListColumns()
+	// 筛选
+	whereAndParams, err := datalist.FilterWhereAndParams(r, listColumns)
+	if err != nil {
+		return nil, err
+	}
+	listModel := &response.ConfigMidjourneyList{}
+	// 获取会员数据
+	data, err := page.Data(r, &page.Param{
+		TableName:   dao.ConfigMidjourney.Table,
+		Where:       whereAndParams.Where,
+		WhereParams: whereAndParams.Params,
+		OrderBy:     "id ASC",
+	}, listModel)
+	if err != nil {
+		return nil, err
+	}
+	return datalist.List(r, data, listColumns)
 }
 
 func (s *configService) MidjourneyOne(r *ghttp.Request) (re *response.ConfigMidjourney, err error) {
-	return nil, nil
+	requestModel := &request.ConfigId{}
+	if err := r.Parse(requestModel); err != nil {
+		return nil, err
+	}
+	re = &response.ConfigMidjourney{}
+	err = dao.ConfigMidjourney.Where("id=?", g.Slice{requestModel.Id}).Scan(re)
+	if err != nil {
+		return nil, err
+	}
+	return re, nil
 }
 
 func (s *configService) MidjourneyAdd(r *ghttp.Request) (err error) {
+	requestModel := &request.ConfigMidjourneyAdd{}
+	if err := r.Parse(requestModel); err != nil {
+		return err
+	}
+	data, err := dao.ConfigMidjourney.Where("title=?", requestModel.Title).One()
+	if err != nil {
+		return err
+	}
+	if !data.IsEmpty() {
+		return errors.New("配置标题重复")
+	}
+	insertID := snowflake.GenerateID()
+	nowTime := xtime.GetNowTime()
+	insertData := gconv.Map(requestModel)
+	insertData["id"] = insertID
+	insertData["created_at"] = nowTime
+	if _, err := dao.ConfigMidjourney.Data(insertData).Insert(); err != nil {
+		return err
+	}
 	return nil
 }
 
 func (s *configService) MidjourneyEdit(r *ghttp.Request) (err error) {
+	requestModel := &request.ConfigMidjourneyEdit{}
+	if err := r.Parse(requestModel); err != nil {
+		return err
+	}
+	data, err := dao.ConfigMidjourney.Where("id<>? AND title=?", requestModel.Id, requestModel.Title).One()
+	if err != nil {
+		return err
+	}
+	if !data.IsEmpty() {
+		return errors.New("配置标题重复")
+	}
+	nowTime := xtime.GetNowTime()
+	updateData := gconv.Map(requestModel)
+	updateData["updated_at"] = nowTime
+	if _, err := dao.ConfigMidjourney.Data(updateData).Where("id=?", requestModel.Id).Update(); err != nil {
+		return err
+	}
 	return nil
 }
 
 func (s *configService) MidjourneyDelete(r *ghttp.Request) error {
+	requestModel := &request.ConfigIds{}
+	if err := r.Parse(requestModel); err != nil {
+		return err
+	}
+	if err := g.DB().Transaction(context.TODO(), func(ctx context.Context, tx *gdb.TX) (err error) {
+		for _, id := range requestModel.Selected {
+			data := &entity.ConfigMidjourney{}
+			err = dao.ConfigMidjourney.Ctx(ctx).TX(tx).Where("id=?", id).Scan(data)
+			if err != nil {
+				return err
+			}
+			if data.Status == 1 {
+				return errors.New("修改【" + data.Title + "】的状态为未启用后再删除")
+			}
+			if _, err := dao.ConfigMidjourney.Ctx(ctx).TX(tx).Where("id=?", id).Delete(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -369,6 +454,111 @@ func (s *configService) OpenaiDelete(r *ghttp.Request) error {
 				return errors.New("修改【" + data.Title + "】的状态为未启用后再删除")
 			}
 			if _, err := dao.ConfigOpenai.Ctx(ctx).TX(tx).Where("id=?", id).Delete(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}); err != nil {
+		return err
+	}
+	return nil
+}
+
+// BaiduList Baidu配置列表
+func (s *configService) BaiduList(r *ghttp.Request) (re *datalist.Result, err error) {
+	columnsModel := &column.Config{}
+	listColumns := columnsModel.BaiduListColumns()
+	// 筛选
+	whereAndParams, err := datalist.FilterWhereAndParams(r, listColumns)
+	if err != nil {
+		return nil, err
+	}
+	listModel := &response.ConfigBaiduList{}
+	data, err := page.Data(r, &page.Param{
+		TableName:   dao.ConfigBaidu.Table,
+		Where:       whereAndParams.Where,
+		WhereParams: whereAndParams.Params,
+		OrderBy:     "id ASC",
+	}, listModel)
+	if err != nil {
+		return nil, err
+	}
+	return datalist.List(r, data, listColumns)
+}
+
+func (s *configService) BaiduOne(r *ghttp.Request) (re *response.ConfigBaidu, err error) {
+	requestModel := &request.ConfigId{}
+	if err := r.Parse(requestModel); err != nil {
+		return nil, err
+	}
+	re = &response.ConfigBaidu{}
+	err = dao.ConfigBaidu.Where("id=?", g.Slice{requestModel.Id}).Scan(re)
+	if err != nil {
+		return nil, err
+	}
+	return re, nil
+}
+
+func (s *configService) BaiduAdd(r *ghttp.Request) (err error) {
+	requestModel := &request.ConfigBaiduAdd{}
+	if err := r.Parse(requestModel); err != nil {
+		return err
+	}
+	data, err := dao.ConfigBaidu.Where("title=?", requestModel.Title).One()
+	if err != nil {
+		return err
+	}
+	if !data.IsEmpty() {
+		return errors.New("配置标题重复")
+	}
+	insertID := snowflake.GenerateID()
+	nowTime := xtime.GetNowTime()
+	insertData := gconv.Map(requestModel)
+	insertData["id"] = insertID
+	insertData["created_at"] = nowTime
+	if _, err := dao.ConfigBaidu.Data(insertData).Insert(); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *configService) BaiduEdit(r *ghttp.Request) (err error) {
+	requestModel := &request.ConfigBaiduEdit{}
+	if err := r.Parse(requestModel); err != nil {
+		return err
+	}
+	data, err := dao.ConfigBaidu.Where("id<>? AND title=?", requestModel.Id, requestModel.Title).One()
+	if err != nil {
+		return err
+	}
+	if !data.IsEmpty() {
+		return errors.New("配置标题重复")
+	}
+	nowTime := xtime.GetNowTime()
+	updateData := gconv.Map(requestModel)
+	updateData["updated_at"] = nowTime
+	if _, err := dao.ConfigBaidu.Data(updateData).Where("id=?", requestModel.Id).Update(); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *configService) BaiduDelete(r *ghttp.Request) error {
+	requestModel := &request.ConfigIds{}
+	if err := r.Parse(requestModel); err != nil {
+		return err
+	}
+	if err := g.DB().Transaction(context.TODO(), func(ctx context.Context, tx *gdb.TX) (err error) {
+		for _, id := range requestModel.Selected {
+			data := &entity.ConfigBaidu{}
+			err = dao.ConfigBaidu.Ctx(ctx).TX(tx).Where("id=?", id).Scan(data)
+			if err != nil {
+				return err
+			}
+			if data.Status == 1 {
+				return errors.New("修改【" + data.Title + "】的状态为未启用后再删除")
+			}
+			if _, err := dao.ConfigBaidu.Ctx(ctx).TX(tx).Where("id=?", id).Delete(); err != nil {
 				return err
 			}
 		}

@@ -11,6 +11,7 @@ import (
 var Rules = map[string][]*utils.RouterItem{
 	"config":       configRouter,
 	"conversation": conversationRouter,
+	"file":         fileRouter,
 	"finance":      financeRouter,
 	"oauth":        oauthRouter,
 	"shop":         shopRouter,

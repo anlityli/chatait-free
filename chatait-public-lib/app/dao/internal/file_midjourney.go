@@ -30,6 +30,7 @@ type fileMidjourneyColumns struct {
 	QueueId    string // 生成该图片的队列id
 	FileName   string // 文件名
 	Path       string // 本地储存路径
+	Thumbnail  string // 缩略图的本地保存路径
 	Prompt     string // 生成该图片的提示词
 	MjFileName string // midjourney的文件名
 	MjUrl      string // midjourney的路径
@@ -50,6 +51,7 @@ func NewFileMidjourneyDao() *FileMidjourneyDao {
 			QueueId:    "queue_id",
 			FileName:   "file_name",
 			Path:       "path",
+			Thumbnail:  "thumbnail",
 			Prompt:     "prompt",
 			MjFileName: "mj_file_name",
 			MjUrl:      "mj_url",

@@ -6,12 +6,18 @@ package service
 
 import (
 	"context"
+	"database/sql"
 	"github.com/anlityli/chatait-free/chatait-frontend-server/app/model/request"
 	"github.com/anlityli/chatait-free/chatait-frontend-server/app/model/response"
 	"github.com/anlityli/chatait-free/chatait-frontend-server/library/auth"
 	"github.com/anlityli/chatait-free/chatait-public-lib/app/dao"
+	"github.com/anlityli/chatait-free/chatait-public-lib/app/model/entity"
+	"github.com/anlityli/chatait-free/chatait-public-lib/library/api/midjourney"
+	"github.com/anlityli/chatait-free/chatait-public-lib/library/notice"
 	"github.com/anlityli/chatait-free/chatait-public-lib/library/page"
+	"github.com/anlityli/chatait-free/chatait-public-lib/library/security"
 	"github.com/gogf/gf/database/gdb"
+	"github.com/gogf/gf/encoding/gjson"
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
 	"github.com/gogf/gf/util/gconv"
@@ -133,6 +139,46 @@ func (s *conversationService) SpeakList(r *ghttp.Request) (re *page.Response, er
 	}, listData)
 	if err != nil {
 		return nil, err
+	}
+	hostUrl, err := security.HostUrl(r)
+	if err != nil {
+		notice.Write(r, notice.OtherError, "域名授权失败，您可能正在使用盗版程序，请购买正版")
+		return nil, err
+	}
+	for _, item := range *listData {
+		item.MjData = &response.ConversationSpeakItemMjData{}
+		item.MjData.Components = make([]*midjourney.WsReceiveMessageDComponentsItem, 0)
+		midjourneyData := &entity.ConversationMidjourney{}
+		err = dao.ConversationMidjourney.Where("conversation_id=?", item.Id).Scan(midjourneyData)
+		if err == nil {
+			item.MjData.ActionType = midjourneyData.ActionType
+			if midjourneyData.Components != "" {
+				componentsJson, err := gjson.Decode(midjourneyData.Components)
+				if err == nil {
+					_ = gconv.Scan(componentsJson, &item.MjData.Components)
+				}
+			}
+			item.MjData.Error = midjourneyData.ErrorData
+			fileData := &entity.FileMidjourney{}
+			err = dao.FileMidjourney.Where("id=?", midjourneyData.FileId).Scan(fileData)
+			if err != nil && err != sql.ErrNoRows {
+				return nil, err
+			}
+			if fileData.Id > 0 {
+				item.MjData.ImgUrl = hostUrl + "/file/midjourney-image?id=" + gconv.String(fileData.Id)
+				item.MjData.ThumbnailImgUrl = hostUrl + "/file/midjourney-image?id=" + gconv.String(fileData.Id) + "&thumbnail=1"
+			}
+		} else {
+			queueData := &entity.QueueMidjourney{}
+			err = dao.QueueMidjourney.Where("conversation_id=?", item.Id).Scan(queueData)
+			if err != nil && err != sql.ErrNoRows {
+				return nil, err
+			}
+			if queueData.Id > 0 {
+				item.MjData.ActionType = queueData.ActionType
+				item.MjData.Progress = queueData.Progress
+			}
+		}
 	}
 	return re, nil
 }

@@ -16,4 +16,6 @@ const (
 )
 
 // 支付方式
-const ()
+const (
+	PayConfigVmq = 1 // 支付方式 微免签
+)

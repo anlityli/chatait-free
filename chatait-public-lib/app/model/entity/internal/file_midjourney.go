@@ -15,6 +15,7 @@ type FileMidjourney struct {
 	QueueId    int64  `orm:"queue_id"     json:"queueId"`    // 生成该图片的队列id
 	FileName   string `orm:"file_name"    json:"fileName"`   // 文件名
 	Path       string `orm:"path"         json:"path"`       // 本地储存路径
+	Thumbnail  string `orm:"thumbnail"    json:"thumbnail"`  // 缩略图的本地保存路径
 	Prompt     string `orm:"prompt"       json:"prompt"`     // 生成该图片的提示词
 	MjFileName string `orm:"mj_file_name" json:"mjFileName"` // midjourney的文件名
 	MjUrl      string `orm:"mj_url"       json:"mjUrl"`      // midjourney的路径

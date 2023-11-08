@@ -5,6 +5,7 @@
 package serv
 
 import (
+	"github.com/anlityli/chatait-free/chatait-frontend-server/app/service"
 	"github.com/anlityli/chatait-free/chatait-public-lib/app/libservice"
 	"github.com/anlityli/chatait-free/chatait-public-lib/library/xtime"
 	"github.com/gogf/gf/os/gcron"
@@ -13,6 +14,13 @@ import (
 
 // OnRun 运行时执行
 func OnRun() {
+	// 执行Bot的监听器
+	go func() {
+		err := service.ConversationMidjourney.Listener()
+		if err != nil {
+			glog.Line(true).Println("监听器启动失败", err)
+		}
+	}()
 	// 每天给高级会员发放余额
 	go func() {
 		_, err := gcron.Add("0 0 2 * * *", func() {

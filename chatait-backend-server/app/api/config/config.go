@@ -171,3 +171,43 @@ func (c *Config) OpenaiDelete(r *ghttp.Request) {
 	}
 	notice.Write(r, notice.NoError, "操作成功")
 }
+
+func (c *Config) BaiduList(r *ghttp.Request) {
+	re, err := service.Config.BaiduList(r)
+	if err != nil {
+		notice.Write(r, notice.OtherError, err.Error())
+	}
+	notice.Write(r, notice.NoError, re)
+}
+
+func (c *Config) BaiduOne(r *ghttp.Request) {
+	re, err := service.Config.BaiduOne(r)
+	if err != nil {
+		notice.Write(r, notice.OtherError, err.Error())
+	}
+	notice.Write(r, notice.NoError, re)
+}
+
+func (c *Config) BaiduAdd(r *ghttp.Request) {
+	err := service.Config.BaiduAdd(r)
+	if err != nil {
+		notice.Write(r, notice.OtherError, err.Error())
+	}
+	notice.Write(r, notice.NoError, "操作成功")
+}
+
+func (c *Config) BaiduEdit(r *ghttp.Request) {
+	err := service.Config.BaiduEdit(r)
+	if err != nil {
+		notice.Write(r, notice.OtherError, err.Error())
+	}
+	notice.Write(r, notice.NoError, "操作成功")
+}
+
+func (c *Config) BaiduDelete(r *ghttp.Request) {
+	err := service.Config.BaiduDelete(r)
+	if err != nil {
+		notice.Write(r, notice.OtherError, err.Error())
+	}
+	notice.Write(r, notice.NoError, "操作成功")
+}

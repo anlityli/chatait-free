@@ -32,4 +32,9 @@ var configRouter = []*utils.RouterItem{
 	{Method: "POST", Pattern: "/openai-add", Object: configApi.OpenaiAdd},
 	{Method: "POST", Pattern: "/openai-edit", Object: configApi.OpenaiEdit},
 	{Method: "POST", Pattern: "/openai-delete", Object: configApi.OpenaiDelete},
+	{Method: "GET", Pattern: "/baidu-list", Object: configApi.BaiduList},
+	{Method: "GET", Pattern: "/baidu-one", Object: configApi.BaiduOne},
+	{Method: "POST", Pattern: "/baidu-add", Object: configApi.BaiduAdd},
+	{Method: "POST", Pattern: "/baidu-edit", Object: configApi.BaiduEdit},
+	{Method: "POST", Pattern: "/baidu-delete", Object: configApi.BaiduDelete},
 }

@@ -3,3 +3,12 @@
 // license that can be found in the LICENSE file.
 
 package request
+
+type NotifyVmq struct {
+	PayId       string `json:"payId"`
+	Param       string `json:"param"`
+	Type        int    `json:"type"`
+	Price       string `json:"price"`
+	ReallyPrice string `json:"reallyPrice"`
+	Sign        string `json:"sign"`
+}

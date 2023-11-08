@@ -131,6 +131,19 @@ func (s *shopService) SetOrderPaid(ctx context.Context, tx *gdb.TX, orderId int6
 								return err
 							}
 						}
+						if balance.Midjourney > 0 {
+							err = Wallet.ChangeWalletBalance(ctx, tx, &ChangeWalletParam{
+								UserId:     orderData.UserId,
+								WalletType: constant.WalletTypeMidjourney,
+								Amount:     -gconv.Int(balance.Midjourney),
+								Remark:     "续费或购买计划扣除之前余额",
+								TargetType: constant.WalletChangeTargetTypeShopOrderGoods,
+								TargetID:   item.Id,
+							})
+							if err != nil {
+								return err
+							}
+						}
 						configLevelData, err := helper.GetConfigLevel(goodsData.ActiveLevelId)
 						if err != nil {
 							return err
@@ -162,8 +175,21 @@ func (s *shopService) SetOrderPaid(ctx context.Context, tx *gdb.TX, orderId int6
 								return err
 							}
 						}
+						if configLevelData.MonthMidjourney > 0 {
+							err = Wallet.ChangeWalletBalance(ctx, tx, &ChangeWalletParam{
+								UserId:     orderData.UserId,
+								WalletType: constant.WalletTypeMidjourney,
+								Amount:     configLevelData.MonthMidjourney,
+								Remark:     "续费或购买计划增加",
+								TargetType: constant.WalletChangeTargetTypeShopOrderGoods,
+								TargetID:   item.Id,
+							})
+							if err != nil {
+								return err
+							}
+						}
 					}
-				} else if goodsData.BuyType == constant.ShopGoodsBuyTypeBalance || goodsData.BuyType == constant.ShopGoodsBuyTypeGpt3 {
+				} else if goodsData.BuyType == constant.ShopGoodsBuyTypeBalance || goodsData.BuyType == constant.ShopGoodsBuyTypeGpt3 || goodsData.BuyType == constant.ShopGoodsBuyTypeGpt4 || goodsData.BuyType == constant.ShopGoodsBuyTypeMidjourney {
 					// 购买钱包余额
 					if goodsData.BuyValue <= 0 {
 						continue
@@ -176,6 +202,8 @@ func (s *shopService) SetOrderPaid(ctx context.Context, tx *gdb.TX, orderId int6
 						walletType = constant.WalletTypeGpt3
 					case constant.ShopGoodsBuyTypeGpt4:
 						walletType = constant.WalletTypeGpt4
+					case constant.ShopGoodsBuyTypeMidjourney:
+						walletType = constant.WalletTypeMidjourney
 					}
 					err = Wallet.ChangeWalletBalance(ctx, tx, &ChangeWalletParam{
 						UserId:     orderData.UserId,

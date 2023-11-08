@@ -241,3 +241,85 @@ func (c *Config) OpenaiListColumns() (re *datalist.Columns) {
 	}
 	return
 }
+
+func (c *Config) BaiduListColumns() (re *datalist.Columns) {
+	re = &datalist.Columns{}
+	re.ListName = "Baidu配置列表"
+	re.ListID = "configBaiduList"
+	re.ColumnList = datalist.ColumnList{
+		&datalist.ColumnItem{
+			Field:  "id",
+			Hidden: true,
+		},
+		&datalist.ColumnItem{
+			Field:       "title",
+			FieldName:   "配置标题",
+			FieldAttr:   &datalist.FieldAttr{Width: 150},
+			CanFilter:   true,
+			FilterField: "title",
+		},
+		&datalist.ColumnItem{
+			Field:       "api_key",
+			FieldName:   "Api Key",
+			FieldAttr:   &datalist.FieldAttr{Width: 200},
+			CanFilter:   true,
+			FilterField: "api_key",
+		},
+		&datalist.ColumnItem{
+			Field:       "secret_key",
+			FieldName:   "Secret Key",
+			FieldAttr:   &datalist.FieldAttr{Width: 200},
+			CanFilter:   true,
+			FilterField: "secret_key",
+		},
+		&datalist.ColumnItem{
+			Field:     "status",
+			FieldName: "是否启用",
+			FieldAttr: &datalist.FieldAttr{Width: 120},
+			ValueCallBack: func(rowData interface{}) string {
+				row := rowData.(*response.ConfigBaidu)
+				return datalist.YesNoValue(row.Status)
+			},
+		},
+		&datalist.ColumnItem{
+			Field:     "call_num",
+			FieldName: "调用次数",
+			FieldAttr: &datalist.FieldAttr{Width: 150},
+		},
+		&datalist.ColumnItem{
+			Field:     "created_at",
+			FieldName: "创建时间",
+			FieldAttr: &datalist.FieldAttr{Width: 200},
+			ValueCallBack: func(rowData interface{}) string {
+				row := rowData.(*response.ConfigBaidu)
+				if row.CreatedAt == 0 {
+					return ""
+				}
+				return gtime.NewFromTimeStamp(gconv.Int64(row.CreatedAt)).Format("Y-m-d H:i:s")
+			},
+			CanFilter: true,
+			FilterType: &datalist.FilterType{
+				Attr: "date",
+			},
+			FilterField: "created_at",
+		},
+		&datalist.ColumnItem{
+			Field:     "updated_at",
+			FieldName: "修改时间",
+			FieldAttr: &datalist.FieldAttr{Width: 200},
+			ValueCallBack: func(rowData interface{}) string {
+				row := rowData.(*response.ConfigBaidu)
+				if row.UpdatedAt == 0 {
+					return ""
+				}
+				return gtime.NewFromTimeStamp(gconv.Int64(row.UpdatedAt)).Format("Y-m-d H:i:s")
+			},
+			CanFilter: true,
+			FilterType: &datalist.FilterType{
+				Attr: "date",
+			},
+			FilterField: "updated_at",
+		},
+	}
+	return
+}

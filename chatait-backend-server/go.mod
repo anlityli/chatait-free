@@ -11,6 +11,7 @@ require (
 	github.com/BurntSushi/toml v0.3.1 // indirect
 	github.com/beevik/ntp v1.3.0 // indirect
 	github.com/clbanning/mxj v1.8.5-0.20200714211355-ff02cfb8ea28 // indirect
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/fatih/color v1.12.0 // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect

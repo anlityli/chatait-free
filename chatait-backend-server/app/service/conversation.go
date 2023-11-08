@@ -5,12 +5,18 @@
 package service
 
 import (
+	"database/sql"
 	"github.com/anlityli/chatait-free/chatait-backend-server/app/model/response"
 	"github.com/anlityli/chatait-free/chatait-backend-server/app/service/column"
 	"github.com/anlityli/chatait-free/chatait-backend-server/library/datalist"
+	"github.com/anlityli/chatait-free/chatait-public-lib/app/constant"
 	"github.com/anlityli/chatait-free/chatait-public-lib/app/dao"
+	"github.com/anlityli/chatait-free/chatait-public-lib/app/model/entity"
+	"github.com/anlityli/chatait-free/chatait-public-lib/library/notice"
 	"github.com/anlityli/chatait-free/chatait-public-lib/library/page"
+	"github.com/anlityli/chatait-free/chatait-public-lib/library/security"
 	"github.com/gogf/gf/net/ghttp"
+	"github.com/gogf/gf/util/gconv"
 )
 
 var Conversation = &conversationService{}
@@ -93,6 +99,45 @@ func (s *conversationService) List(r *ghttp.Request) (re *datalist.Result, err e
 	re, err = datalist.List(r, data, listColumns)
 	if err != nil {
 		return nil, err
+	}
+	hostUrl, err := security.HostUrl(r)
+	if err != nil {
+		notice.Write(r, notice.OtherError, "域名授权失败，您可能正在使用盗版程序，请购买正版")
+		return nil, err
+	}
+	for _, item := range re.List {
+		if gconv.Int(item["topic_type"].OriValue) == constant.TopicTypeMidjourney {
+			itemMjData := &response.ConversationSpeakItemMjData{}
+			mjData := &entity.ConversationMidjourney{}
+			err = dao.ConversationMidjourney.Where("conversation_id=?", gconv.String(item["id"].OriValue)).Scan(mjData)
+			if err != nil && err != sql.ErrNoRows {
+				return nil, err
+			}
+			if mjData.ConversationId > 0 {
+				itemMjData.ActionType = mjData.ActionType
+				itemMjData.Error = mjData.ErrorData
+				fileData := &entity.FileMidjourney{}
+				err = dao.FileMidjourney.Where("id=?", mjData.FileId).Scan(fileData)
+				if err != nil && err != sql.ErrNoRows {
+					return nil, err
+				}
+				if fileData.Id > 0 {
+					itemMjData.ImgUrl = hostUrl + "/file/midjourney-image?id=" + gconv.String(fileData.Id)
+					itemMjData.Prompt = fileData.Prompt
+				}
+			} else {
+				queueData := &entity.QueueMidjourney{}
+				err = dao.QueueMidjourney.Where("conversation_id=?", gconv.String(item["id"].OriValue)).Scan(queueData)
+				if err != nil && err != sql.ErrNoRows {
+					return nil, err
+				}
+				if queueData.Id > 0 {
+					itemMjData.ActionType = queueData.ActionType
+					itemMjData.Progress = queueData.Progress
+				}
+			}
+			item["mj_data"].OriValue = itemMjData
+		}
 	}
 	return re, nil
 }

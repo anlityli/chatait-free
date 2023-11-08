@@ -189,6 +189,14 @@ func (c *Conversation) topicTypeFilterType() (re *datalist.FilterType) {
 			"label": "GPT3.5",
 			"value": constant.TopicTypeOpenaiGPT3,
 		},
+		g.Map{
+			"label": "GPT4",
+			"value": constant.TopicTypeOpenaiGPT4,
+		},
+		g.Map{
+			"label": "Midjourney",
+			"value": constant.TopicTypeMidjourney,
+		},
 	}
 	return &datalist.FilterType{
 		Attr:       "select",
