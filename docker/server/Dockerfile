@@ -1,7 +1,5 @@
-FROM loads/alpine:3.8
-#RUN apk add nginx
+FROM golang:1.21
 
-#FROM nginx AS nginx
 WORKDIR /chatait
 RUN mkdir /chatait/config
 RUN mkdir /chatait/tmp/
@@ -15,18 +13,9 @@ VOLUME /chatait/tmp/
 VOLUME /chatait/files/
 COPY ./backendServer/chatait-backend-server /chatait/backendServer/
 COPY ./frontendServer/chatait-frontend-server /chatait/frontendServer/
-#COPY ./nginx.conf /etc/nginx/conf.d/chatait.conf
-COPY ./docker-run.sh /chatait 
-#RUN chmod +x /chatait/backendServer/chatait-backend-server
-#RUN chmod +x /chatait/frontendServer/chatait-frontend-server
+COPY ./docker-run.sh /chatait
+RUN chmod +x /chatait/backendServer/chatait-backend-server
+RUN chmod +x /chatait/frontendServer/chatait-frontend-server
 
 WORKDIR /chatait
 CMD /chatait/docker-run.sh
-
-
-
-
-
-
- 
-
