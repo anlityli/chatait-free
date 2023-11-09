@@ -84,6 +84,22 @@ CREATE TABLE `c_config` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4  COMMENT='系统配置表';
 
 -- ----------------------------
+-- Table structure for c_config_baidu
+-- ----------------------------
+DROP TABLE IF EXISTS `c_config_baidu`;
+CREATE TABLE `c_config_baidu` (
+  `id` bigint NOT NULL COMMENT 'ID',
+  `title` varchar(50) NOT NULL COMMENT '标题',
+  `api_key` varchar(255) NOT NULL,
+  `secret_key` varchar(255) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '启用状态',
+  `call_num` int NOT NULL DEFAULT '0' COMMENT '调用次数',
+  `created_at` int NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `updated_at` int NOT NULL DEFAULT '0' COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='百度接口';
+
+-- ----------------------------
 -- Table structure for c_config_level
 -- ----------------------------
 DROP TABLE IF EXISTS `c_config_level`;
