@@ -19,7 +19,7 @@ docker run -p 18001:18001 -p 18002:18002 -v /root/chatait-free/docker/server/con
 
 ## 启动前端docker
 ```
-docker run -p 18008:18003 -p 18009:18004 -d --name chataitVueApp anlity/chataitvue:1.0.1
+docker run -p 18003:18003 -p 18004:18004 -d --name chataitVueApp anlity/chataitvue:1.0.1
 ```
 
 ## 部署nginx
