@@ -56,7 +56,7 @@ chat-frontend-api.chatait.demo  # 前台接口服务端域名（前台前端请�
 chat-backend-api.chatait.demo   # 后台接口服务端域名（后台前端请求的接口域名）
 ```
 
-> 注：如果部署免费版 ```chat-frontend-api``` 和 ```chat-backend-api``` 两个A记录必须严格按照这个内容解析。
+> 注：如果不是自己打包VUE部署 ```chat-frontend-api``` 和 ```chat-backend-api``` 两个A记录必须严格按照这个内容解析。
 
 ### 购买服务器
 最好购买国外服务器，因为国外服务器可以直接访问```openai```和```midjourney```网站，如果部署在国内服务器，部署完成后需要配置代理服务器。   
