@@ -38,7 +38,7 @@ func GenerateImage(ctx context.Context, tx *gdb.TX, params *GenerateImageParams)
 		ApplicationId: ApplicationId,
 		SessionId:     config.SessionId,
 		Data: &DSCommand{
-			Version: "1118961510123847772",
+			Version: "1166847114203123795",
 			Id:      "938956540159881230",
 			Name:    "imagine",
 			Type:    1,
@@ -52,7 +52,7 @@ func GenerateImage(ctx context.Context, tx *gdb.TX, params *GenerateImageParams)
 			ApplicationCommand: &DSApplicationCommand{
 				Id:                       "938956540159881230",
 				ApplicationId:            ApplicationId,
-				Version:                  "1118961510123847772",
+				Version:                  "1166847114203123795",
 				DefaultPermission:        true,
 				DefaultMemberPermissions: nil,
 				Type:                     1,
