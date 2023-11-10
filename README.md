@@ -4,7 +4,7 @@
 <img src="https://github.com/anlityli/chatait-free/blob/main/doc/logo.png?raw=true" width="200"/>
 </div>
 
-ChatAIT是用golang+vue开发的AI对话网站，对话模式模仿ChatGPT和Midjourney的形式。
+ChatAIT是用golang+vue开发的AI对话网站，对话模式模仿ChatGPT和Midjourney的形式。正式版已经开源，不区分正式版和免费版，所有功能开源。如需定制联系邮箱。
 
 支持：
 - [x] GPT4
@@ -26,6 +26,7 @@ ChatAIT是用golang+vue开发的AI对话网站，对话模式模仿ChatGPT和Mid
 - [ ] 敏感词过滤
 - [ ] 站内公告文章系统
 - [ ] 百度文心一言
+- [ ] I18n 多语言
 - [ ] 更多实用功能
 
 ## 演示地址
