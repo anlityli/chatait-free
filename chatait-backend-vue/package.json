@@ -1,6 +1,6 @@
 {
   "name": "chatgpt-backend",
-  "version": "0.7.6",
+  "version": "1.1.1",
   "scripts": {
     "dev:mock": "vite --open --mode mock",
     "dev": "vite --open --mode development",

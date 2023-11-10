@@ -632,6 +632,9 @@ INSERT INTO `c_config_wallet` (`field`, `wallet_name`) VALUES ('gpt3', 'Gpt3次�
 INSERT INTO `c_config_wallet` (`field`, `wallet_name`) VALUES ('gpt4', 'Gpt4次数');
 INSERT INTO `c_config_wallet` (`field`, `wallet_name`) VALUES ('midjourney', 'Midjourney次数');
 
+# c_config_pay
+INSERT INTO `c_config_pay` (`id`, `api_name`, `params`, `pay_channel`, `frontend_description`, `backend_description`, `status`, `created_at`, `updated_at`) VALUES (1, '微免签', '[{\"param\":\"apiKey\",\"param_name\":\"通讯密钥\",\"value\":\"xxxxxxxxx\"},{\"param\":\"host\",\"param_name\":\"host\",\"value\":\"http://xxx.xxx.com\"}]', '[{\"id\":1,\"channel\":\"1\",\"channel_name\":\"微信\",\"status\":1},{\"id\":2,\"channel\":\"2\",\"channel_name\":\"支付宝\",\"status\":1}]', '', '', 1, 0, 0);
+
 # c_admin_role
 INSERT INTO `c_admin_role` (`id`, `role_name`, `remark`, `permission`, `column_permission`, `dont_del`, `create_admin`, `update_admin`, `created_at`, `updated_at`) VALUES (1, '超级管理员', '全局管理', NULL, NULL, 1, '1', '1', 0, 0);
 

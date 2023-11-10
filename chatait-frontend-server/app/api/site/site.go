@@ -16,7 +16,7 @@ type Site struct {
 
 // Index 首页
 func (c *Site) Index(r *ghttp.Request) {
-	notice.Write(r, notice.NoError, "ChatAIT首页")
+	notice.Write(r, notice.NoError, "ChatAIT首页 v1.1.1")
 }
 
 func (c *Site) Datetime(r *ghttp.Request) {
