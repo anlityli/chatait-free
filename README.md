@@ -6,6 +6,8 @@
 
 ChatAIT是用golang+vue开发的AI对话网站，对话模式模仿ChatGPT(GPT3.5、GPT4)和Midjourney的形式。正式版已经开源，不区分正式版和免费版，所有功能开源。如需定制联系邮箱。
 
+<strong>请自觉遵守当地法律，勿将本项目用于非法目的和用途，本项目仅用于学习使用。<strong>
+
 支持：
 - [x] GPT4
 - [x] GPT3.5
@@ -193,8 +195,7 @@ systemctl start chataitFrontend.service
 </div>
 
 ## 联系邮箱或QQ定制开发
-邮箱: leo@leocode.net   
-QQ: 88511136
+邮箱: 0838258@gmail.com   
 
 ## 框架
 golang: [Goframe](https://github.com/gogf/gf)   
