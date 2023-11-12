@@ -194,7 +194,7 @@ systemctl start chataitFrontend.service
 <img src="https://github.com/anlityli/chatait-free/blob/main/doc/donate.jpg?raw=true" width="375"/>
 </div>
 
-## 联系邮箱或QQ定制开发
+## 联系邮箱
 邮箱: 0838258@gmail.com   
 
 ## 框架
