@@ -97,7 +97,7 @@ CREATE TABLE `c_config_baidu` (
   `created_at` int NOT NULL DEFAULT '0' COMMENT '创建时间',
   `updated_at` int NOT NULL DEFAULT '0' COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='百度接口';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4  COMMENT='百度接口';
 
 -- ----------------------------
 -- Table structure for c_config_level
