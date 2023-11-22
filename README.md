@@ -194,6 +194,10 @@ systemctl start chataitFrontend.service
 <img src="https://github.com/anlityli/chatait-free/blob/main/doc/donate.jpg?raw=true" width="375"/>
 </div>
 
+来自 | 时间 | 金额 | 备注 
+---|---|---|---
+胖六斤 | 2023.11.18 | 66.00 | 
+
 ## 联系邮箱
 邮箱: 0838258@gmail.com   
 
