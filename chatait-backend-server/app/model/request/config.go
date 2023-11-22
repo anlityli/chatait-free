@@ -77,6 +77,7 @@ type ConfigMidjourneyEdit struct {
 
 type ConfigOpenaiAdd struct {
 	Title     string `json:"title" v:"required"`
+	ApiUrl    string `json:"api_url"`
 	ApiKey    string `json:"api_key" v:"required"`
 	Proxy     string `json:"proxy"`
 	MaxTokens int    `json:"max_tokens"`

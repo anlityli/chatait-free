@@ -10,6 +10,9 @@
       <t-form-item label="配置标题" name="title">
         <t-input v-model="formData.title" class="edit-input"></t-input>
       </t-form-item>
+      <t-form-item label="Api Url" name="api_url">
+        <t-input v-model="formData.api_url" class="edit-input"></t-input>
+      </t-form-item>
       <t-form-item label="Api Key" name="api_key">
         <t-input v-model="formData.api_key" class="edit-input"></t-input>
       </t-form-item>
@@ -44,6 +47,7 @@ const route = useRoute()
 const formData = ref<FormOpenaiEdit>({
   id: '',
   title: '',
+  api_url: '',
   api_key: '',
   proxy: '',
   max_tokens: 500,

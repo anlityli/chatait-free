@@ -7,6 +7,7 @@
 export interface FormOpenaiEdit {
   id: string
   title: string
+  api_url: string
   api_key: string
   proxy: string
   max_tokens: number

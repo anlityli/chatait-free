@@ -167,6 +167,13 @@ func (c *Config) OpenaiListColumns() (re *datalist.Columns) {
 			FilterField: "title",
 		},
 		&datalist.ColumnItem{
+			Field:       "api_url",
+			FieldName:   "Api Url",
+			FieldAttr:   &datalist.FieldAttr{Width: 200},
+			CanFilter:   true,
+			FilterField: "api_url",
+		},
+		&datalist.ColumnItem{
 			Field:       "api_key",
 			FieldName:   "Api Key",
 			FieldAttr:   &datalist.FieldAttr{Width: 200},
