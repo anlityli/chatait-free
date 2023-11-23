@@ -11,7 +11,7 @@
         <t-input v-model="formData.title" class="edit-input"></t-input>
       </t-form-item>
       <t-form-item label="Api Url" name="api_url">
-        <t-input v-model="formData.api_url" class="edit-input"></t-input>
+        <t-input v-model="formData.api_url" class="edit-input" placeholder="不填默认 openai 官方接口"></t-input>
       </t-form-item>
       <t-form-item label="Api Key" name="api_key">
         <t-input v-model="formData.api_key" class="edit-input"></t-input>
