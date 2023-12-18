@@ -25,6 +25,7 @@ ChatAIT是用golang+vue开发的AI对话网站，对话模式模仿ChatGPT(GPT3.
 - [x] 对接微免签
 - [x] midjourney提问支持百度翻译
 - [x] midjourney图片本地保存缩略图，以便前台快速打开
+- [x] 支持第三方openai接口
 - [ ] 敏感词过滤
 - [ ] 站内公告文章系统
 - [ ] 百度文心一言
