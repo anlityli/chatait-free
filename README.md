@@ -45,6 +45,10 @@ ChatAIT是用golang+vue开发的AI对话网站，对话模式模仿ChatGPT(GPT3.
 ## 视频部署教程
 [https://www.bilibili.com/video/BV1gP411Y7oj](https://www.bilibili.com/video/BV1gP411Y7oj)
 
+## 第三方openai配置
+openai 的默认接口为: https://api.openai.com/v1/chat/completions
+在openai配置的apiUrl中替换为第三方接口的地址，如果不填则默认openai接口
+
 ## Docker部署
 [Docker部署](https://github.com/anlityli/chatait-free/blob/main/docker/README.md)
 
