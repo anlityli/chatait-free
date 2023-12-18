@@ -4,7 +4,7 @@
 
 package openai
 
-const ApiUrl = "https://api.openai.com"
+const ApiUrl = "https://api.openai.com/v1/chat/completions"
 
 const (
 	ModelGPT35Turbo    = "gpt-3.5-turbo"

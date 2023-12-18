@@ -14,7 +14,6 @@ import (
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
 	"github.com/gogf/gf/os/glog"
-	"github.com/gogf/gf/text/gstr"
 	"github.com/gogf/gf/util/gconv"
 )
 
@@ -56,9 +55,9 @@ func ChatCompletion(params *ChatCompletionParams, callback CreateChatCompletionC
 	glog.Line(true).Debug(gconv.String(requestDataJson))
 	apiUrl := ApiUrl
 	if config.ApiUrl != "" {
-		apiUrl = gstr.TrimRight(apiUrl, "/")
+		apiUrl = config.ApiUrl
 	}
-	resp, err := httpClient.Post(ApiUrl+"chat/completions", requestDataJson)
+	resp, err := httpClient.Post(apiUrl, requestDataJson)
 	if err != nil {
 		glog.Line(true).Println(err.Error())
 		return err
