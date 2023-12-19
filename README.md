@@ -53,7 +53,7 @@ openai 的默认接口为: https://api.openai.com/v1/chat/completions
 ### v1.1.1 升级到 v1.1.3
 按照教程部署后，把之前的数据库增加第三方api的字段，从mysql中执行以下命令：
 ```
-ALTER TABLE `chatait_db`.`c_config_openai` 
+ALTER TABLE `c_config_openai` 
 ADD COLUMN `api_url` varchar(1000) NOT NULL DEFAULT '' COMMENT 'api_url' AFTER `title`;
 ```
 
