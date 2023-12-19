@@ -146,7 +146,7 @@ DROP TABLE IF EXISTS `c_config_openai`;
 CREATE TABLE `c_config_openai` (
   `id` bigint NOT NULL COMMENT 'ID',
   `title` varchar(50) NOT NULL COMMENT '标题',
-  `api_url` varchar(1000) CHARACTER SET utf8mb4  NOT NULL COMMENT 'api_url',
+  `api_url` varchar(1000) CHARACTER SET utf8mb4  NOT NULL DEFAULT '' COMMENT 'api_url',
   `api_key` varchar(255) CHARACTER SET utf8mb4  NOT NULL COMMENT 'api_key',
   `proxy` varchar(255) NOT NULL DEFAULT '' COMMENT '代理地址',
   `max_tokens` int NOT NULL DEFAULT '500' COMMENT '最大Token',
