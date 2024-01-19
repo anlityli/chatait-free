@@ -94,6 +94,7 @@ type ConfigMidjourneyList []*ConfigMidjourney
 type ConfigOpenai struct {
 	Id        string `json:"id"`
 	Title     string `json:"title"`
+	ApiUrl    string `json:"api_url"`
 	ApiKey    string `json:"api_key"`
 	Proxy     string `json:"proxy"`
 	MaxTokens int    `json:"max_tokens"`
