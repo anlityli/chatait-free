@@ -65,6 +65,10 @@ export const getRoutesExpanded = () => {
 
 export const getActive = (maxLevel = 3): string => {
   const route = useRoute()
+  // #16 @bobwong89757 https://github.com/anlityli/chatait-free/issues/16#issuecomment-1916755224
+  if (route === null) {
+    return ''
+  }
   if (!route.path) {
     return ''
   }
