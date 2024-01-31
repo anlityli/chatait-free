@@ -517,7 +517,7 @@ func (w *WsClient) continueHandler(message *WsReceiveMessageDCommon, queueData *
 				ChannelId:     w.Config.ChannelId,
 				MessageFlags:  gconv.Int64(message.Flags),
 				MessageId:     message.Id,
-				ApplicationId: ApplicationId,
+				ApplicationId: NJApplicationId,
 				SessionId:     w.Config.SessionId,
 				Data: &CustomIdData{
 					ComponentType: 2,
@@ -586,7 +586,7 @@ func (w *WsClient) verifyHuman(message *WsReceiveMessageDCommon, queueData *enti
 				ChannelId:     w.Config.ChannelId,
 				MessageFlags:  gconv.Int64(message.Flags),
 				MessageId:     message.Id,
-				ApplicationId: ApplicationId,
+				ApplicationId: NJApplicationId,
 				SessionId:     w.Config.SessionId,
 				Data: &CustomIdData{
 					ComponentType: 2,

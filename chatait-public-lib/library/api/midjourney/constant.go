@@ -6,8 +6,24 @@ package midjourney
 
 // ApplicationId Midjourney在Discord的应用Id
 const ApplicationId = "936929561302675456"
+
+// ID
 const ApiUrl = "https://discord.com/api/v9/"
 const WsUrl = "wss://gateway.discord.gg/?encoding=json&v=9"
+
+const (
+	MJApplicationId                   = "936929561302675456"
+	MJVersionId                       = "1166847114203123795"
+	MJCommandGenerateImageId          = "938956540159881230"
+	MJCommandGenerateImageDescription = "Create images with Midjourney"
+)
+
+const (
+	NJApplicationId                   = "1022952195194359889"
+	NJVersionId                       = "1166842163141816443"
+	NJCommandGenerateImageId          = "1023054140580057099"
+	NJCommandGenerateImageDescription = "Create images with Niji journey"
+)
 
 const (
 	MessageTypeGenerate = 0  // 生图
