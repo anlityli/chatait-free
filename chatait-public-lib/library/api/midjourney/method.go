@@ -29,17 +29,27 @@ func GenerateImage(ctx context.Context, tx *gdb.TX, params *GenerateImageParams)
 		glog.Line(true).Debug(err)
 		return err
 	}
+	applicationId := MJApplicationId
+	versionId := MJVersionId
+	commandGenerateImageId := MJCommandGenerateImageId
+	commandGenerateImageDescription := MJCommandGenerateImageDescription
+	if params.ApplicationType == constant.QueueMidjourneyApplicationTypeNJ {
+		applicationId = NJApplicationId
+		versionId = NJVersionId
+		commandGenerateImageId = NJCommandGenerateImageId
+		commandGenerateImageDescription = NJCommandGenerateImageDescription
+	}
 	prompt := trimPrompt(config, params.Prompt)
 	nonce := snowflake.GenerateDiscordId()
 	requestData := &ReqTriggerDiscord{
 		Type:          RequestTypeGenerate,
 		GuildId:       config.GuildId,
 		ChannelId:     config.ChannelId,
-		ApplicationId: NJApplicationId,
+		ApplicationId: applicationId,
 		SessionId:     config.SessionId,
 		Data: &DSCommand{
-			Version: NJVersionId,
-			Id:      NJCommandGenerateImageId,
+			Version: versionId,
+			Id:      commandGenerateImageId,
 			Name:    "imagine",
 			Type:    1,
 			Options: []*DSOption{
@@ -50,15 +60,15 @@ func GenerateImage(ctx context.Context, tx *gdb.TX, params *GenerateImageParams)
 				},
 			},
 			ApplicationCommand: &DSApplicationCommand{
-				Id:                       NJCommandGenerateImageId,
-				ApplicationId:            NJApplicationId,
-				Version:                  NJVersionId,
+				Id:                       commandGenerateImageId,
+				ApplicationId:            applicationId,
+				Version:                  versionId,
 				DefaultPermission:        true,
 				DefaultMemberPermissions: nil,
 				Type:                     1,
 				Nsfw:                     false,
 				Name:                     "imagine",
-				Description:              NJCommandGenerateImageDescription,
+				Description:              commandGenerateImageDescription,
 				DmPermission:             true,
 				Options:                  []*DSCommandOption{{Type: 3, Name: "prompt", Description: "The prompt to imagine", Required: true}},
 			},
@@ -74,18 +84,19 @@ func GenerateImage(ctx context.Context, tx *gdb.TX, params *GenerateImageParams)
 	}
 	id := snowflake.GenerateID()
 	queueData := &entity.QueueMidjourney{
-		Id:             id,
-		ConversationId: params.ConversationId,
-		ConfigId:       config.Id,
-		ActionType:     constant.ActionTypeGenerate,
-		Nonce:          nonce,
-		MessageType:    MessageTypeGenerate,
-		MessageContent: prompt,
-		RequestType:    RequestTypeGenerate,
-		RequestUrl:     ApiUrl + "interactions",
-		RequestData:    gconv.String(requestDataJson),
-		Status:         constant.QueueMidjourneyStatusInit,
-		CreatedAt:      gconv.Int(xtime.GetNowTime()),
+		Id:              id,
+		ConversationId:  params.ConversationId,
+		ConfigId:        config.Id,
+		ActionType:      constant.ActionTypeGenerate,
+		ApplicationType: params.ApplicationType,
+		Nonce:           nonce,
+		MessageType:     MessageTypeGenerate,
+		MessageContent:  prompt,
+		RequestType:     RequestTypeGenerate,
+		RequestUrl:      ApiUrl + "interactions",
+		RequestData:     gconv.String(requestDataJson),
+		Status:          constant.QueueMidjourneyStatusInit,
+		CreatedAt:       gconv.Int(xtime.GetNowTime()),
 	}
 	err = QueueInstance().InsertTask(queueData)
 	if err != nil {
@@ -118,6 +129,10 @@ func CustomIdImage(ctx context.Context, tx *gdb.TX, params *CustomIdImageParams)
 	if referQueueData.Id <= 0 {
 		return errors.New("对话相应的队列信息不存在")
 	}
+	applicationId := MJApplicationId
+	if referQueueData.ApplicationType == constant.QueueMidjourneyApplicationTypeNJ {
+		applicationId = NJApplicationId
+	}
 	nonce := snowflake.GenerateDiscordId()
 	requestData := &ReqCustomIdDiscord{
 		Type:          RequestTypeCustomId,
@@ -125,7 +140,7 @@ func CustomIdImage(ctx context.Context, tx *gdb.TX, params *CustomIdImageParams)
 		ChannelId:     config.ChannelId,
 		MessageFlags:  0,
 		MessageId:     gconv.String(referQueueData.MessageId),
-		ApplicationId: NJApplicationId,
+		ApplicationId: applicationId,
 		SessionId:     config.SessionId,
 		Data: &CustomIdData{
 			ComponentType: 2,
@@ -141,19 +156,20 @@ func CustomIdImage(ctx context.Context, tx *gdb.TX, params *CustomIdImageParams)
 	}
 	id := snowflake.GenerateID()
 	queueData := &entity.QueueMidjourney{
-		Id:             id,
-		ConversationId: params.ConversationId,
-		ConfigId:       config.Id,
-		ActionType:     params.ActionType,
-		Nonce:          nonce,
-		ReferMessageId: referQueueData.MessageId,
-		ReferIndex:     params.Index,
-		MessageType:    MessageTypeCustomId,
-		RequestType:    RequestTypeCustomId,
-		RequestUrl:     ApiUrl + "interactions",
-		RequestData:    gconv.String(requestDataJson),
-		Status:         constant.QueueMidjourneyStatusInit,
-		CreatedAt:      gconv.Int(xtime.GetNowTime()),
+		Id:              id,
+		ConversationId:  params.ConversationId,
+		ConfigId:        config.Id,
+		ActionType:      params.ActionType,
+		ApplicationType: referQueueData.ApplicationType,
+		Nonce:           nonce,
+		ReferMessageId:  referQueueData.MessageId,
+		ReferIndex:      params.Index,
+		MessageType:     MessageTypeCustomId,
+		RequestType:     RequestTypeCustomId,
+		RequestUrl:      ApiUrl + "interactions",
+		RequestData:     gconv.String(requestDataJson),
+		Status:          constant.QueueMidjourneyStatusInit,
+		CreatedAt:       gconv.Int(xtime.GetNowTime()),
 	}
 	err = QueueInstance().InsertTask(queueData)
 	if err != nil {

@@ -488,7 +488,7 @@ func (w *WsClient) filterMessage(message *WsReceiveMessageDCommon) bool {
 	if message.ChannelId != w.Config.ChannelId {
 		return false
 	}
-	if message.Author != nil && w.Config.MjBotId != "" && message.Author.Id != w.Config.MjBotId {
+	if message.Author != nil && message.Author.Id != MJApplicationId && message.Author.Id != NJApplicationId {
 		return false
 	}
 	if message.Interaction != nil && gconv.Int64(message.Interaction.User.Id) != w.UserId {
@@ -511,13 +511,17 @@ func (w *WsClient) continueHandler(message *WsReceiveMessageDCommon, queueData *
 				message:   message,
 			})
 			// 再次发起请求
+			applicationId := MJApplicationId
+			if queueData.ApplicationType == constant.QueueMidjourneyApplicationTypeNJ {
+				applicationId = NJApplicationId
+			}
 			requestData := &ReqCustomIdDiscord{
 				Type:          3,
 				GuildId:       w.Config.GuildId,
 				ChannelId:     w.Config.ChannelId,
 				MessageFlags:  gconv.Int64(message.Flags),
 				MessageId:     message.Id,
-				ApplicationId: NJApplicationId,
+				ApplicationId: applicationId,
 				SessionId:     w.Config.SessionId,
 				Data: &CustomIdData{
 					ComponentType: 2,
@@ -580,13 +584,17 @@ func (w *WsClient) verifyHuman(message *WsReceiveMessageDCommon, queueData *enti
 				message:   message,
 			})
 			// 再次发起请求
+			applicationId := MJApplicationId
+			if queueData.ApplicationType == constant.QueueMidjourneyApplicationTypeNJ {
+				applicationId = NJApplicationId
+			}
 			requestData := &ReqCustomIdDiscord{
 				Type:          3,
 				GuildId:       w.Config.GuildId,
 				ChannelId:     w.Config.ChannelId,
 				MessageFlags:  gconv.Int64(message.Flags),
 				MessageId:     message.Id,
-				ApplicationId: NJApplicationId,
+				ApplicationId: applicationId,
 				SessionId:     w.Config.SessionId,
 				Data: &CustomIdData{
 					ComponentType: 2,

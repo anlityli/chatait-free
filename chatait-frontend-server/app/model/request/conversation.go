@@ -41,18 +41,19 @@ type ConversationTopicEdit struct {
 }
 
 type ConversationMidjourneySpeak struct {
-	TopicId string `json:"topic_id" v:"required"`
-	Content string `json:"content" v:"required"`
-	No      string `json:"no"`
-	Images  string `json:"images"`
-	Seed    string `json:"seed"`
-	Ar      string `json:"ar"`
-	Chaos   string `json:"chaos"`
-	Quality string `json:"quality"`
-	Model   string `json:"model"`
-	Stylize string `json:"stylize"`
-	Tile    string `json:"tile"`
-	Iw      string `json:"iw"`
+	TopicId         string `json:"topic_id" v:"required"`
+	Content         string `json:"content" v:"required"`
+	ApplicationType int    `json:"application_type" v:"required"`
+	No              string `json:"no"`
+	Images          string `json:"images"`
+	Seed            string `json:"seed"`
+	Ar              string `json:"ar"`
+	Chaos           string `json:"chaos"`
+	Quality         string `json:"quality"`
+	Model           string `json:"model"`
+	Stylize         string `json:"stylize"`
+	Tile            string `json:"tile"`
+	Iw              string `json:"iw"`
 }
 
 type ConversationMidjourneyCustom struct {

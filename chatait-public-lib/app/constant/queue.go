@@ -22,3 +22,8 @@ const (
 	QueueMidjourneyEventVerifyHuman         = "verifyHuman"
 	QueueMidjourneyEventError               = "error"
 )
+
+const (
+	QueueMidjourneyApplicationTypeMJ = 1 // MJ机器人
+	QueueMidjourneyApplicationTypeNJ = 2 // Niji机器人
+)

@@ -5,8 +5,9 @@
 package midjourney
 
 type GenerateImageParams struct {
-	ConversationId int64  `json:"conversation_id"`
-	Prompt         string `json:"prompt"`
+	ConversationId  int64  `json:"conversation_id"`
+	ApplicationType int    `json:"application_type"`
+	Prompt          string `json:"prompt"`
 }
 
 type CustomIdImageParams struct {

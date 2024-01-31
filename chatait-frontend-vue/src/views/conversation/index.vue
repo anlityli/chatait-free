@@ -1,5 +1,5 @@
 <!--
-  - Copyright 2023 Anlity <leo@leocode.net>. All rights reserved.
+  - Copyright 2024 Anlity <leo@leocode.net>. All rights reserved.
   - Use of this source code is governed by a AGPL v3.0 style
   - license that can be found in the LICENSE file.
   -->
@@ -670,7 +670,9 @@ onBeforeUnmount(() => {
                               btnItem.label !== 'Web' &&
                               btnItem.custom_id.indexOf('BOOKMARK') === -1 &&
                               btnItem.custom_id.indexOf('CustomZoom') === -1 &&
-                              btnItem.custom_id.indexOf('Inpaint') === -1
+                              btnItem.custom_id.indexOf('Inpaint') === -1 &&
+                              btnItem.custom_id.indexOf('JOB::low_variation') === -1 &&
+                              btnItem.custom_id.indexOf('JOB::high_variation') === -1
                             "
                             :key="btnIndex"
                             :theme="btnItem.style === 1 ? 'success' : 'default'"

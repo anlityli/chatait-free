@@ -1,5 +1,5 @@
 <!--
-  - Copyright 2023 Anlity <leo@leocode.net>. All rights reserved.
+  - Copyright 2024 Anlity <leo@leocode.net>. All rights reserved.
   - Use of this source code is governed by a AGPL v3.0 style
   - license that can be found in the LICENSE file.
   -->
@@ -32,6 +32,12 @@
     </t-input>
     <div v-show="showTools" class="input-params-tools">
       <t-form :data="form">
+        <t-form-item class="input-params-row" label="应用机器人" name="application_type">
+          <t-radio-group v-model="form.application_type" :default-value="ApplicationTypeMJ" size="small">
+            <t-radio-button :value="ApplicationTypeMJ">Midjourney</t-radio-button>
+            <t-radio-button :value="ApplicationTypeNJ">Niji</t-radio-button>
+          </t-radio-group>
+        </t-form-item>
         <t-form-item class="input-params-row" label="反向提示" name="no">
           <t-textarea v-model="form.no" :autosize="{ maxRows: 3 }"></t-textarea>
         </t-form-item>
@@ -62,6 +68,7 @@ import { ref, toRefs, watch } from 'vue'
 import { EnterIcon, Filter2Icon, LoadingIcon } from 'tdesign-icons-vue-next'
 import { mjTools } from '@/views/conversation/script/mjTools'
 import { MidjourneySpeakForm, MidjourneySpeakFormKey } from '@/views/conversation/script/model'
+import { ApplicationTypeMJ, ApplicationTypeNJ } from '@/utils/constant/conversation'
 
 const props = defineProps({
   modelValue: {
@@ -80,6 +87,7 @@ const showTools = ref(false)
 const form = ref<MidjourneySpeakForm>({
   topic_id: '',
   content: modelValue?.value,
+  application_type: ApplicationTypeMJ,
   no: '',
   images: '',
   seed: '',
@@ -108,6 +116,7 @@ const handleInitForm = () => {
   form.value = {
     topic_id: '',
     content: modelValue?.value,
+    application_type: ApplicationTypeMJ,
     no: '',
     images: '',
     seed: '',
@@ -124,13 +133,21 @@ const handleInitForm = () => {
 const handleEnter = (event: any) => {
   showTools.value = false
   emit('enter', form.value, event)
-  handleInitForm()
+  // handleInitForm()
+  // 只清除反向提示和图片提示，其他的参数不变
+  form.value.content = modelValue?.value
+  form.value.no = ''
+  form.value.images = ''
 }
 
 const handleSubmit = () => {
   showTools.value = false
   emit('submit', form.value)
-  handleInitForm()
+  // handleInitForm()
+  // 只清除反向提示和图片提示，其他的参数不变
+  form.value.content = modelValue?.value
+  form.value.no = ''
+  form.value.images = ''
 }
 
 defineExpose({

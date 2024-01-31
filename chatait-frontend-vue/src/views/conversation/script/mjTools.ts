@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Anlity <leo@leocode.net>. All rights reserved.
+ * Copyright 2024 Anlity <leo@leocode.net>. All rights reserved.
  * Use of this source code is governed by a AGPL v3.0 style
  * license that can be found in the LICENSE file.
  */
@@ -28,7 +28,8 @@ export const mjTools = [
     description: '该参数调整生成图片的比例',
     default: 0,
     params: [
-      { label: '1:1', value: '' },
+      { label: '默认', value: '' },
+      { label: '1:1', value: '--ar 1:1' },
       { label: '4:5', value: '--ar 4:5' },
       { label: '5:4', value: '--ar 5:4' },
       { label: '2:3', value: '--ar 2:3' },

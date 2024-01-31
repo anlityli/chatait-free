@@ -331,6 +331,7 @@ CREATE TABLE `c_queue_midjourney` (
   `conversation_id` bigint DEFAULT NULL COMMENT '对话ID',
   `config_id` bigint NOT NULL COMMENT '接口配置ID',
   `action_type` int NOT NULL DEFAULT '1' COMMENT '行为类型  1生图 2Upscale',
+  `application_type` int NOT NULL DEFAULT '1' COMMENT '应用机器人类型 1MJ 2Niji',
   `nonce` bigint NOT NULL DEFAULT '0' COMMENT 'nonceID',
   `message_id` bigint NOT NULL DEFAULT '0' COMMENT '消息结束ID(生成图片完成时的消息ID)',
   `refer_message_id` bigint NOT NULL DEFAULT '0' COMMENT '提到的消息ID(生图动作为0)',

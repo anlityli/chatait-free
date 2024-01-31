@@ -144,8 +144,9 @@ func (s *conversationMidjourneyService) Speak(r *ghttp.Request) (re *response.Co
 		}
 		// 请求生成图片的接口
 		err = midjourney.GenerateImage(ctx, tx, &midjourney.GenerateImageParams{
-			ConversationId: gconv.Int64(re.AnswerId),
-			Prompt:         prompt,
+			ConversationId:  gconv.Int64(re.AnswerId),
+			ApplicationType: requestModel.ApplicationType,
+			Prompt:          prompt,
 		})
 
 		if err != nil {
@@ -306,157 +307,6 @@ func (s *conversationMidjourneyService) Custom(r *ghttp.Request) (re *response.C
 	}
 	return re, nil
 }
-
-//func (s *conversationMidjourneyService) Speak(r *ghttp.Request) (re *response.ConversationMidjourneySpeak, err error) {
-//	requestModel := &request.ConversationMidjourneySpeak{}
-//	if err = r.Parse(requestModel); err != nil {
-//		return nil, err
-//	}
-//	userId := auth.GetUserId(r)
-//	walletType := constant.WalletTypeMidjourney
-//	amount := 100
-//	// 如果用户次数不足直接报错
-//	walletData := libservice.Wallet.GetAllBalance(userId)
-//	if gconv.Int(walletData.Midjourney) < amount {
-//		midjourneyUseBalance, err := helper.GetConfig("midjourneyUseBalance")
-//		if err != nil {
-//			return nil, err
-//		}
-//		walletType = constant.WalletTypeBalance
-//		amount = gconv.Int(midjourneyUseBalance)
-//		if gconv.Int(walletData.Balance) < gconv.Int(midjourneyUseBalance) {
-//			return nil, errors.New("您的" + helper.GetWalletName(constant.WalletTypeMidjourney) + "次数或" + helper.GetWalletName(constant.WalletTypeBalance) + "不足请充值")
-//		}
-//	}
-//	// 如果达到每日最高上限，则提示报错
-//	midjourneyDailyLimit, err := helper.GetConfig("midjourneyDailyLimit")
-//	if err != nil {
-//		return nil, errors.New("获取系统配置参数失败")
-//	}
-//	todayStart := xtime.GetTodayBegin()
-//	todayEnd := xtime.GetTodayEnd()
-//	todayTimes, err := dao.Conversation.As("c").LeftJoin(dao.Topic.Table+" t", "c.topic_id=t.id").Where("t.type=? AND c.created_at>=? AND c.created_at<=?", constant.TopicTypeMidjourney, todayStart, todayEnd).Count()
-//	if todayTimes/2 >= gconv.Int(midjourneyDailyLimit) {
-//		return nil, errors.New("今日Midjourney生图次数已达上限")
-//	}
-//	newTopicId := snowflake.GenerateID()
-//	re = &response.ConversationMidjourneySpeak{}
-//	re.TopicId = requestModel.TopicId
-//	re.TopicType = constant.TopicTypeMidjourney
-//	if gconv.Int64(re.TopicId) == 0 {
-//		if requestModel.ActionType != constant.ActionTypeGenerate {
-//			return nil, errors.New("该模式不允许新提交")
-//		}
-//		re.TopicId = gconv.String(newTopicId)
-//		re.Title = "Midjourney生图: " + gstr.SubStrRune(requestModel.Content, 0, 50)
-//	}
-//	if requestModel.ActionType == constant.ActionTypeGenerate && requestModel.Content == "" {
-//		return nil, errors.New("提交内容不能为空")
-//	}
-//	if requestModel.ActionType == constant.ActionTypeUpscale || requestModel.ActionType == constant.ActionTypeVariate {
-//		if gconv.Int64(requestModel.ReferConversationId) == 0 {
-//			return nil, errors.New("upscale 或 variate 必须指定消息")
-//		}
-//		if requestModel.Index == 0 {
-//			return nil, errors.New("upscale 或 variate 不允许该索引")
-//		}
-//		if requestModel.CustomId == "" {
-//			return nil, errors.New("CustomId 不得为空")
-//		}
-//	}
-//	if requestModel.ActionType == constant.ActionTypeReRoll {
-//		if gconv.Int64(requestModel.ReferConversationId) == 0 {
-//			return nil, errors.New("upscale 或 variate 必须指定消息")
-//		}
-//		if requestModel.CustomId == "" {
-//			return nil, errors.New("CustomId 不得为空")
-//		}
-//	}
-//	nowTime := xtime.GetNowTime()
-//	if err := g.DB().Transaction(context.TODO(), func(ctx context.Context, tx *gdb.TX) (err error) {
-//		// 如果是新话题，话题入库
-//		if requestModel.TopicId == "" || requestModel.TopicId == "0" {
-//			if _, err = dao.Topic.Ctx(ctx).TX(tx).Data(g.Map{
-//				"id":         re.TopicId,
-//				"user_id":    userId,
-//				"title":      re.Title,
-//				"type":       constant.TopicTypeMidjourney,
-//				"created_at": nowTime,
-//			}).Insert(); err != nil {
-//				return err
-//			}
-//		}
-//		// 提问入库
-//		qConversationId := snowflake.GenerateID()
-//		re.QuestionContent = requestModel.Content
-//		if requestModel.ActionType == constant.ActionTypeUpscale {
-//			re.QuestionContent = "Upscale the index " + gconv.String(requestModel.Index) + " in the picture with ID " + requestModel.ReferConversationId
-//		} else if requestModel.ActionType == constant.ActionTypeVariate {
-//			re.QuestionContent = "Variate the index " + gconv.String(requestModel.Index) + " in the picture with ID " + requestModel.ReferConversationId
-//		}
-//		if _, err = dao.Conversation.Ctx(ctx).TX(tx).Data(g.Map{
-//			"id":         qConversationId,
-//			"user_id":    userId,
-//			"topic_id":   re.TopicId,
-//			"role":       "user",
-//			"content":    re.QuestionContent,
-//			"created_at": nowTime,
-//		}).Insert(); err != nil {
-//			return err
-//		}
-//		re.QuestionId = gconv.String(qConversationId)
-//		// 回答入库
-//		aConversationId := snowflake.GenerateID()
-//		if _, err = dao.Conversation.Ctx(ctx).TX(tx).Data(g.Map{
-//			"id":         aConversationId,
-//			"user_id":    userId,
-//			"topic_id":   re.TopicId,
-//			"role":       "assistant",
-//			"created_at": nowTime,
-//		}).Insert(); err != nil {
-//			return err
-//		}
-//		re.AnswerId = gconv.String(aConversationId)
-//		// 扣除次数
-//		if err = libservice.Wallet.ChangeWalletBalance(ctx, tx, &libservice.ChangeWalletParam{
-//			UserId:     userId,
-//			WalletType: walletType,
-//			Amount:     -amount,
-//			Remark:     fmt.Sprintf("生成图片【%s】扣除", gstr.SubStrRune(re.QuestionContent, 0, 50)),
-//			TargetType: constant.WalletChangeTargetTypeConversationMidjourney,
-//			TargetID:   qConversationId,
-//		}); err != nil {
-//			glog.Line(true).Println("扣除提问次数失败", qConversationId, err)
-//			return err
-//		}
-//		// 请求生成图片的接口
-//		if requestModel.ActionType == constant.ActionTypeGenerate {
-//			err = midjourney.GenerateImage(ctx, tx, &midjourney.GenerateImageParams{
-//				ConversationId: gconv.Int64(re.AnswerId),
-//				Prompt:         requestModel.Content,
-//			})
-//		} else if requestModel.ActionType == constant.ActionTypeUpscale || requestModel.ActionType == constant.ActionTypeVariate || requestModel.ActionType == constant.ActionTypeReRoll {
-//			err = midjourney.CustomIdImage(ctx, tx, &midjourney.CustomIdImageParams{
-//				ActionType:          requestModel.ActionType,
-//				ConversationId:      gconv.Int64(re.AnswerId),
-//				ReferConversationId: gconv.Int64(requestModel.ReferConversationId),
-//				Index:               requestModel.Index,
-//				CustomId:            requestModel.CustomId,
-//			})
-//		} else {
-//			err = errors.New("不支持的操作")
-//		}
-//
-//		if err != nil {
-//			return err
-//		}
-//		return nil
-//	}); err != nil {
-//		glog.Line(true).Debug("生图失败", err)
-//		return nil, err
-//	}
-//	return re, nil
-//}
 
 // Listener Bot的监听方法在项目启动时调用
 func (s *conversationMidjourneyService) Listener() (err error) {
@@ -870,6 +720,7 @@ func (s *conversationMidjourneyService) promptHandler(requestModel *request.Conv
 	// 追加参数
 	requestMap := gconv.MapStrStr(requestModel)
 	delete(requestMap, "content")
+	delete(requestMap, "application_type")
 	delete(requestMap, "images")
 	delete(requestMap, "iw")
 	delete(requestMap, "topic_id")
