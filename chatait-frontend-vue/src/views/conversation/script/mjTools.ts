@@ -8,6 +8,36 @@ import { MidjourneySpeakFormKey } from '@/views/conversation/script/model'
 
 export const mjTools = [
   {
+    key: <MidjourneySpeakFormKey>'model',
+    label: '模型',
+    description: '不同模型版本',
+    default: 0,
+    params: [
+      { label: '默认', value: '' },
+      { label: 'MJ4', value: '--v 4' },
+      { label: 'MJ5', value: '--v 5' },
+      { label: 'MJ5.1', value: '--v 5.1' },
+      { label: 'MJ5.2', value: '--v 5.2' },
+      { label: 'MJ6', value: '--v 6' },
+      { label: 'Niji5', value: '--niji 5' },
+      { label: 'Niji6', value: '--niji 6' },
+    ],
+  },
+  {
+    key: <MidjourneySpeakFormKey>'style',
+    label: '风格',
+    description: '不同模型的艺术表现形式',
+    default: 0,
+    params: [
+      { label: '默认', value: '' },
+      { label: 'MJ raw', value: '--style raw' },
+      { label: 'Niji original', value: '--style original' },
+      { label: 'Niji cute', value: '--style cute' },
+      { label: 'Niji expressive', value: '--style expressive' },
+      { label: 'Niji scenic', value: '--style scenic' },
+    ],
+  },
+  {
     key: <MidjourneySpeakFormKey>'iw',
     label: '图片权重',
     description: '该参数会不同程度的保留原图片的样式，数值越高越依从原图片',
@@ -63,20 +93,6 @@ export const mjTools = [
       { label: '低清', value: '--q .25' },
       { label: '标清', value: '--q .5' },
       { label: '高清', value: '' },
-    ],
-  },
-  {
-    key: <MidjourneySpeakFormKey>'model',
-    label: '模型',
-    description: '不同模型的艺术表现形式',
-    default: 0,
-    params: [
-      { label: 'MJ', value: '' },
-      { label: 'Niji默认', value: '--niji 5' },
-      { label: 'Niji原创', value: '--niji 5 --style original' },
-      { label: 'Niji可爱', value: '--niji 5 --style cute' },
-      { label: 'Niji富表现力', value: '--niji 5 --style expressive' },
-      { label: 'Niji布景', value: '--niji 5 --style scenic' },
     ],
   },
   {

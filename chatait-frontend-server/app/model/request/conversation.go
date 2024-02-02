@@ -51,6 +51,7 @@ type ConversationMidjourneySpeak struct {
 	Chaos           string `json:"chaos"`
 	Quality         string `json:"quality"`
 	Model           string `json:"model"`
+	Style           string `json:"style"`
 	Stylize         string `json:"stylize"`
 	Tile            string `json:"tile"`
 	Iw              string `json:"iw"`

@@ -22,6 +22,7 @@ export interface MidjourneySpeakForm {
   chaos: string
   quality: string
   model: string
+  style: string
   stylize: string
   tile: string
   iw: string

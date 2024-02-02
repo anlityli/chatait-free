@@ -43,7 +43,7 @@ import {
   ActionTypeVariate,
   ActionTypePan,
   ActionTypeVary,
-  ActionTypeZoomOut,
+  ActionTypeZoomOut, ApplicationTypeMJ,
 } from '@/utils/constant/conversation'
 import InputParams from '@/views/conversation/inputParams.vue'
 import AvatarImage from '@/components/avatarImage/AvatarImage.vue'
@@ -87,6 +87,7 @@ const speakForm = ref<SpeakForm>({
 const midjourneySpeakForm = ref<MidjourneySpeakForm>({
   topic_id: '0',
   content: '',
+  application_type: ApplicationTypeMJ,
   no: '',
   images: '',
   seed: '',
@@ -94,6 +95,7 @@ const midjourneySpeakForm = ref<MidjourneySpeakForm>({
   chaos: '',
   quality: '',
   model: '',
+  style: '',
   stylize: '',
   tile: '',
   iw: '',

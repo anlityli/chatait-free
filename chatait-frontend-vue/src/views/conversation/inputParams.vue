@@ -46,7 +46,7 @@
         </t-form-item>
         <template v-for="(item, index) in mjTools" :key="index">
           <t-form-item
-            v-if="!(item.key === 'iw' && form.images === '')"
+            v-if="item.key !== 'iw' && item.key !== 'model' && item.key !== 'style'"
             class="input-params-row"
             :label="item.label"
             :name="item.key"
@@ -55,6 +55,60 @@
               <t-radio-button v-for="(btnItem, btnIndex) in item.params" :key="btnIndex" :value="btnItem.value">
                 {{ btnItem.label }}
               </t-radio-button>
+            </t-radio-group>
+          </t-form-item>
+          <t-form-item
+            v-else-if="item.key === 'iw' && form.images !== ''"
+            class="input-params-row"
+            :label="item.label"
+            :name="item.key"
+          >
+            <t-radio-group v-model="form[item.key]" :default-value="item.params[item.default].value" size="small">
+              <t-radio-button v-for="(btnItem, btnIndex) in item.params" :key="btnIndex" :value="btnItem.value">
+                {{ btnItem.label }}
+              </t-radio-button>
+            </t-radio-group>
+          </t-form-item>
+          <t-form-item v-else-if="item.key === 'model'" class="input-params-row" :label="item.label" :name="item.key">
+            <t-radio-group v-model="form[item.key]" :default-value="item.params[item.default].value" size="small">
+              <template v-for="(btnItem, btnIndex) in item.params" :key="btnIndex">
+                <t-radio-button v-if="btnItem.value === ''" :value="btnItem.value">
+                  {{ btnItem.label }}
+                </t-radio-button>
+                <t-radio-button
+                  v-else-if="form.application_type === ApplicationTypeMJ && btnItem.label.indexOf('MJ') !== -1"
+                  :value="btnItem.value"
+                >
+                  {{ btnItem.label }}
+                </t-radio-button>
+                <t-radio-button
+                  v-else-if="form.application_type === ApplicationTypeNJ && btnItem.label.indexOf('Niji') !== -1"
+                  :value="btnItem.value"
+                >
+                  {{ btnItem.label }}
+                </t-radio-button>
+              </template>
+            </t-radio-group>
+          </t-form-item>
+          <t-form-item v-else-if="item.key === 'style'" class="input-params-row" :label="item.label" :name="item.key">
+            <t-radio-group v-model="form[item.key]" :default-value="item.params[item.default].value" size="small">
+              <template v-for="(btnItem, btnIndex) in item.params" :key="btnIndex">
+                <t-radio-button v-if="btnItem.value === ''" :value="btnItem.value">
+                  {{ btnItem.label }}
+                </t-radio-button>
+                <t-radio-button
+                  v-else-if="form.application_type === ApplicationTypeMJ && btnItem.label.indexOf('MJ') !== -1"
+                  :value="btnItem.value"
+                >
+                  {{ btnItem.label }}
+                </t-radio-button>
+                <t-radio-button
+                  v-else-if="form.application_type === ApplicationTypeNJ && btnItem.label.indexOf('Niji') !== -1"
+                  :value="btnItem.value"
+                >
+                  {{ btnItem.label }}
+                </t-radio-button>
+              </template>
             </t-radio-group>
           </t-form-item>
         </template>
@@ -95,6 +149,7 @@ const form = ref<MidjourneySpeakForm>({
   chaos: '',
   quality: '',
   model: '',
+  style: '',
   stylize: '',
   tile: '',
   iw: '',
@@ -124,6 +179,7 @@ const handleInitForm = () => {
     chaos: '',
     quality: '',
     model: '',
+    style: '',
     stylize: '',
     tile: '',
     iw: '',
