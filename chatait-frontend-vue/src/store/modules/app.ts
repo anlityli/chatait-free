@@ -6,6 +6,8 @@
 
 import { defineStore } from 'pinia'
 import { store } from '@/store'
+import { ApplicationTypeMJ } from '@/utils/constant/conversation'
+import { MidjourneySpeakForm } from '@/views/conversation/script/model'
 
 const getSystemThemeMode = (): boolean => {
   return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -14,6 +16,23 @@ const getSystemThemeMode = (): boolean => {
 export const useAppStore = defineStore('app', {
   state: () => ({
     theme: 'light',
+    saveMjSpeakParams: false,
+    mjSpeakParams: <MidjourneySpeakForm>{
+      topic_id: '',
+      content: '',
+      application_type: ApplicationTypeMJ,
+      no: '',
+      images: '',
+      seed: '',
+      ar: '',
+      chaos: '',
+      quality: '',
+      model: '',
+      style: '',
+      stylize: '',
+      tile: '',
+      iw: '',
+    },
   }),
   getters: {},
   actions: {
@@ -29,6 +48,21 @@ export const useAppStore = defineStore('app', {
         this.theme = mode
       }
     },
+    switchSaveMjSpeakParams() {
+      console.log(this.saveMjSpeakParams)
+      this.saveMjSpeakParams = !this.saveMjSpeakParams
+      console.log(this.saveMjSpeakParams)
+    },
+    setMjSpeakParams(formValue: MidjourneySpeakForm) {
+      if (this.saveMjSpeakParams) {
+        this.mjSpeakParams = formValue
+      }
+    },
+  },
+  persist: {
+    key: 'app',
+    storage: localStorage,
+    paths: ['saveMjSpeakParams', 'mjSpeakParams'],
   },
 })
 

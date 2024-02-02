@@ -112,17 +112,29 @@
             </t-radio-group>
           </t-form-item>
         </template>
+        <t-form-item class="input-params-row" label="记住参数">
+          <t-radio-group
+            v-model="appStore.saveMjSpeakParams"
+            :default-value="false"
+            size="small"
+            @change="handleChangeSaveMjParams"
+          >
+            <t-radio-button :value="true">开启</t-radio-button>
+            <t-radio-button :value="false">关闭</t-radio-button>
+          </t-radio-group>
+        </t-form-item>
       </t-form>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, toRefs, watch } from 'vue'
+import { onMounted, ref, toRefs, watch } from 'vue'
 import { EnterIcon, Filter2Icon, LoadingIcon } from 'tdesign-icons-vue-next'
 import { mjTools } from '@/views/conversation/script/mjTools'
-import { MidjourneySpeakForm, MidjourneySpeakFormKey } from '@/views/conversation/script/model'
+import { MidjourneySpeakForm } from '@/views/conversation/script/model'
 import { ApplicationTypeMJ, ApplicationTypeNJ } from '@/utils/constant/conversation'
+import { useAppStore } from '@/store'
 
 const props = defineProps({
   modelValue: {
@@ -137,6 +149,7 @@ const props = defineProps({
 const { modelValue } = toRefs(props)
 const emit = defineEmits(['update:modelValue', 'enter', 'submit', 'change'])
 const showTools = ref(false)
+const appStore = useAppStore()
 
 const form = ref<MidjourneySpeakForm>({
   topic_id: '',
@@ -194,6 +207,7 @@ const handleEnter = (event: any) => {
   form.value.content = modelValue?.value
   form.value.no = ''
   form.value.images = ''
+  appStore.setMjSpeakParams(form.value)
 }
 
 const handleSubmit = () => {
@@ -204,7 +218,27 @@ const handleSubmit = () => {
   form.value.content = modelValue?.value
   form.value.no = ''
   form.value.images = ''
+  appStore.setMjSpeakParams(form.value)
 }
+
+const handleChangeSaveMjParams = () => {
+  console.log(appStore.saveMjSpeakParams)
+  appStore.setMjSpeakParams(form.value)
+}
+
+onMounted(async () => {
+  if (appStore.saveMjSpeakParams) {
+    form.value.application_type = appStore.mjSpeakParams.application_type
+    form.value.ar = appStore.mjSpeakParams.ar
+    form.value.chaos = appStore.mjSpeakParams.chaos
+    form.value.quality = appStore.mjSpeakParams.quality
+    form.value.model = appStore.mjSpeakParams.model
+    form.value.style = appStore.mjSpeakParams.style
+    form.value.stylize = appStore.mjSpeakParams.stylize
+    form.value.tile = appStore.mjSpeakParams.tile
+    form.value.iw = appStore.mjSpeakParams.iw
+  }
+})
 
 defineExpose({
   handleInitForm,

@@ -23,6 +23,7 @@
     "marked": "^4.3.0",
     "mitt": "^3.0.1",
     "pinia": "^2.0.33",
+    "pinia-plugin-persistedstate": "^3.2.1",
     "qartjs": "^1.2.0",
     "sha.js": "^2.4.11",
     "tdesign-icons-vue-next": "^0.2.0",

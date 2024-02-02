@@ -5,14 +5,17 @@
  */
 
 import { createPinia } from 'pinia'
+import { createPersistedState } from 'pinia-plugin-persistedstate'
 // import { provideEventBus } from '@/utils/eventBus/eventBus'
 
 const store = createPinia()
+store.use(createPersistedState())
 // provideEventBus()
+export { store }
 
 export * from './modules/app'
 export * from './modules/config'
 export * from './modules/topic'
 export * from './modules/websocket'
 
-export { store }
+export default store
