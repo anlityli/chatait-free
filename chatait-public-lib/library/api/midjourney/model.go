@@ -87,3 +87,30 @@ type ReqCommandAttachments struct {
 	Filename       string `json:"filename"`
 	UploadFilename string `json:"uploaded_filename"`
 }
+
+type ReqModalDiscord struct {
+	Type          int64      `json:"type"`
+	ApplicationId string     `json:"application_id"`
+	ChannelId     string     `json:"channel_id"`
+	GuildId       string     `json:"guild_id"`
+	Data          *ModalData `json:"data"`
+	SessionId     string     `json:"session_id"`
+	Nonce         string     `json:"nonce"`
+}
+
+type ModalData struct {
+	Id         string                     `json:"id"`
+	CustomId   string                     `json:"custom_id"`
+	Components []*ModalDataComponentsItem `json:"components"`
+}
+
+type ModalDataComponentsItem struct {
+	Type       int64                                    `json:"type"`
+	Components []*ModalDataComponentsItemComponentsItem `json:"components"`
+}
+
+type ModalDataComponentsItemComponentsItem struct {
+	Type     int64  `json:"type"`
+	CustomId string `json:"custom_id"`
+	Value    string `json:"value"`
+}

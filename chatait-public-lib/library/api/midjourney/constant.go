@@ -25,9 +25,11 @@ const (
 const (
 	MessageTypeGenerate = 0  // 生图
 	MessageTypeCustomId = 19 // CustomId
+	MessageTypeModal    = 20 // CustomId
 )
 
 const (
 	RequestTypeGenerate = 2 // 生图
 	RequestTypeCustomId = 3 // CustomId
+	RequestTypeModal    = 5 // Modal
 )

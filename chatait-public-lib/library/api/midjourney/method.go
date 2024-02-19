@@ -186,6 +186,89 @@ func CustomIdImage(ctx context.Context, tx *gdb.TX, params *CustomIdImageParams)
 	return nil
 }
 
+func ModalImage(ctx context.Context, tx *gdb.TX, params *CustomIdImageParams) (err error) {
+	config, err := Instance().GetConfig()
+	if err != nil {
+		glog.Line(true).Debug(err)
+		return err
+	}
+	referQueueData := &entity.QueueMidjourney{}
+	err = dao.QueueMidjourney.Ctx(ctx).TX(tx).Where("conversation_id=?", params.ReferConversationId).Scan(referQueueData)
+	if err != nil && err != sql.ErrNoRows {
+		glog.Line(true).Debug(err)
+		return err
+	}
+	if referQueueData.Id <= 0 {
+		return errors.New("对话相应的队列信息不存在")
+	}
+	applicationId := MJApplicationId
+	if referQueueData.ApplicationType == constant.QueueMidjourneyApplicationTypeNJ {
+		applicationId = NJApplicationId
+	}
+	nonce := snowflake.GenerateDiscordId()
+	//dataId := snowflake.GenerateDiscordId()
+	requestData := &ReqModalDiscord{
+		Type:          RequestTypeModal,
+		ApplicationId: applicationId,
+		ChannelId:     config.ChannelId,
+		GuildId:       config.GuildId,
+		Data: &ModalData{
+			Id:       "1209150918260432896",
+			CustomId: "MJ::RemixModal::70a89e80-20d8-4e7e-b24f-ae83b0a7d663::1::1",
+			Components: []*ModalDataComponentsItem{
+				{
+					Type: 1,
+					Components: []*ModalDataComponentsItemComponentsItem{
+						{
+							Type:     4,
+							CustomId: "MJ::RemixModal::new_prompt",
+							Value:    "1girl, red hair, red clothes --ar 1:1 --relax",
+						},
+					},
+				},
+			},
+		},
+		SessionId: config.SessionId,
+		Nonce:     gconv.String(nonce),
+	}
+	// 构造请求数据，把请求内容写入到队列中
+	requestDataJson, err := gjson.Encode(requestData)
+	if err != nil {
+		glog.Line(true).Debug(err)
+		return err
+	}
+	id := snowflake.GenerateID()
+	queueData := &entity.QueueMidjourney{
+		Id:              id,
+		ConversationId:  params.ConversationId,
+		ConfigId:        config.Id,
+		ActionType:      params.ActionType,
+		ApplicationType: referQueueData.ApplicationType,
+		Nonce:           nonce,
+		ReferMessageId:  referQueueData.MessageId,
+		ReferIndex:      params.Index,
+		MessageType:     MessageTypeModal,
+		RequestType:     RequestTypeModal,
+		RequestUrl:      ApiUrl + "interactions",
+		RequestData:     gconv.String(requestDataJson),
+		Status:          constant.QueueMidjourneyStatusInit,
+		CreatedAt:       gconv.Int(xtime.GetNowTime()),
+	}
+	err = QueueInstance().InsertTask(queueData)
+	if err != nil {
+		glog.Line(true).Debug(err)
+		return err
+	}
+	// 调用接口，接口调用次数增加
+	if _, err = dao.ConfigMidjourney.Ctx(ctx).TX(tx).Data(g.Map{
+		"call_num": gdb.Raw("call_num+1"),
+	}).Where("id=?", config.Id).Update(); err != nil {
+		glog.Line(true).Debug(err)
+		return err
+	}
+	return nil
+}
+
 // trimPrompt 清理提示词
 func trimPrompt(config *entity.ConfigMidjourney, prompt string) string {
 	words := strings.Split(prompt, " ")
