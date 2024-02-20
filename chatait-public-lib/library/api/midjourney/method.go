@@ -8,6 +8,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 	"github.com/anlityli/chatait-free/chatait-public-lib/app/constant"
 	"github.com/anlityli/chatait-free/chatait-public-lib/app/dao"
 	"github.com/anlityli/chatait-free/chatait-public-lib/app/model/entity"
@@ -17,6 +18,7 @@ import (
 	"github.com/gogf/gf/encoding/gjson"
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/os/glog"
+	"github.com/gogf/gf/text/gstr"
 	"github.com/gogf/gf/util/gconv"
 	"strings"
 )
@@ -98,7 +100,9 @@ func GenerateImage(ctx context.Context, tx *gdb.TX, params *GenerateImageParams)
 		Status:          constant.QueueMidjourneyStatusInit,
 		CreatedAt:       gconv.Int(xtime.GetNowTime()),
 	}
-	err = QueueInstance().InsertTask(queueData)
+	err = QueueInstance().InsertTask(queueData, func(signal int) {
+
+	})
 	if err != nil {
 		glog.Line(true).Debug(err)
 		return err
@@ -115,11 +119,6 @@ func GenerateImage(ctx context.Context, tx *gdb.TX, params *GenerateImageParams)
 
 // CustomIdImage 组件处理图片
 func CustomIdImage(ctx context.Context, tx *gdb.TX, params *CustomIdImageParams) (err error) {
-	config, err := Instance().GetConfig()
-	if err != nil {
-		glog.Line(true).Debug(err)
-		return err
-	}
 	referQueueData := &entity.QueueMidjourney{}
 	err = dao.QueueMidjourney.Ctx(ctx).TX(tx).Where("conversation_id=?", params.ReferConversationId).Scan(referQueueData)
 	if err != nil && err != sql.ErrNoRows {
@@ -128,6 +127,12 @@ func CustomIdImage(ctx context.Context, tx *gdb.TX, params *CustomIdImageParams)
 	}
 	if referQueueData.Id <= 0 {
 		return errors.New("对话相应的队列信息不存在")
+	}
+	// 为保障新的任务和引用的任务是同一配置，从引用的队列中获取配置
+	config := &entity.ConfigMidjourney{}
+	err = dao.ConfigMidjourney.Where("id=? AND status=1", referQueueData.ConfigId).Scan(config)
+	if err != nil {
+		return errors.New("绘画配置不存在")
 	}
 	applicationId := MJApplicationId
 	if referQueueData.ApplicationType == constant.QueueMidjourneyApplicationTypeNJ {
@@ -171,11 +176,29 @@ func CustomIdImage(ctx context.Context, tx *gdb.TX, params *CustomIdImageParams)
 		Status:          constant.QueueMidjourneyStatusInit,
 		CreatedAt:       gconv.Int(xtime.GetNowTime()),
 	}
-	err = QueueInstance().InsertTask(queueData)
+	err = QueueInstance().InsertTask(queueData, func(signal int) {
+		glog.Line(true).Debug("队列任务完成", queueData, signal)
+		// 如果是弹模态框的任务则再调用模态方法
+		if isModalCustomId(params.CustomId) {
+			err = CustomIdModalImage(&CustomIdModalImageParams{
+				ActionType:          params.ActionType,
+				ConversationId:      params.ConversationId,
+				ReferConversationId: params.ReferConversationId,
+				Index:               params.Index,
+				OriCustomId:         params.CustomId,
+				DataId:              gconv.String(queueData.InteractionId),
+				NewPrompt:           params.NewPrompt,
+			})
+			if err != nil {
+				glog.Line(true).Debug(err)
+			}
+		}
+	})
 	if err != nil {
 		glog.Line(true).Debug(err)
 		return err
 	}
+
 	// 调用接口，接口调用次数增加
 	if _, err = dao.ConfigMidjourney.Ctx(ctx).TX(tx).Data(g.Map{
 		"call_num": gdb.Raw("call_num+1"),
@@ -186,43 +209,55 @@ func CustomIdImage(ctx context.Context, tx *gdb.TX, params *CustomIdImageParams)
 	return nil
 }
 
-func ModalImage(ctx context.Context, tx *gdb.TX, params *CustomIdImageParams) (err error) {
-	config, err := Instance().GetConfig()
-	if err != nil {
-		glog.Line(true).Debug(err)
-		return err
-	}
+func CustomIdModalImage(params *CustomIdModalImageParams) (err error) {
 	referQueueData := &entity.QueueMidjourney{}
-	err = dao.QueueMidjourney.Ctx(ctx).TX(tx).Where("conversation_id=?", params.ReferConversationId).Scan(referQueueData)
+	err = dao.QueueMidjourney.Where("conversation_id=?", params.ReferConversationId).Scan(referQueueData)
 	if err != nil && err != sql.ErrNoRows {
 		glog.Line(true).Debug(err)
 		return err
 	}
 	if referQueueData.Id <= 0 {
-		return errors.New("对话相应的队列信息不存在")
+		return errors.New("对话响应的队列信息不存在")
+	}
+	// 为保障新的任务和引用的任务是同一配置，从引用的队列中获取配置
+	config := &entity.ConfigMidjourney{}
+	err = dao.ConfigMidjourney.Where("id=? AND status=1", referQueueData.ConfigId).Scan(config)
+	if err != nil {
+		return errors.New("绘画配置不存在")
 	}
 	applicationId := MJApplicationId
 	if referQueueData.ApplicationType == constant.QueueMidjourneyApplicationTypeNJ {
 		applicationId = NJApplicationId
 	}
 	nonce := snowflake.GenerateDiscordId()
-	//dataId := snowflake.GenerateDiscordId()
-	requestData := &ReqModalDiscord{
+	if params.NewPrompt == "" {
+		params.NewPrompt = referQueueData.MessageContent
+	}
+	if params.NewPrompt == "" {
+		return errors.New("新提示词不能为空")
+	}
+	newPrompt := trimPrompt(config, params.NewPrompt)
+	// 替换CustomId
+	dataCustomId, componentsCustomId, err := replaceModalCustomId(params.OriCustomId, gconv.String(referQueueData.MessageId))
+	if err != nil {
+		return err
+	}
+	requestData := &ReqCustomIdModalDiscord{
 		Type:          RequestTypeModal,
 		ApplicationId: applicationId,
 		ChannelId:     config.ChannelId,
 		GuildId:       config.GuildId,
-		Data: &ModalData{
-			Id:       "1209150918260432896",
-			CustomId: "MJ::RemixModal::70a89e80-20d8-4e7e-b24f-ae83b0a7d663::1::1",
-			Components: []*ModalDataComponentsItem{
+		Data: &CustomIdModalData{
+			Id:       params.DataId,
+			CustomId: dataCustomId,
+			Components: []*CustomIdModalDataComponentsItem{
 				{
 					Type: 1,
-					Components: []*ModalDataComponentsItemComponentsItem{
+					Components: []*CustomIdModalDataComponentsItemComponentsItem{
 						{
 							Type:     4,
-							CustomId: "MJ::RemixModal::new_prompt",
-							Value:    "1girl, red hair, red clothes --ar 1:1 --relax",
+							CustomId: componentsCustomId,
+							Value:    newPrompt,
 						},
 					},
 				},
@@ -254,18 +289,14 @@ func ModalImage(ctx context.Context, tx *gdb.TX, params *CustomIdImageParams) (e
 		Status:          constant.QueueMidjourneyStatusInit,
 		CreatedAt:       gconv.Int(xtime.GetNowTime()),
 	}
-	err = QueueInstance().InsertTask(queueData)
+	err = QueueInstance().InsertTask(queueData, func(signal int) {
+
+	})
 	if err != nil {
 		glog.Line(true).Debug(err)
 		return err
 	}
-	// 调用接口，接口调用次数增加
-	if _, err = dao.ConfigMidjourney.Ctx(ctx).TX(tx).Data(g.Map{
-		"call_num": gdb.Raw("call_num+1"),
-	}).Where("id=?", config.Id).Update(); err != nil {
-		glog.Line(true).Debug(err)
-		return err
-	}
+
 	return nil
 }
 
@@ -281,4 +312,47 @@ func trimPrompt(config *entity.ConfigMidjourney, prompt string) string {
 	cleanedWords = append(cleanedWords, "--"+config.CreateModel)
 	cleanedStr := strings.Join(cleanedWords, " ")
 	return cleanedStr
+}
+
+func isModalCustomId(CustomId string) bool {
+	dataCustomId, _, _ := replaceModalCustomId(CustomId, "")
+	return dataCustomId != ""
+}
+
+func replaceModalCustomId(oriCustomId string, oriMessageId string) (dataCustomId string, componentsCustomId string, err error) {
+	if gstr.Contains(oriCustomId, "MJ::JOB::reroll") {
+		dataCustomId = "MJ::ImagineModal::" + oriMessageId
+		componentsCustomId = "MJ::ImagineModal::new_prompt"
+	} else if gstr.Contains(oriCustomId, "MJ::JOB::variation") {
+		customIdArr := gstr.Explode("::", oriCustomId)
+		dataCustomId = fmt.Sprintf("MJ::RemixModal::%s::%s::1", customIdArr[4], customIdArr[3])
+		componentsCustomId = "MJ::RemixModal::new_prompt"
+	} else if gstr.Contains(oriCustomId, "MJ::JOB::low_variation") {
+		customIdArr := gstr.Explode("::", oriCustomId)
+		dataCustomId = fmt.Sprintf("MJ::RemixModal::%s::%s::0", customIdArr[4], customIdArr[3])
+		componentsCustomId = "MJ::RemixModal::new_prompt"
+	} else if gstr.Contains(oriCustomId, "MJ::JOB::high_variation") {
+		customIdArr := gstr.Explode("::", oriCustomId)
+		dataCustomId = fmt.Sprintf("MJ::RemixModal::%s::%s::1", customIdArr[4], customIdArr[3])
+		componentsCustomId = "MJ::RemixModal::new_prompt"
+	} else if gstr.Contains(oriCustomId, "MJ::JOB::pan_left") {
+		customIdArr := gstr.Explode("::", oriCustomId)
+		dataCustomId = fmt.Sprintf("MJ::PanModal::left::%s::%s", customIdArr[4], customIdArr[3])
+		componentsCustomId = "MJ::PanModal::prompt"
+	} else if gstr.Contains(oriCustomId, "MJ::JOB::pan_right") {
+		customIdArr := gstr.Explode("::", oriCustomId)
+		dataCustomId = fmt.Sprintf("MJ::PanModal::right::%s::%s", customIdArr[4], customIdArr[3])
+		componentsCustomId = "MJ::PanModal::prompt"
+	} else if gstr.Contains(oriCustomId, "MJ::JOB::pan_up") {
+		customIdArr := gstr.Explode("::", oriCustomId)
+		dataCustomId = fmt.Sprintf("MJ::PanModal::up::%s::%s", customIdArr[4], customIdArr[3])
+		componentsCustomId = "MJ::PanModal::prompt"
+	} else if gstr.Contains(oriCustomId, "MJ::JOB::pan_down") {
+		customIdArr := gstr.Explode("::", oriCustomId)
+		dataCustomId = fmt.Sprintf("MJ::PanModal::down::%s::%s", customIdArr[4], customIdArr[3])
+		componentsCustomId = "MJ::PanModal::prompt"
+	} else {
+		return "", "", errors.New("不支持的格式")
+	}
+	return dataCustomId, componentsCustomId, nil
 }

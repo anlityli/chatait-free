@@ -289,21 +289,21 @@ func (s *conversationMidjourneyService) Custom(r *ghttp.Request) (re *response.C
 			return err
 		}
 		// 请求生成图片的接口
-		//err = midjourney.CustomIdImage(ctx, tx, &midjourney.CustomIdImageParams{
-		//	ActionType:          requestModel.ActionType,
-		//	ConversationId:      gconv.Int64(re.AnswerId),
-		//	ReferConversationId: gconv.Int64(requestModel.ReferConversationId),
-		//	Index:               requestModel.Index,
-		//	CustomId:            requestModel.CustomId,
-		//})
-
-		err = midjourney.ModalImage(ctx, tx, &midjourney.CustomIdImageParams{
+		err = midjourney.CustomIdImage(ctx, tx, &midjourney.CustomIdImageParams{
 			ActionType:          requestModel.ActionType,
 			ConversationId:      gconv.Int64(re.AnswerId),
 			ReferConversationId: gconv.Int64(requestModel.ReferConversationId),
 			Index:               requestModel.Index,
 			CustomId:            requestModel.CustomId,
 		})
+
+		//err = midjourney.CustomIdModalImage(ctx, tx, &midjourney.CustomIdModalImageParams{
+		//	ActionType:          requestModel.ActionType,
+		//	ConversationId:      gconv.Int64(re.AnswerId),
+		//	ReferConversationId: gconv.Int64(requestModel.ReferConversationId),
+		//	Index:               requestModel.Index,
+		//	OriCustomId:         requestModel.CustomId,
+		//})
 
 		if err != nil {
 			return err

@@ -29,9 +29,10 @@ type QueueEvent struct {
 type QueueEventMessage = WsReceiveMessageDCommon
 
 type QueueTask struct {
-	Data          *entity.QueueMidjourney  // 队列数据，与数据库一致
-	StatusChannel chan int                 // 状态通道，用来监听任务执行进度情况
-	Config        *entity.ConfigMidjourney // 任务对应的配置信息 防止重复查询所以单提出来
+	Data            *entity.QueueMidjourney  // 队列数据，与数据库一致
+	StatusChannel   chan int                 // 状态通道，用来监听任务执行进度情况
+	Config          *entity.ConfigMidjourney // 任务对应的配置信息 防止重复查询所以单提出来
+	CallbackChannel chan int                 // 回调通道，用来监听任务完成执行回调方法的通道
 }
 
 // QueueClient Queue客户端
@@ -94,7 +95,7 @@ func (q *QueueClient) Run() {
 	glog.Line(true).Debug("队列结束运行")
 }
 
-func (q *QueueClient) InsertTask(queueData *entity.QueueMidjourney) (err error) {
+func (q *QueueClient) InsertTask(queueData *entity.QueueMidjourney, callback func(signal int)) (err error) {
 	glog.Line(true).Debug("队列生产者插入任务", queueData)
 	configData := &entity.ConfigMidjourney{}
 	err = dao.ConfigMidjourney.Where("id=?", queueData.ConfigId).Scan(configData)
@@ -118,9 +119,10 @@ func (q *QueueClient) InsertTask(queueData *entity.QueueMidjourney) (err error) 
 		}
 	}
 	task := &QueueTask{
-		Data:          queueData,
-		StatusChannel: make(chan int),
-		Config:        configData,
+		Data:            queueData,
+		StatusChannel:   make(chan int),
+		Config:          configData,
+		CallbackChannel: make(chan int),
 	}
 	select {
 	case q.channel <- task:
@@ -128,6 +130,14 @@ func (q *QueueClient) InsertTask(queueData *entity.QueueMidjourney) (err error) 
 		if _, err = dao.QueueMidjourney.Data(queueData).Insert(); err != nil {
 			return err
 		}
+		go func() {
+			for {
+				callbackSignal := <-task.CallbackChannel
+				// todo 这里要研究一下什么时候关闭通道，防止内存泄露
+				//close(task.CallbackChannel)
+				callback(callbackSignal)
+			}
+		}()
 		return nil
 	default:
 		glog.Line(true).Debug("队列已经满了")
@@ -165,9 +175,15 @@ func (q *QueueClient) execTask(task *QueueTask) {
 		glog.Line(true).Debug("队列状态通道有状态", status)
 		if status == constant.QueueMidjourneyStatusEnded {
 			close(task.StatusChannel)
+			task.CallbackChannel <- constant.QueueMidjourneyStatusEnded
 			break
 		} else if status == constant.QueueMidjourneyStatusError {
 			close(task.StatusChannel)
+			task.CallbackChannel <- constant.QueueMidjourneyStatusError
+			break
+		} else if status == constant.QueueMidjourneyStatusInterrupt {
+			close(task.StatusChannel)
+			task.CallbackChannel <- constant.QueueMidjourneyStatusInterrupt
 			break
 		}
 	}

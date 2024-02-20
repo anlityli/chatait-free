@@ -474,6 +474,9 @@ func (w *WsClient) onInteractionSuccess(message *WsReceiveMessageDCommon) {
 		queueData := w.matchQueue(message)
 		if queueData.Id > 0 {
 			queueData.InteractionId = gconv.Int64(message.Id)
+			if isModalCustomId(queueData.RequestData) {
+				queueData.Status = constant.QueueMidjourneyStatusInterrupt
+			}
 			QueueInstance().changeTaskData(&changeTaskDataParams{
 				eventType: constant.QueueMidjourneyEventInteractionSuccess,
 				queueData: queueData,

@@ -9,6 +9,7 @@ const (
 	QueueMidjourneyStatusProceeding = 1
 	QueueMidjourneyStatusEnded      = 2
 	QueueMidjourneyStatusError      = 3
+	QueueMidjourneyStatusInterrupt  = 4 // 中断主要是一些模态框的任务不能认定为全部完成，认为是中断也不用再继续了
 )
 
 const (

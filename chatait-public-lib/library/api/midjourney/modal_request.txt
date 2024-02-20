@@ -1,0 +1,245 @@
+# reroll
+{
+    "type": 3,
+    "nonce": "1209475444336754688",
+    "guild_id": "1202146418307891220",
+    "channel_id": "1202146418307891223",
+    "message_flags": 0,
+    "message_id": "1202243722012794930",
+    "application_id": "1022952195194359889",
+    "session_id": "6b09429297ce2ac945a7992dcc192ac9",
+    "data": {
+        "component_type": 2,
+        "custom_id": "MJ::JOB::reroll::0::70a89e80-20d8-4e7e-b24f-ae83b0a7d663::SOLO"
+    }
+}
+
+{
+    "type": 5,
+    "application_id": "1022952195194359889",
+    "channel_id": "1202146418307891223",
+    "guild_id": "1202146418307891220",
+    "data": {
+        "id": "1209475445536460831",
+        "custom_id": "MJ::ImagineModal::1202243722012794930",
+        "components": [
+            {
+                "type": 1,
+                "components": [
+                    {
+                        "type": 4,
+                        "custom_id": "MJ::ImagineModal::new_prompt",
+                        "value": "1girl, red hair, Silver necklace --ar 1:1 --relax"
+                    }
+                ]
+            }
+        ]
+    },
+    "session_id": "6b09429297ce2ac945a7992dcc192ac9",
+    "nonce": "1209475798726082560"
+}
+
+# v3
+{
+    "type": 3,
+    "nonce": "1209477186197651456",
+    "guild_id": "1202146418307891220",
+    "channel_id": "1202146418307891223",
+    "message_flags": 0,
+    "message_id": "1202243722012794930",
+    "application_id": "1022952195194359889",
+    "session_id": "6b09429297ce2ac945a7992dcc192ac9",
+    "data": {
+        "component_type": 2,
+        "custom_id": "MJ::JOB::variation::3::70a89e80-20d8-4e7e-b24f-ae83b0a7d663"
+    }
+}
+
+{
+    "type": 5,
+    "application_id": "1022952195194359889",
+    "channel_id": "1202146418307891223",
+    "guild_id": "1202146418307891220",
+    "data": {
+        "id": "1209477187992813612",
+        "custom_id": "MJ::RemixModal::70a89e80-20d8-4e7e-b24f-ae83b0a7d663::3::1",
+        "components": [
+            {
+                "type": 1,
+                "components": [
+                    {
+                        "type": 4,
+                        "custom_id": "MJ::RemixModal::new_prompt",
+                        "value": "1girl, red hair, Silver necklace --ar 1:1 --relax"
+                    }
+                ]
+            }
+        ]
+    },
+    "session_id": "6b09429297ce2ac945a7992dcc192ac9",
+    "nonce": "1209477320117583872"
+}
+
+# Vary(Subtle)
+{
+    "type": 3,
+    "nonce": "1209477927859650560",
+    "guild_id": "1202146418307891220",
+    "channel_id": "1202146418307891223",
+    "message_flags": 0,
+    "message_id": "1209477640616939543",
+    "application_id": "1022952195194359889",
+    "session_id": "6b09429297ce2ac945a7992dcc192ac9",
+    "data": {
+        "component_type": 2,
+        "custom_id": "MJ::JOB::low_variation::1::eb6da9df-e214-4c47-b580-dacd788119bd::SOLO"
+    }
+}
+
+{
+    "type": 5,
+    "application_id": "1022952195194359889",
+    "channel_id": "1202146418307891223",
+    "guild_id": "1202146418307891220",
+    "data": {
+        "id": "1209477932922441758",
+        "custom_id": "MJ::RemixModal::eb6da9df-e214-4c47-b580-dacd788119bd::1::0",
+        "components": [
+            {
+                "type": 1,
+                "components": [
+                    {
+                        "type": 4,
+                        "custom_id": "MJ::RemixModal::new_prompt",
+                        "value": "1girl, red hair, black necklace --ar 1:1"
+                    }
+                ]
+            }
+        ]
+    },
+    "session_id": "6b09429297ce2ac945a7992dcc192ac9",
+    "nonce": "1209478083417997312"
+}
+
+# Vary(Strong)
+{
+    "type": 3,
+    "nonce": "1209478655563005952",
+    "guild_id": "1202146418307891220",
+    "channel_id": "1202146418307891223",
+    "message_flags": 0,
+    "message_id": "1209477640616939543",
+    "application_id": "1022952195194359889",
+    "session_id": "6b09429297ce2ac945a7992dcc192ac9",
+    "data": {
+        "component_type": 2,
+        "custom_id": "MJ::JOB::high_variation::1::eb6da9df-e214-4c47-b580-dacd788119bd::SOLO"
+    }
+}
+
+{
+    "type": 5,
+    "application_id": "1022952195194359889",
+    "channel_id": "1202146418307891223",
+    "guild_id": "1202146418307891220",
+    "data": {
+        "id": "1209478660118155334",
+        "custom_id": "MJ::RemixModal::eb6da9df-e214-4c47-b580-dacd788119bd::1::1",
+        "components": [
+            {
+                "type": 1,
+                "components": [
+                    {
+                        "type": 4,
+                        "custom_id": "MJ::RemixModal::new_prompt",
+                        "value": "1girl, red hair, black necklace --ar 1:1"
+                    }
+                ]
+            }
+        ]
+    },
+    "session_id": "6b09429297ce2ac945a7992dcc192ac9",
+    "nonce": "1209478797770883072"
+}
+
+# 左
+{
+    "type": 3,
+    "nonce": "1209479163279310848",
+    "guild_id": "1202146418307891220",
+    "channel_id": "1202146418307891223",
+    "message_flags": 0,
+    "message_id": "1209477640616939543",
+    "application_id": "1022952195194359889",
+    "session_id": "6b09429297ce2ac945a7992dcc192ac9",
+    "data": {
+        "component_type": 2,
+        "custom_id": "MJ::JOB::pan_left::1::eb6da9df-e214-4c47-b580-dacd788119bd::SOLO"
+    }
+}
+
+{
+    "type": 5,
+    "application_id": "1022952195194359889",
+    "channel_id": "1202146418307891223",
+    "guild_id": "1202146418307891220",
+    "data": {
+        "id": "1209479164705644594",
+        "custom_id": "MJ::PanModal::left::eb6da9df-e214-4c47-b580-dacd788119bd::1",
+        "components": [
+            {
+                "type": 1,
+                "components": [
+                    {
+                        "type": 4,
+                        "custom_id": "MJ::PanModal::prompt",
+                        "value": "1girl, red hair, black necklace --ar 1:1"
+                    }
+                ]
+            }
+        ]
+    },
+    "session_id": "6b09429297ce2ac945a7992dcc192ac9",
+    "nonce": "1209479333706465280"
+}
+
+# 上
+{
+    "type": 3,
+    "nonce": "1209487223112597504",
+    "guild_id": "1202146418307891220",
+    "channel_id": "1202146418307891223",
+    "message_flags": 0,
+    "message_id": "1209477640616939543",
+    "application_id": "1022952195194359889",
+    "session_id": "6b09429297ce2ac945a7992dcc192ac9",
+    "data": {
+        "component_type": 2,
+        "custom_id": "MJ::JOB::pan_up::1::eb6da9df-e214-4c47-b580-dacd788119bd::SOLO"
+    }
+}
+
+{
+    "type": 5,
+    "application_id": "1022952195194359889",
+    "channel_id": "1202146418307891223",
+    "guild_id": "1202146418307891220",
+    "data": {
+        "id": "1209487225792757790",
+        "custom_id": "MJ::PanModal::up::eb6da9df-e214-4c47-b580-dacd788119bd::1",
+        "components": [
+            {
+                "type": 1,
+                "components": [
+                    {
+                        "type": 4,
+                        "custom_id": "MJ::PanModal::prompt",
+                        "value": "1girl, red hair --ar 1:1"
+                    }
+                ]
+            }
+        ]
+    },
+    "session_id": "6b09429297ce2ac945a7992dcc192ac9",
+    "nonce": "1209487298073198592"
+}
