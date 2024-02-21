@@ -297,14 +297,6 @@ func (s *conversationMidjourneyService) Custom(r *ghttp.Request) (re *response.C
 			CustomId:            requestModel.CustomId,
 		})
 
-		//err = midjourney.CustomIdModalImage(ctx, tx, &midjourney.CustomIdModalImageParams{
-		//	ActionType:          requestModel.ActionType,
-		//	ConversationId:      gconv.Int64(re.AnswerId),
-		//	ReferConversationId: gconv.Int64(requestModel.ReferConversationId),
-		//	Index:               requestModel.Index,
-		//	OriCustomId:         requestModel.CustomId,
-		//})
-
 		if err != nil {
 			return err
 		}
