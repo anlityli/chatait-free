@@ -11,6 +11,7 @@ import (
 	"github.com/anlityli/chatait-free/chatait-public-lib/app/model/entity"
 	"github.com/anlityli/chatait-free/chatait-public-lib/library/helper"
 	"github.com/anlityli/chatait-free/chatait-public-lib/library/xtime"
+	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
 	"github.com/gogf/gf/os/glog"
 	"github.com/gogf/gf/os/gtimer"
@@ -78,6 +79,14 @@ func (q *QueueClient) init() (err error) {
 
 func (q *QueueClient) Run() {
 	glog.Line(true).Debug("队列开始运行")
+	// 把服务启动前未完成的任务都设置为失败
+	if _, err := dao.QueueMidjourney.Data(g.Map{
+		"status":     constant.QueueMidjourneyStatusError,
+		"error_data": "任务中断退出",
+		"error_at":   xtime.GetNowTime(),
+	}).Where("status<=?", constant.QueueMidjourneyStatusProceeding).Update(); err != nil {
+		glog.Line(true).Debug("服务启动关闭未完成任务失败", err)
+	}
 	// 建立同时执行任务的消费者
 	for i := 0; i < q.concurrentSize; i++ {
 		go func(workerId int) {
