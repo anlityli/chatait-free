@@ -554,7 +554,7 @@ const handleMidjourneyInputSubmit = async (midjourneyInputData: any) => {
       continue
     }
     const formKey = key as MidjourneySpeakFormKey
-    midjourneySpeakForm.value[formKey] = midjourneyInputData[key]
+    midjourneySpeakForm.value[formKey] = midjourneyInputData[key] as never
   }
   await handleSubmitSpeak('midjourneySpeakForm')
 }
