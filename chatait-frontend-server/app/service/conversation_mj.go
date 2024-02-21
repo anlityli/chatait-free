@@ -205,6 +205,14 @@ func (s *conversationMidjourneyService) Custom(r *ghttp.Request) (re *response.C
 	if todayTimes/2 >= gconv.Int(midjourneyDailyLimit) {
 		return nil, errors.New("今日Midjourney生图次数已达上限")
 	}
+	// 校验当前会员是否有其他未完成的绘画提问，如果有的话提示等待所有出图都结束后再提问
+	waitQueue, err := dao.QueueMidjourney.As("qm").LeftJoin(dao.Conversation.Table+" c", "qm.conversation_id=c.id").Where("c.user_id=? AND qm.status<=?", userId, constant.QueueMidjourneyStatusProceeding).One()
+	if err != nil {
+		return nil, err
+	}
+	if !waitQueue.IsEmpty() {
+		return nil, errors.New("您存在尚未完成的绘画任务，请等待任务完成后再提问。")
+	}
 	// 查找提及的数据
 	referData := &entity.Conversation{}
 	err = dao.Conversation.Where("id=?", requestModel.ReferConversationId).Scan(referData)
