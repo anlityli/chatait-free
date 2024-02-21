@@ -43,7 +43,8 @@ import {
   ActionTypeVariate,
   ActionTypePan,
   ActionTypeVary,
-  ActionTypeZoomOut, ApplicationTypeMJ,
+  ActionTypeZoomOut,
+  ApplicationTypeMJ,
 } from '@/utils/constant/conversation'
 import InputParams from '@/views/conversation/inputParams.vue'
 import AvatarImage from '@/components/avatarImage/AvatarImage.vue'
@@ -672,9 +673,7 @@ onBeforeUnmount(() => {
                               btnItem.label !== 'Web' &&
                               btnItem.custom_id.indexOf('BOOKMARK') === -1 &&
                               btnItem.custom_id.indexOf('CustomZoom') === -1 &&
-                              btnItem.custom_id.indexOf('Inpaint') === -1 &&
-                              btnItem.custom_id.indexOf('JOB::low_variation') === -1 &&
-                              btnItem.custom_id.indexOf('JOB::high_variation') === -1
+                              btnItem.custom_id.indexOf('Inpaint') === -1
                             "
                             :key="btnIndex"
                             :theme="btnItem.style === 1 ? 'success' : 'default'"

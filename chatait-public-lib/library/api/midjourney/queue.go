@@ -133,9 +133,8 @@ func (q *QueueClient) InsertTask(queueData *entity.QueueMidjourney, callback fun
 		go func() {
 			for {
 				callbackSignal := <-task.CallbackChannel
-				// todo 这里要研究一下什么时候关闭通道，防止内存泄露
-				//close(task.CallbackChannel)
 				callback(callbackSignal)
+				break
 			}
 		}()
 		return nil
@@ -176,14 +175,17 @@ func (q *QueueClient) execTask(task *QueueTask) {
 		if status == constant.QueueMidjourneyStatusEnded {
 			close(task.StatusChannel)
 			task.CallbackChannel <- constant.QueueMidjourneyStatusEnded
+			close(task.CallbackChannel)
 			break
 		} else if status == constant.QueueMidjourneyStatusError {
 			close(task.StatusChannel)
 			task.CallbackChannel <- constant.QueueMidjourneyStatusError
+			close(task.CallbackChannel)
 			break
 		} else if status == constant.QueueMidjourneyStatusInterrupt {
 			close(task.StatusChannel)
 			task.CallbackChannel <- constant.QueueMidjourneyStatusInterrupt
+			close(task.CallbackChannel)
 			break
 		}
 	}
