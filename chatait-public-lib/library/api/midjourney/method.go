@@ -211,7 +211,7 @@ func CustomIdImage(ctx context.Context, tx *gdb.TX, params *CustomIdImageParams)
 
 func CustomIdModalImage(params *CustomIdModalImageParams) (err error) {
 	referQueueData := &entity.QueueMidjourney{}
-	err = dao.QueueMidjourney.Where("conversation_id=?", params.ReferConversationId).Scan(referQueueData)
+	err = dao.QueueMidjourney.Where("conversation_id=? AND message_id<>0", params.ReferConversationId).Scan(referQueueData)
 	if err != nil && err != sql.ErrNoRows {
 		glog.Line(true).Debug(err)
 		return err
