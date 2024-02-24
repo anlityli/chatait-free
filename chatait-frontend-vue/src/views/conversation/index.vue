@@ -364,9 +364,10 @@ const handleMidjourneySpeak = async () => {
   } catch (e) {
     console.log(e)
     speakList.splice(-2)
-    submitBtnLoading.value = false
   }
   handleInitMidjourneySpeakForm()
+  // 提交完就允许再次输入，允许会员可以并发任务
+  submitBtnLoading.value = false
 }
 
 const handleMidjourneyCustom = async () => {
@@ -383,9 +384,10 @@ const handleMidjourneyCustom = async () => {
   } catch (e) {
     console.log(e)
     speakList.splice(-2)
-    submitBtnLoading.value = false
   }
   handleInitMidjourneyCustomForm()
+  // 提交完就允许再次输入，允许会员可以并发任务
+  submitBtnLoading.value = false
 }
 
 const handleOnMidjourneyInsertQueue = (speakListIndex: number, data: WSConversationMidjourneyListenerEvent) => {
