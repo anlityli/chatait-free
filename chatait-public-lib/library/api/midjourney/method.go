@@ -120,7 +120,7 @@ func GenerateImage(ctx context.Context, tx *gdb.TX, params *GenerateImageParams)
 // CustomIdImage 组件处理图片
 func CustomIdImage(ctx context.Context, tx *gdb.TX, params *CustomIdImageParams) (err error) {
 	referQueueData := &entity.QueueMidjourney{}
-	err = dao.QueueMidjourney.Ctx(ctx).TX(tx).Where("conversation_id=?", params.ReferConversationId).Scan(referQueueData)
+	err = dao.QueueMidjourney.Ctx(ctx).TX(tx).Where("conversation_id=? AND message_id<>0", params.ReferConversationId).Scan(referQueueData)
 	if err != nil && err != sql.ErrNoRows {
 		glog.Line(true).Debug(err)
 		return err

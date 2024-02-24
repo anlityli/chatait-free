@@ -172,6 +172,13 @@ func (q *QueueClient) execTask(task *QueueTask) {
 		glog.Line(true).Debug("开始请求", task.Data.RequestData, task.Data.RequestUrl)
 		_, err := q.request(task.Config, task.Data.RequestData, task.Data.RequestUrl)
 		if err != nil {
+			task.Data.Status = constant.QueueMidjourneyStatusError
+			task.Data.ErrorAt = gconv.Int(xtime.GetNowTime())
+			task.Data.ErrorData = err.Error()
+			q.changeTaskData(&changeTaskDataParams{
+				eventType: constant.QueueMidjourneyEventError,
+				queueData: task.Data,
+			})
 			glog.Line(true).Debug(err)
 			return
 		}
