@@ -78,12 +78,16 @@ func (s *conversationMidjourneyService) Speak(r *ghttp.Request) (re *response.Co
 		return nil, errors.New("今日Midjourney生图次数已达上限")
 	}
 	// 校验当前会员是否有其他未完成的绘画提问，如果有的话提示等待所有出图都结束后再提问
-	waitQueue, err := dao.QueueMidjourney.As("qm").LeftJoin(dao.Conversation.Table+" c", "qm.conversation_id=c.id").Where("c.user_id=? AND qm.status<=?", userId, constant.QueueMidjourneyStatusProceeding).One()
+	midjourneyUserProgressSize, err := helper.GetConfig("midjourneyUserProgressSize")
+	if err != nil {
+		return nil, errors.New("获取系统配置参数失败")
+	}
+	waitQueueCount, err := dao.QueueMidjourney.As("qm").LeftJoin(dao.Conversation.Table+" c", "qm.conversation_id=c.id").Where("c.user_id=? AND qm.status<=?", userId, constant.QueueMidjourneyStatusProceeding).Count()
 	if err != nil {
 		return nil, err
 	}
-	if !waitQueue.IsEmpty() {
-		return nil, errors.New("您存在尚未完成的绘画任务，请等待任务完成后再提问。")
+	if waitQueueCount >= gconv.Int(midjourneyUserProgressSize) {
+		return nil, errors.New("您同时正在执行的绘画任务已经超过" + midjourneyUserProgressSize + "个，请等待任务完成后再提问。")
 	}
 	prompt, err := s.promptHandler(requestModel)
 	if err != nil {
@@ -206,12 +210,16 @@ func (s *conversationMidjourneyService) Custom(r *ghttp.Request) (re *response.C
 		return nil, errors.New("今日Midjourney生图次数已达上限")
 	}
 	// 校验当前会员是否有其他未完成的绘画提问，如果有的话提示等待所有出图都结束后再提问
-	waitQueue, err := dao.QueueMidjourney.As("qm").LeftJoin(dao.Conversation.Table+" c", "qm.conversation_id=c.id").Where("c.user_id=? AND qm.status<=?", userId, constant.QueueMidjourneyStatusProceeding).One()
+	midjourneyUserProgressSize, err := helper.GetConfig("midjourneyUserProgressSize")
+	if err != nil {
+		return nil, errors.New("获取系统配置参数失败")
+	}
+	waitQueueCount, err := dao.QueueMidjourney.As("qm").LeftJoin(dao.Conversation.Table+" c", "qm.conversation_id=c.id").Where("c.user_id=? AND qm.status<=?", userId, constant.QueueMidjourneyStatusProceeding).Count()
 	if err != nil {
 		return nil, err
 	}
-	if !waitQueue.IsEmpty() {
-		return nil, errors.New("您存在尚未完成的绘画任务，请等待任务完成后再提问。")
+	if waitQueueCount >= gconv.Int(midjourneyUserProgressSize) {
+		return nil, errors.New("您同时正在执行的绘画任务已经超过" + midjourneyUserProgressSize + "个，请等待任务完成后再提问。")
 	}
 	// 查找提及的数据
 	referData := &entity.Conversation{}
