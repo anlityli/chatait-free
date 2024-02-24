@@ -19,6 +19,7 @@ export const mjTools = [
       { label: 'MJ5.1', value: '--v 5.1' },
       { label: 'MJ5.2', value: '--v 5.2' },
       { label: 'MJ6', value: '--v 6' },
+      { label: 'Niji4', value: '--niji 4' },
       { label: 'Niji5', value: '--niji 5' },
       { label: 'Niji6', value: '--niji 6' },
     ],

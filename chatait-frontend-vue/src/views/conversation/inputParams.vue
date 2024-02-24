@@ -71,22 +71,20 @@
           </t-form-item>
           <t-form-item v-else-if="item.key === 'model'" class="input-params-row" :label="item.label" :name="item.key">
             <t-radio-group v-model="form[item.key]" :default-value="item.params[item.default].value" size="small">
-              <template v-for="(btnItem, btnIndex) in item.params" :key="btnIndex">
-                <t-radio-button v-if="btnItem.value === ''" :value="btnItem.value">
+              <template v-if="form.application_type === ApplicationTypeMJ">
+                <t-radio-button v-for="(btnItem, btnIndex) in item.params" :key="btnIndex" :value="btnItem.value">
                   {{ btnItem.label }}
                 </t-radio-button>
-                <t-radio-button
-                  v-else-if="form.application_type === ApplicationTypeMJ && btnItem.label.indexOf('MJ') !== -1"
-                  :value="btnItem.value"
-                >
-                  {{ btnItem.label }}
-                </t-radio-button>
-                <t-radio-button
-                  v-else-if="form.application_type === ApplicationTypeNJ && btnItem.label.indexOf('Niji') !== -1"
-                  :value="btnItem.value"
-                >
-                  {{ btnItem.label }}
-                </t-radio-button>
+              </template>
+              <template v-else-if="form.application_type === ApplicationTypeNJ">
+                <template v-for="(btnItem, btnIndex) in item.params" :key="btnIndex">
+                  <t-radio-button
+                    v-if="btnItem.label.indexOf('Niji') !== -1 || btnItem.value === ''"
+                    :value="btnItem.value"
+                  >
+                    {{ btnItem.label }}
+                  </t-radio-button>
+                </template>
               </template>
             </t-radio-group>
           </t-form-item>
