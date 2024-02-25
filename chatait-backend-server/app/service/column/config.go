@@ -331,7 +331,7 @@ func (c *Config) BaiduListColumns() (re *datalist.Columns) {
 	return
 }
 
-func (c *Config) SensitiveWordColumns() (re *datalist.Columns) {
+func (c *Config) SensitiveWordListColumns() (re *datalist.Columns) {
 	re = &datalist.Columns{}
 	re.ListName = "敏感词列表"
 	re.ListID = "configSensitiveWordList"

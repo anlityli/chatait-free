@@ -84,6 +84,8 @@ func (m *Menu) userChildren() (re ListModel) {
 		&ItemModel{Key: "userBan", Title: "禁用会员", RoutePath: "user/ban", Show: false, Leaf: true},
 		&ItemModel{Key: "userChangeLevel", Title: "修改会员级别", RoutePath: "user/change-level", Show: false, Leaf: true},
 		&ItemModel{Key: "userResetPassword", Title: "重置会员密码", RoutePath: "user/reset-password", Show: false, Leaf: true},
+		&ItemModel{Key: "userSensitiveWordList", Title: "敏感词触发列表", RoutePath: "user/sensitive-word-list", Show: true, Leaf: true},
+		&ItemModel{Key: "userSensitiveWordOne", Title: "敏感词触发详情", RoutePath: "user/sensitive-word-one", Show: false, Leaf: true},
 	}
 }
 

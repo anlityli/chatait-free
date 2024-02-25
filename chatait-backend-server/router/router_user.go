@@ -16,4 +16,6 @@ var userRouter = []*utils.RouterItem{
 	{Method: "POST", Pattern: "/ban", Object: userApi.Ban},
 	{Method: "POST", Pattern: "/change-level", Object: userApi.ChangeLevel},
 	{Method: "POST", Pattern: "/reset-password", Object: userApi.ResetPassword},
+	{Method: "GET", Pattern: "/sensitive-word-list", Object: userApi.SensitiveWordList},
+	{Method: "GET", Pattern: "/sensitive-word-one", Object: userApi.SensitiveWordOne},
 }

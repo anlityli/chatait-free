@@ -19,3 +19,16 @@ type UserListItem struct {
 }
 
 type UserList []*UserListItem
+
+type UserSensitiveWord struct {
+	Id             string `json:"id"`
+	Username       string `json:"username"`
+	Nickname       string `json:"nickname"`
+	Type           int    `json:"type"`
+	TopicType      int    `json:"topic_type"`
+	Content        string `json:"content"`
+	ValidateResult string `json:"validate_result"`
+	CreatedAt      int    `json:"created_at"`
+}
+
+type UserSensitiveWordList []*UserSensitiveWord

@@ -45,3 +45,19 @@ func (c *User) ResetPassword(r *ghttp.Request) {
 	}
 	notice.Write(r, notice.NoError, "操作成功")
 }
+
+func (c *User) SensitiveWordList(r *ghttp.Request) {
+	re, err := service.User.SensitiveWordList(r)
+	if err != nil {
+		notice.Write(r, notice.OtherError, err.Error())
+	}
+	notice.Write(r, notice.NoError, re)
+}
+
+func (c *User) SensitiveWordOne(r *ghttp.Request) {
+	re, err := service.User.SensitiveWordOne(r)
+	if err != nil {
+		notice.Write(r, notice.OtherError, err.Error())
+	}
+	notice.Write(r, notice.NoError, re)
+}

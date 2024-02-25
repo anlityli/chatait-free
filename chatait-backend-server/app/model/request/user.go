@@ -4,6 +4,10 @@
 
 package request
 
+type UserId struct {
+	Id string `json:"id" v:"required"`
+}
+
 type UserIds struct {
 	Selected []string `json:"selected" v:"required"`
 }

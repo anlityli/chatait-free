@@ -126,4 +126,4 @@ type ConfigSensitiveWord struct {
 	CreatedAt int    `json:"created_at"`
 }
 
-type ConfigSensitiveWordsList []*ConfigSensitiveWord
+type ConfigSensitiveWordList []*ConfigSensitiveWord

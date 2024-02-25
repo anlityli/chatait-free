@@ -11,6 +11,7 @@ import (
 	"github.com/anlityli/chatait-free/chatait-public-lib/app/dao"
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/os/gtime"
+	"github.com/gogf/gf/text/gstr"
 	"github.com/gogf/gf/util/gconv"
 )
 
@@ -136,6 +137,65 @@ func (c *User) ListColumns() (re *datalist.Columns) {
 				Attr: "date",
 			},
 			FilterField: "u.updated_at",
+		},
+	}
+	return
+}
+
+func (c *User) SensitiveWordListColumns() (re *datalist.Columns) {
+	re = &datalist.Columns{}
+	re.ListName = "敏感词触发列表"
+	re.ListID = "userSensitiveWordList"
+	re.ColumnList = datalist.ColumnList{
+		&datalist.ColumnItem{
+			Field:       "id",
+			FieldName:   "ID",
+			FieldAttr:   &datalist.FieldAttr{Width: 200},
+			CanFilter:   true,
+			FilterField: "usw.id",
+		},
+		&datalist.ColumnItem{
+			Field:       "username",
+			FieldName:   "会员名",
+			FieldAttr:   &datalist.FieldAttr{Width: 150},
+			CanFilter:   true,
+			FilterField: "u.username",
+		},
+		&datalist.ColumnItem{
+			Field:       "nickname",
+			FieldName:   "昵称",
+			FieldAttr:   &datalist.FieldAttr{Width: 120},
+			CanFilter:   true,
+			FilterField: "ui.nickname",
+		},
+		&datalist.ColumnItem{
+			Field:     "content",
+			FieldName: "触发内容",
+			FieldAttr: &datalist.FieldAttr{Width: 200},
+			ValueCallBack: func(rowData interface{}) string {
+				row := rowData.(*response.UserSensitiveWord)
+				if row.Content != "" {
+					row.Content = gstr.SubStrRune(row.Content, 0, 20) + "..."
+				}
+				return row.Content
+			},
+		},
+		&datalist.ColumnItem{
+			Field:     "created_at",
+			FieldName: "触发时间",
+			FieldAttr: &datalist.FieldAttr{Width: 200},
+			ValueCallBack: func(rowData interface{}) string {
+				row := rowData.(*response.UserSensitiveWord)
+				if row.CreatedAt == 0 {
+					return ""
+				}
+				return gtime.NewFromTimeStamp(gconv.Int64(row.CreatedAt)).Format("Y-m-d H:i:s")
+			},
+			CanFilter: true,
+			FilterType: &datalist.FilterType{
+				Attr: "date",
+			},
+			FilterField: "usw.created_at",
 		},
 	}
 	return

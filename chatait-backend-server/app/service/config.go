@@ -578,13 +578,13 @@ func (s *configService) BaiduDelete(r *ghttp.Request) error {
 
 func (s *configService) SensitiveWordList(r *ghttp.Request) (re *datalist.Result, err error) {
 	columnsModel := &column.Config{}
-	listColumns := columnsModel.SensitiveWordColumns()
+	listColumns := columnsModel.SensitiveWordListColumns()
 	// 筛选
 	whereAndParams, err := datalist.FilterWhereAndParams(r, listColumns)
 	if err != nil {
 		return nil, err
 	}
-	listModel := &response.ConfigSensitiveWordsList{}
+	listModel := &response.ConfigSensitiveWordList{}
 	data, err := page.Data(r, &page.Param{
 		TableName:   dao.ConfigSensitiveWord.Table,
 		Where:       whereAndParams.Where,

@@ -128,3 +128,50 @@ func (s *userService) ResetPassword(r *ghttp.Request) (err error) {
 	}
 	return nil
 }
+
+func (s *userService) SensitiveWordList(r *ghttp.Request) (re *datalist.Result, err error) {
+	columnsModel := &column.User{}
+	listColumns := columnsModel.SensitiveWordListColumns()
+	// 筛选
+	whereAndParams, err := datalist.FilterWhereAndParams(r, listColumns)
+	if err != nil {
+		return nil, err
+	}
+	listModel := &response.UserSensitiveWordList{}
+	data, err := page.Data(r, &page.Param{
+		TableName:   dao.UserSensitiveWord.Table + " usw",
+		Where:       whereAndParams.Where,
+		WhereParams: whereAndParams.Params,
+		Join: page.ParamJoin{
+			&page.ParamJoinItem{
+				JoinType:  "leftJoin",
+				JoinTable: dao.User.Table + " u",
+				On:        "usw.user_id=u.id",
+			},
+			&page.ParamJoinItem{
+				JoinType:  "leftJoin",
+				JoinTable: dao.UserInfo.Table + " ui",
+				On:        "usw.user_id=ui.user_id",
+			},
+		},
+		Field:   "usw.*, u.username,ui.nickname",
+		OrderBy: "usw.id Desc",
+	}, listModel)
+	if err != nil {
+		return nil, err
+	}
+	return datalist.List(r, data, listColumns)
+}
+
+func (s *userService) SensitiveWordOne(r *ghttp.Request) (re *response.UserSensitiveWord, err error) {
+	requestModel := &request.UserId{}
+	if err := r.Parse(requestModel); err != nil {
+		return nil, err
+	}
+	re = &response.UserSensitiveWord{}
+	err = dao.UserSensitiveWord.As("usw").LeftJoin(dao.User.Table+" u", "usw.user_id=u.id").LeftJoin(dao.UserInfo.Table+" ui", "usw.user_id=ui.user_id").Where("usw.id=?", g.Slice{requestModel.Id}).Fields("usw.*, u.username,ui.nickname").Scan(re)
+	if err != nil {
+		return nil, err
+	}
+	return re, nil
+}

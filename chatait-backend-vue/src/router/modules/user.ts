@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Anlity <leo@leocode.net>. All rights reserved.
+ * Copyright 2024 Anlity <leo@leocode.net>. All rights reserved.
  * Use of this source code is governed by a AGPL v3.0 style
  * license that can be found in the LICENSE file.
  */
@@ -26,6 +26,18 @@ export default [
         name: 'UserIndex',
         component: () => import('@/pages/user/index.vue'),
         meta: { title: '个人中心' },
+      },
+      {
+        path: 'sensitive-word-list',
+        name: 'userSensitiveWordList',
+        component: () => import('@/pages/user/sensitiveWordList.vue'),
+        meta: { title: '敏感词触发列表' },
+      },
+      {
+        path: 'sensitive-word-one',
+        name: 'userSensitiveWordOne',
+        component: () => import('@/pages/user/sensitiveWordOne.vue'),
+        meta: { title: '敏感词触发详情', highlight: 'userSensitiveWordList' },
       },
     ],
   },
