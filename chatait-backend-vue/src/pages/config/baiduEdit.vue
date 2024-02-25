@@ -33,7 +33,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { MessagePlugin } from 'tdesign-vue-next'
+import { CheckboxOption, MessagePlugin } from 'tdesign-vue-next'
 import { useRoute, useRouter } from 'vue-router'
 import http from '@/utils/network/http'
 import { FormBaiduEdit } from '@/pages/config/model/baidu'
@@ -42,7 +42,7 @@ import { BaiduFeature } from '@/constants/config'
 const router = useRouter()
 const route = useRoute()
 
-const featuresOption = ref([
+const featuresOption = ref<CheckboxOption[]>([
   { label: '全选', checkAll: true },
   {
     value: BaiduFeature.translate,
