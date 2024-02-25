@@ -42,9 +42,9 @@ func (c *Client) init() (err error) {
 }
 
 // GetConfig 获取GetConfig
-func (c *Client) GetConfig() (configData *Config, err error) {
+func (c *Client) GetConfig(feature string) (configData *Config, err error) {
 	configData = &Config{}
-	err = dao.ConfigBaidu.Where("status=1").Limit(1).Order("call_num ASC").Scan(configData)
+	err = dao.ConfigBaidu.Where("status=1 AND ( features='[]' OR features='' OR features LIKE ?)", "%"+feature+"%").Limit(1).Order("call_num ASC").Scan(configData)
 	if err != nil && err != sql.ErrNoRows {
 		glog.Line(true).Println(configData, err)
 		return nil, err

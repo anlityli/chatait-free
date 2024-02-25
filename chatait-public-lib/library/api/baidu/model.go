@@ -35,3 +35,32 @@ type TransTextResponseTransResult struct {
 	Src string `json:"src"`
 	Dst string `json:"dst"`
 }
+
+type CensorTextParams struct {
+	Text string `json:"text"`
+}
+
+type CensorTextResponse struct {
+	LogId          string                        `json:"log_id"`
+	ErrorMsg       string                        `json:"error_msg"`
+	ErrorCode      string                        `json:"error_code"`
+	Conclusion     string                        `json:"conclusion"`
+	ConclusionType int                           `json:"conclusionType"` // 1.合规，2.不合规，3.疑似，4.审核失败
+	Data           []*CensorTextResponseDataItem `json:"data"`
+}
+
+type CensorTextResponseDataItem struct {
+	Type    int                               `json:"type"`
+	SubType int                               `json:"subType"`
+	Msg     string                            `json:"msg"`
+	Hits    []*CensorTextResponseDataHitsItem `json:"hits"`
+}
+
+type CensorTextResponseDataHitsItem struct {
+	Probability       string      `json:"probability"`
+	DatasetName       string      `json:"datasetName"`
+	Words             []string    `json:"words"`
+	Details           interface{} `json:"details"`
+	ModelHitPositions interface{} `json:"modelHitPositions"`
+	WordHitPositions  interface{} `json:"wordHitPositions"`
+}

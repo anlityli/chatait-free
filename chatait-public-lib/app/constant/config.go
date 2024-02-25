@@ -19,3 +19,13 @@ const (
 	ConfigMidjourneyCreateModelRelax = "relax"
 	ConfigMidjourneyCreateModelTurbo = "turbo"
 )
+
+const (
+	ConfigBaiduFeatureTranslate = "translate" // 翻译
+	ConfigBaiduFeatureCensor    = "censor"    // 内容审核
+)
+
+const (
+	ConfigSensitiveWordValidateTypeConversation = 1 // 对话
+	ConfigSensitiveWordValidateTypeNickname     = 2 // 昵称
+)

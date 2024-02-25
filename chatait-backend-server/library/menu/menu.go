@@ -160,5 +160,8 @@ func (m *Menu) configChildren() (re ListModel) {
 		&ItemModel{Key: "configBaiduAdd", Title: "百度配置添加", RoutePath: "config/baidu-add", Show: false, Leaf: false},
 		&ItemModel{Key: "configBaiduEdit", Title: "百度配置编辑", RoutePath: "config/baidu-edit", RelevantRoutePath: []string{"config/baidu-one"}, Show: false, Leaf: false},
 		&ItemModel{Key: "configBaiduDelete", Title: "百度配置删除", RoutePath: "config/baidu-delete", Show: false, Leaf: false},
+		&ItemModel{Key: "configSensitiveWordList", Title: "敏感词配置列表", RoutePath: "config/sensitive-word-list", Show: true, Leaf: true},
+		&ItemModel{Key: "configSensitiveWordAdd", Title: "敏感词配置添加", RoutePath: "config/sensitive-word-add", Show: false, Leaf: true},
+		&ItemModel{Key: "configSensitiveWordDelete", Title: "敏感词配置删除", RoutePath: "config/sensitive-word-delete", Show: false, Leaf: true},
 	}
 }

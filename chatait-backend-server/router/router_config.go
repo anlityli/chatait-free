@@ -37,4 +37,7 @@ var configRouter = []*utils.RouterItem{
 	{Method: "POST", Pattern: "/baidu-add", Object: configApi.BaiduAdd},
 	{Method: "POST", Pattern: "/baidu-edit", Object: configApi.BaiduEdit},
 	{Method: "POST", Pattern: "/baidu-delete", Object: configApi.BaiduDelete},
+	{Method: "GET", Pattern: "/sensitive-word-list", Object: configApi.SensitiveWordList},
+	{Method: "POST", Pattern: "/sensitive-word-add", Object: configApi.SensitiveWordAdd},
+	{Method: "POST", Pattern: "/sensitive-word-delete", Object: configApi.SensitiveWordDelete},
 }

@@ -27,6 +27,7 @@ type configBaiduColumns struct {
 	SecretKey string //
 	Status    string // 启用状态
 	CallNum   string // 调用次数
+	Features  string // 可用功能数组json
 	CreatedAt string // 创建时间
 	UpdatedAt string // 更新时间
 }
@@ -43,6 +44,7 @@ func NewConfigBaiduDao() *ConfigBaiduDao {
 			SecretKey: "secret_key",
 			Status:    "status",
 			CallNum:   "call_num",
+			Features:  "features",
 			CreatedAt: "created_at",
 			UpdatedAt: "updated_at",
 		},

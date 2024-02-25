@@ -9,7 +9,14 @@ import (
 	"crypto/rand"
 	"encoding/json"
 	"fmt"
+	"github.com/anlityli/chatait-free/chatait-public-lib/app/dao"
+	"github.com/anlityli/chatait-free/chatait-public-lib/app/model/entity"
+	"github.com/anlityli/chatait-free/chatait-public-lib/library/api/baidu"
+	"github.com/anlityli/chatait-free/chatait-public-lib/library/api/baidu/censor"
+	"github.com/anlityli/chatait-free/chatait-public-lib/library/snowflake"
+	"github.com/anlityli/chatait-free/chatait-public-lib/library/xtime"
 	"github.com/gogf/gf/encoding/gjson"
+	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/util/grand"
 	uuid "github.com/satori/go.uuid"
 	"math"
@@ -587,4 +594,62 @@ func SortIntSlice(sortSlice *[]int) {
 func GenerateUuid() string {
 	uuidObj := uuid.NewV4()
 	return uuidObj.String()
+}
+
+type SensitiveWordsValidateParams struct {
+	UserId       int64
+	ValidateType int
+	TopicType    int
+	Content      string
+}
+
+// SensitiveWordsValidate 敏感词过滤
+func SensitiveWordsValidate(params *SensitiveWordsValidateParams) (re bool, err error) {
+	wordList := &[]*entity.ConfigSensitiveWord{}
+	err = dao.ConfigSensitiveWord.Where("1=1").Scan(wordList)
+	if err != nil {
+		return false, err
+	}
+	re = true
+	words := make([]string, 0)
+	if len(*wordList) > 0 {
+		for _, item := range *wordList {
+			if gstr.Contains(params.Content, item.Content) {
+				re = false
+				words = append(words, item.Content)
+			}
+		}
+	}
+	if !re {
+		sensitiveWordsValidateToData(params.UserId, params.ValidateType, params.TopicType, params.Content, words)
+		return re, nil
+	}
+	// 百度敏感词审核
+	censorRe, err := censor.Text(&baidu.CensorTextParams{
+		Text: params.Content,
+	})
+	if err != nil {
+		return false, err
+	}
+	if censorRe.ConclusionType != baidu.CensorTextConclusionTypePass {
+		sensitiveWordsValidateToData(params.UserId, params.ValidateType, params.TopicType, params.Content, censorRe)
+		return false, nil
+	}
+	return true, nil
+}
+
+func sensitiveWordsValidateToData(userId int64, validateType int, topicType int, content string, validateRe interface{}) {
+	validateJson, err := gjson.Encode(validateRe)
+	if err == nil {
+		id := snowflake.GenerateID()
+		_, _ = dao.UserSensitiveWord.Data(g.Map{
+			"id":              id,
+			"user_id":         userId,
+			"type":            validateType,
+			"topic_type":      topicType,
+			"content":         content,
+			"validate_result": gconv.String(validateJson),
+			"created_at":      xtime.GetNowTime(),
+		}).Insert()
+	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Anlity <leo@leocode.net>. All rights reserved.
+ * Copyright 2024 Anlity <leo@leocode.net>. All rights reserved.
  * Use of this source code is governed by a AGPL v3.0 style
  * license that can be found in the LICENSE file.
  */
@@ -98,6 +98,18 @@ export default [
         name: 'configBaiduEdit',
         component: () => import('@/pages/config/baiduEdit.vue'),
         meta: { title: '编辑百度配置', highlight: 'configBaiduList' },
+      },
+      {
+        path: 'sensitive-word-list',
+        name: 'configSensitiveWordList',
+        component: () => import('@/pages/config/sensitiveWordList.vue'),
+        meta: { title: '敏感词配置列表' },
+      },
+      {
+        path: 'sensitive-word-add',
+        name: 'configSensitiveWordAdd',
+        component: () => import('@/pages/config/sensitiveWordEdit.vue'),
+        meta: { title: '添加敏感词配置', highlight: 'configSensitiveWordList' },
       },
     ],
   },

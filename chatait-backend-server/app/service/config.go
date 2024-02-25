@@ -496,6 +496,13 @@ func (s *configService) BaiduOne(r *ghttp.Request) (re *response.ConfigBaidu, er
 	if err != nil {
 		return nil, err
 	}
+	if len(re.Features) > 0 {
+		featuresJson, err := gjson.Decode(re.Features[0])
+		if err != nil {
+			return nil, err
+		}
+		re.Features = gconv.SliceStr(featuresJson)
+	}
 	return re, nil
 }
 
@@ -559,6 +566,68 @@ func (s *configService) BaiduDelete(r *ghttp.Request) error {
 				return errors.New("修改【" + data.Title + "】的状态为未启用后再删除")
 			}
 			if _, err := dao.ConfigBaidu.Ctx(ctx).TX(tx).Where("id=?", id).Delete(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *configService) SensitiveWordList(r *ghttp.Request) (re *datalist.Result, err error) {
+	columnsModel := &column.Config{}
+	listColumns := columnsModel.SensitiveWordColumns()
+	// 筛选
+	whereAndParams, err := datalist.FilterWhereAndParams(r, listColumns)
+	if err != nil {
+		return nil, err
+	}
+	listModel := &response.ConfigSensitiveWordsList{}
+	data, err := page.Data(r, &page.Param{
+		TableName:   dao.ConfigSensitiveWord.Table,
+		Where:       whereAndParams.Where,
+		WhereParams: whereAndParams.Params,
+		OrderBy:     "id Desc",
+	}, listModel)
+	if err != nil {
+		return nil, err
+	}
+	return datalist.List(r, data, listColumns)
+}
+
+func (s *configService) SensitiveWordAdd(r *ghttp.Request) (err error) {
+	requestModel := &request.ConfigSensitiveWordAdd{}
+	if err := r.Parse(requestModel); err != nil {
+		return err
+	}
+	data, err := dao.ConfigSensitiveWord.Where("content=?", requestModel.Content).One()
+	if err != nil {
+		return err
+	}
+	if !data.IsEmpty() {
+		return errors.New("配置内容重复")
+	}
+	insertID := snowflake.GenerateID()
+	nowTime := xtime.GetNowTime()
+	insertData := gconv.Map(requestModel)
+	insertData["id"] = insertID
+	insertData["created_at"] = nowTime
+	if _, err := dao.ConfigSensitiveWord.Data(insertData).Insert(); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *configService) SensitiveWordDelete(r *ghttp.Request) error {
+	requestModel := &request.ConfigIds{}
+	if err := r.Parse(requestModel); err != nil {
+		return err
+	}
+	if err := g.DB().Transaction(context.TODO(), func(ctx context.Context, tx *gdb.TX) (err error) {
+		for _, id := range requestModel.Selected {
+			if _, err := dao.ConfigSensitiveWord.Ctx(ctx).TX(tx).Where("id=?", id).Delete(); err != nil {
 				return err
 			}
 		}

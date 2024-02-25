@@ -211,3 +211,27 @@ func (c *Config) BaiduDelete(r *ghttp.Request) {
 	}
 	notice.Write(r, notice.NoError, "操作成功")
 }
+
+func (c *Config) SensitiveWordList(r *ghttp.Request) {
+	re, err := service.Config.SensitiveWordList(r)
+	if err != nil {
+		notice.Write(r, notice.OtherError, err.Error())
+	}
+	notice.Write(r, notice.NoError, re)
+}
+
+func (c *Config) SensitiveWordAdd(r *ghttp.Request) {
+	err := service.Config.SensitiveWordAdd(r)
+	if err != nil {
+		notice.Write(r, notice.OtherError, err.Error())
+	}
+	notice.Write(r, notice.NoError, "操作成功")
+}
+
+func (c *Config) SensitiveWordDelete(r *ghttp.Request) {
+	err := service.Config.SensitiveWordDelete(r)
+	if err != nil {
+		notice.Write(r, notice.OtherError, err.Error())
+	}
+	notice.Write(r, notice.NoError, "操作成功")
+}

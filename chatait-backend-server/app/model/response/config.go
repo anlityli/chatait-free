@@ -107,14 +107,23 @@ type ConfigOpenai struct {
 type ConfigOpenaiList []*ConfigOpenai
 
 type ConfigBaidu struct {
-	Id        string `json:"id"`
-	Title     string `json:"title"`
-	ApiKey    string `json:"api_key"`
-	SecretKey string `json:"secret_key"`
-	Status    int    `json:"status"`
-	CallNum   int    `json:"call_num"`
-	CreatedAt int    `json:"created_at"`
-	UpdatedAt int    `json:"updated_at"`
+	Id        string   `json:"id"`
+	Title     string   `json:"title"`
+	ApiKey    string   `json:"api_key"`
+	SecretKey string   `json:"secret_key"`
+	Status    int      `json:"status"`
+	Features  []string `json:"features"`
+	CallNum   int      `json:"call_num"`
+	CreatedAt int      `json:"created_at"`
+	UpdatedAt int      `json:"updated_at"`
 }
 
 type ConfigBaiduList []*ConfigBaidu
+
+type ConfigSensitiveWord struct {
+	Id        string `json:"id"`
+	Content   string `json:"content"`
+	CreatedAt int    `json:"created_at"`
+}
+
+type ConfigSensitiveWordsList []*ConfigSensitiveWord

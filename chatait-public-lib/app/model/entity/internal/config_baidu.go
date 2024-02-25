@@ -12,6 +12,7 @@ type ConfigBaidu struct {
 	SecretKey string `orm:"secret_key" json:"secretKey"` //
 	Status    int    `orm:"status"     json:"status"`    // 启用状态
 	CallNum   int    `orm:"call_num"   json:"callNum"`   // 调用次数
+	Features  string `orm:"features"   json:"features"`  // 可用功能数组json
 	CreatedAt int    `orm:"created_at" json:"createdAt"` // 创建时间
 	UpdatedAt int    `orm:"updated_at" json:"updatedAt"` // 更新时间
 }

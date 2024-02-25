@@ -90,13 +90,18 @@ type ConfigOpenaiEdit struct {
 }
 
 type ConfigBaiduAdd struct {
-	Title     string `json:"title" v:"required"`
-	ApiKey    string `json:"api_key" v:"required"`
-	SecretKey string `json:"secret_key" v:"required"`
-	Status    int    `json:"status" v:"required"`
+	Title     string   `json:"title" v:"required"`
+	ApiKey    string   `json:"api_key" v:"required"`
+	SecretKey string   `json:"secret_key" v:"required"`
+	Status    int      `json:"status" v:"required"`
+	Features  []string `json:"features"`
 }
 
 type ConfigBaiduEdit struct {
 	Id string `json:"id" v:"required"`
 	ConfigBaiduAdd
+}
+
+type ConfigSensitiveWordAdd struct {
+	Content string `json:"content" v:"required"`
 }

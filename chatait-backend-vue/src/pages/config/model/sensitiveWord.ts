@@ -4,11 +4,7 @@
  * license that can be found in the LICENSE file.
  */
 
-export interface FormBaiduEdit {
+export interface FormSensitiveWordEdit {
   id: string
-  title: string
-  api_key: string
-  secret_key: string
-  status: number
-  features: string[]
+  content: string
 }

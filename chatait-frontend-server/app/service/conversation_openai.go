@@ -45,6 +45,19 @@ func (s *conversationOpenaiService) Speak(r *ghttp.Request) (re *response.Conver
 	walletType := constant.WalletTypeGpt3
 	amount := 100
 	model := openai.ModelGPT35Turbo
+	// 敏感词过滤
+	wordsValidateRe, err := helper.SensitiveWordsValidate(&helper.SensitiveWordsValidateParams{
+		UserId:       userId,
+		ValidateType: constant.ConfigSensitiveWordValidateTypeConversation,
+		TopicType:    requestModel.TopicType,
+		Content:      requestModel.Content,
+	})
+	if err != nil {
+		return nil, err
+	}
+	if !wordsValidateRe {
+		return nil, errors.New("您提交的内容存在不合规内容，请检查后重新提交")
+	}
 	// 如果用户次数不足直接报错
 	walletData := libservice.Wallet.GetAllBalance(userId)
 	if requestModel.TopicType == constant.TopicTypeOpenaiGPT3 {

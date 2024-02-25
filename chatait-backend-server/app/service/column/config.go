@@ -330,3 +330,40 @@ func (c *Config) BaiduListColumns() (re *datalist.Columns) {
 	}
 	return
 }
+
+func (c *Config) SensitiveWordColumns() (re *datalist.Columns) {
+	re = &datalist.Columns{}
+	re.ListName = "敏感词列表"
+	re.ListID = "configSensitiveWordList"
+	re.ColumnList = datalist.ColumnList{
+		&datalist.ColumnItem{
+			Field:  "id",
+			Hidden: true,
+		},
+		&datalist.ColumnItem{
+			Field:       "content",
+			FieldName:   "内容",
+			FieldAttr:   &datalist.FieldAttr{Width: 150},
+			CanFilter:   true,
+			FilterField: "content",
+		},
+		&datalist.ColumnItem{
+			Field:     "created_at",
+			FieldName: "创建时间",
+			FieldAttr: &datalist.FieldAttr{Width: 200},
+			ValueCallBack: func(rowData interface{}) string {
+				row := rowData.(*response.ConfigSensitiveWord)
+				if row.CreatedAt == 0 {
+					return ""
+				}
+				return gtime.NewFromTimeStamp(gconv.Int64(row.CreatedAt)).Format("Y-m-d H:i:s")
+			},
+			CanFilter: true,
+			FilterType: &datalist.FilterType{
+				Attr: "date",
+			},
+			FilterField: "created_at",
+		},
+	}
+	return
+}
