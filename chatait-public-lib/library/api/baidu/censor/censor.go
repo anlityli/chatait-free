@@ -34,16 +34,12 @@ func Text(params *baidu.CensorTextParams) (re *baidu.CensorTextResponse, err err
 		return nil, err
 	}
 	httpClient := ghttp.NewClient()
-	httpClient.SetHeader("Content-Type", "application/json;charset=utf-8")
+	httpClient.SetHeader("Content-Type", "application/x-www-form-urlencoded")
 	requestData := g.Map{
-		"text": params.Text,
+		"text":   params.Text,
+		"userId": params.Text,
 	}
-	requestDataJson, err := gjson.Encode(requestData)
-	if err != nil {
-		glog.Line(true).Println(params, requestData, err)
-		return nil, err
-	}
-	response, err := httpClient.Post(baidu.CensorTextURL+"?access_token="+configData.AccessToken, requestDataJson)
+	response, err := httpClient.Post(baidu.CensorTextURL+"?access_token="+configData.AccessToken, requestData)
 	if err != nil {
 		glog.Line(true).Println(baidu.CensorTextURL+"?access_token="+configData.AccessToken, requestData, err)
 		return

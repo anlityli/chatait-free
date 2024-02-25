@@ -37,7 +37,8 @@ type TransTextResponseTransResult struct {
 }
 
 type CensorTextParams struct {
-	Text string `json:"text"`
+	Text   string `json:"text"`
+	UserId string `json:"userId"`
 }
 
 type CensorTextResponse struct {

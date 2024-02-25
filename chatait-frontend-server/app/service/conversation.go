@@ -12,14 +12,19 @@ import (
 	"github.com/anlityli/chatait-free/chatait-frontend-server/library/auth"
 	"github.com/anlityli/chatait-free/chatait-public-lib/app/dao"
 	"github.com/anlityli/chatait-free/chatait-public-lib/app/model/entity"
+	"github.com/anlityli/chatait-free/chatait-public-lib/library/api/baidu"
+	"github.com/anlityli/chatait-free/chatait-public-lib/library/api/baidu/censor"
 	"github.com/anlityli/chatait-free/chatait-public-lib/library/api/midjourney"
 	"github.com/anlityli/chatait-free/chatait-public-lib/library/notice"
 	"github.com/anlityli/chatait-free/chatait-public-lib/library/page"
 	"github.com/anlityli/chatait-free/chatait-public-lib/library/security"
+	"github.com/anlityli/chatait-free/chatait-public-lib/library/snowflake"
+	"github.com/anlityli/chatait-free/chatait-public-lib/library/xtime"
 	"github.com/gogf/gf/database/gdb"
 	"github.com/gogf/gf/encoding/gjson"
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
+	"github.com/gogf/gf/text/gstr"
 	"github.com/gogf/gf/util/gconv"
 	"sync"
 )
@@ -181,4 +186,63 @@ func (s *conversationService) SpeakList(r *ghttp.Request) (re *page.Response, er
 		}
 	}
 	return re, nil
+}
+
+type SensitiveWordsValidateParams struct {
+	UserId       int64
+	ValidateType int
+	TopicType    int
+	Content      string
+}
+
+// SensitiveWordsValidate 敏感词过滤
+func (s *conversationService) SensitiveWordsValidate(params *SensitiveWordsValidateParams) (re bool, err error) {
+	wordList := &[]*entity.ConfigSensitiveWord{}
+	err = dao.ConfigSensitiveWord.Where("1=1").Scan(wordList)
+	if err != nil {
+		return false, err
+	}
+	re = true
+	words := make([]string, 0)
+	if len(*wordList) > 0 {
+		for _, item := range *wordList {
+			if gstr.Contains(params.Content, item.Content) {
+				re = false
+				words = append(words, item.Content)
+			}
+		}
+	}
+	if !re {
+		s.sensitiveWordsValidateToData(params.UserId, params.ValidateType, params.TopicType, params.Content, words)
+		return re, nil
+	}
+	// 百度敏感词审核
+	censorRe, err := censor.Text(&baidu.CensorTextParams{
+		Text:   params.Content,
+		UserId: gconv.String(params.UserId),
+	})
+	if err != nil {
+		return false, err
+	}
+	if censorRe.ConclusionType != baidu.CensorTextConclusionTypePass {
+		s.sensitiveWordsValidateToData(params.UserId, params.ValidateType, params.TopicType, params.Content, censorRe)
+		return false, nil
+	}
+	return true, nil
+}
+
+func (s *conversationService) sensitiveWordsValidateToData(userId int64, validateType int, topicType int, content string, validateRe interface{}) {
+	validateJson, err := gjson.Encode(validateRe)
+	if err == nil {
+		id := snowflake.GenerateID()
+		_, _ = dao.UserSensitiveWord.Data(g.Map{
+			"id":              id,
+			"user_id":         userId,
+			"type":            validateType,
+			"topic_type":      topicType,
+			"content":         content,
+			"validate_result": gconv.String(validateJson),
+			"created_at":      xtime.GetNowTime(),
+		}).Insert()
+	}
 }

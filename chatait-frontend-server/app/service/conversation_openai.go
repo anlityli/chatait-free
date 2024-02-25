@@ -46,7 +46,7 @@ func (s *conversationOpenaiService) Speak(r *ghttp.Request) (re *response.Conver
 	amount := 100
 	model := openai.ModelGPT35Turbo
 	// 敏感词过滤
-	wordsValidateRe, err := helper.SensitiveWordsValidate(&helper.SensitiveWordsValidateParams{
+	wordsValidateRe, err := Conversation.SensitiveWordsValidate(&SensitiveWordsValidateParams{
 		UserId:       userId,
 		ValidateType: constant.ConfigSensitiveWordValidateTypeConversation,
 		TopicType:    requestModel.TopicType,

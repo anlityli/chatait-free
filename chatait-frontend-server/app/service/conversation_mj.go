@@ -49,7 +49,7 @@ func (s *conversationMidjourneyService) Speak(r *ghttp.Request) (re *response.Co
 	walletType := constant.WalletTypeMidjourney
 	amount := 100
 	// 敏感词过滤
-	wordsValidateRe, err := helper.SensitiveWordsValidate(&helper.SensitiveWordsValidateParams{
+	wordsValidateRe, err := Conversation.SensitiveWordsValidate(&SensitiveWordsValidateParams{
 		UserId:       userId,
 		ValidateType: constant.ConfigSensitiveWordValidateTypeConversation,
 		TopicType:    constant.TopicTypeMidjourney,
