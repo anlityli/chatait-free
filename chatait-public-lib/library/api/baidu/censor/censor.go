@@ -24,7 +24,7 @@ func Text(params *baidu.CensorTextParams) (re *baidu.CensorTextResponse, err err
 		re = &baidu.CensorTextResponse{
 			ConclusionType: 1,
 		}
-		return nil, nil
+		return re, nil
 	}
 	// 调用接口次数增加
 	if _, err = dao.ConfigBaidu.Data(g.Map{
