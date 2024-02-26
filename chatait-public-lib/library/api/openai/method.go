@@ -23,6 +23,12 @@ func ChatCompletion(params *ChatCompletionParams, callback CreateChatCompletionC
 		glog.Line(true).Println(params, err)
 		return err
 	}
+	// 根据传入的model判断模型是gpt3的还是gpt4的，如果配置了gpt3或者gpt4的模型，则用配置的模型
+	if params.Model == ModelGPT35Turbo && config.Gpt3Model != "" {
+		params.Model = config.Gpt3Model
+	} else if params.Model == ModelGPT4 && config.Gpt4Model != "" {
+		params.Model = config.Gpt4Model
+	}
 	// 调用接口次数增加
 	if _, err = dao.ConfigOpenai.Data(g.Map{
 		"call_num": gdb.Raw("call_num+1"),
@@ -59,7 +65,7 @@ func ChatCompletion(params *ChatCompletionParams, callback CreateChatCompletionC
 	}
 	resp, err := httpClient.Post(apiUrl, requestDataJson)
 	if err != nil {
-		glog.Line(true).Println(err.Error())
+		glog.Line(true).Println(apiUrl, requestDataJson, err.Error())
 		return err
 	}
 	defer resp.Body.Close()
@@ -81,13 +87,13 @@ func ChatCompletion(params *ChatCompletionParams, callback CreateChatCompletionC
 					if errErr == nil && responseErr.Error != nil {
 						return errors.New(responseErr.Error.Message)
 					} else {
-						glog.Line(true).Println(requestData, errorData)
+						glog.Line(true).Println(apiUrl, requestData, errorData)
 					}
 				} else {
-					glog.Line(true).Println(requestData, errorData)
+					glog.Line(true).Println(apiUrl, requestData, errorData)
 				}
 			}
-			glog.Line(true).Println(requestData, err.Error(), resp.ReadAllString())
+			glog.Line(true).Println(apiUrl, requestData, err.Error(), resp.ReadAllString())
 			return err
 		}
 		lineContent = bytes.TrimSpace(lineContent)
@@ -122,18 +128,18 @@ func ChatCompletion(params *ChatCompletionParams, callback CreateChatCompletionC
 		// 解析返回内容
 		decodeContent, err := gjson.Decode(lineContentStr)
 		if err != nil {
-			glog.Line(true).Println(requestData, lineContentStr, err.Error())
+			glog.Line(true).Println(apiUrl, requestData, lineContentStr, err.Error())
 			return err
 		}
 		linObj := &ResponseChat{}
 		err = gconv.Scan(decodeContent, linObj)
 		if err != nil {
-			glog.Line(true).Println(requestData, decodeContent, err.Error())
+			glog.Line(true).Println(apiUrl, requestData, decodeContent, err.Error())
 			return err
 		}
 		err = callback(gconv.String(lineContent), linObj)
 		if err != nil {
-			glog.Line(true).Println(requestData, gconv.String(lineContent), err.Error())
+			glog.Line(true).Println(apiUrl, requestData, gconv.String(lineContent), err.Error())
 			return err
 		}
 	}

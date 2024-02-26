@@ -81,6 +81,8 @@ type ConfigOpenaiAdd struct {
 	ApiKey    string `json:"api_key" v:"required"`
 	Proxy     string `json:"proxy"`
 	MaxTokens int    `json:"max_tokens"`
+	Gpt3Model string `json:"gpt3_model"`
+	Gpt4Model string `json:"gpt4_model"`
 	Status    int    `json:"status" v:"required"`
 }
 

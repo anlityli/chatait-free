@@ -12,6 +12,8 @@ type ConfigOpenai struct {
 	ApiKey    string `orm:"api_key"    json:"apiKey"`    // api_key
 	Proxy     string `orm:"proxy"      json:"proxy"`     // 代理地址
 	MaxTokens int    `orm:"max_tokens" json:"maxTokens"` // 最大Token
+	Gpt3Model string `orm:"gpt3_model" json:"gpt3Model"` // gpt3使用模型
+	Gpt4Model string `orm:"gpt4_model" json:"gpt4Model"` // gpt4使用模型
 	Status    int    `orm:"status"     json:"status"`    // 是否启用 1启用 0不启用
 	CallNum   int    `orm:"call_num"   json:"callNum"`   // 接口调用次数
 	CreatedAt int    `orm:"created_at" json:"createdAt"` // 创建时间

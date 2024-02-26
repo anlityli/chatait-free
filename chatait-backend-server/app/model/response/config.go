@@ -98,6 +98,8 @@ type ConfigOpenai struct {
 	ApiKey    string `json:"api_key"`
 	Proxy     string `json:"proxy"`
 	MaxTokens int    `json:"max_tokens"`
+	Gpt3Model string `json:"gpt3_model"`
+	Gpt4Model string `json:"gpt4_model"`
 	Status    int    `json:"status"`
 	CallNum   int    `json:"call_num"`
 	CreatedAt int    `json:"created_at"`

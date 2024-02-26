@@ -27,6 +27,8 @@ type configOpenaiColumns struct {
 	ApiKey    string // api_key
 	Proxy     string // 代理地址
 	MaxTokens string // 最大Token
+	Gpt3Model string // gpt3使用模型
+	Gpt4Model string // gpt4使用模型
 	Status    string // 是否启用 1启用 0不启用
 	CallNum   string // 接口调用次数
 	CreatedAt string // 创建时间
@@ -45,6 +47,8 @@ func NewConfigOpenaiDao() *ConfigOpenaiDao {
 			ApiKey:    "api_key",
 			Proxy:     "proxy",
 			MaxTokens: "max_tokens",
+			Gpt3Model: "gpt3_model",
+			Gpt4Model: "gpt4_model",
 			Status:    "status",
 			CallNum:   "call_num",
 			CreatedAt: "created_at",

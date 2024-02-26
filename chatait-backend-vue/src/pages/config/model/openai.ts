@@ -11,5 +11,7 @@ export interface FormOpenaiEdit {
   api_key: string
   proxy: string
   max_tokens: number
+  gpt3_model: string
+  gpt4_model: string
   status: number
 }

@@ -10,7 +10,11 @@
       <t-form-item label="配置标题" name="title">
         <t-input v-model="formData.title" class="edit-input"></t-input>
       </t-form-item>
-      <t-form-item label="Api Url" name="api_url">
+      <t-form-item
+        label="Api Url"
+        name="api_url"
+        help="留空默认官网接口，如使用第三方接口请把接口地址写完整，例：https://xxx.xxx.com/v1/chat/completions"
+      >
         <t-input v-model="formData.api_url" class="edit-input" placeholder="不填默认 openai 官方接口"></t-input>
       </t-form-item>
       <t-form-item label="Api Key" name="api_key">
@@ -21,6 +25,12 @@
       </t-form-item>
       <t-form-item label="最大Token" name="max_tokens">
         <t-input-number v-model="formData.max_tokens" class="edit-input" theme="normal"></t-input-number>
+      </t-form-item>
+      <t-form-item label="GPT3模型" name="gpt3_model" help="留空默认 gpt-3.5-turbo">
+        <t-input v-model="formData.gpt3_model" class="edit-input"></t-input>
+      </t-form-item>
+      <t-form-item label="GPT4模型" name="gpt4_model" help="留空默认 gpt-4">
+        <t-input v-model="formData.gpt4_model" class="edit-input"></t-input>
       </t-form-item>
       <t-form-item label="是否启用" name="status">
         <t-switch v-model="formData.status" :custom-value="[1, 0]"></t-switch>
@@ -51,6 +61,8 @@ const formData = ref<FormOpenaiEdit>({
   api_key: '',
   proxy: '',
   max_tokens: 500,
+  gpt3_model: 'gpt-3.5-turbo',
+  gpt4_model: 'gpt-4',
   status: 1,
 })
 
