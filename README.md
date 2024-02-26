@@ -16,7 +16,7 @@ ChatAIT是用golang+vue开发的AI对话网站，对话模式模仿ChatGPT(GPT3.
 - [x] openai接口循环调用
 - [x] midjourney接口循环调用
 - [x] midjourney接口多进程
-- [x] midjourney U V Zoom Vary(strong) Vary(Subtle) ⬅️ ➡️ ⬆️ ⬇️ 等操作
+- [x] midjourney U V Zoom Vary(strong) Vary(Subtle) ⬅️ ➡️ ⬆️ ⬇️ 等操作（请开启Remix mode，系统会无视弹窗自动跳过）
 - [x] midjourney 支持文生图和图生图 以及各种参数
 - [x] midjourney 生成的图片可选是否本地保存
 - [x] 管理员及角色管理
@@ -26,7 +26,9 @@ ChatAIT是用golang+vue开发的AI对话网站，对话模式模仿ChatGPT(GPT3.
 - [x] midjourney提问支持百度翻译
 - [x] midjourney图片本地保存缩略图，以便前台快速打开
 - [x] 支持第三方openai接口
-- [ ] 敏感词过滤
+- [x] 允许自定义指定gpt3和gpt4的模型
+- [x] 支持niji机器人
+- [x] 敏感词过滤
 - [ ] 站内公告文章系统
 - [ ] 百度文心一言
 - [ ] I18n 多语言
@@ -51,11 +53,10 @@ openai 的默认接口为: https://api.openai.com/v1/chat/completions
 
 ## 升级说明
 ### v1.1.1 升级到 v1.1.3
-按照教程部署后，把之前的数据库增加第三方api的字段，从mysql中执行以下命令：
-```
-ALTER TABLE `c_config_openai` 
-ADD COLUMN `api_url` varchar(1000) NOT NULL DEFAULT '' COMMENT 'api_url' AFTER `title`;
-```
+按照教程部署后，把之前的数据库增加第三方api的字段，从mysql中执行以下命令: [查看升级命令](https://github.com/anlityli/chatait-free/blob/main/upgrade/v1.1.1_to_v1.1.3.sql)
+
+### v1.1.3 升级到 v1.2.0
+按照教程部署后，把之前的数据库增加第三方api的字段，从mysql中执行以下命令: [查看升级命令](https://github.com/anlityli/chatait-free/blob/main/upgrade/v1.1.3_to_v1.2.0.sql)
 
 ## Docker部署
 [Docker部署](https://github.com/anlityli/chatait-free/blob/main/docker/README.md)

@@ -93,6 +93,7 @@ CREATE TABLE `c_config_baidu` (
   `api_key` varchar(255) NOT NULL,
   `secret_key` varchar(255) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '启用状态',
+  `features` varchar(255) NOT NULL DEFAULT '[]' COMMENT '可用功能数组json',
   `call_num` int NOT NULL DEFAULT '0' COMMENT '调用次数',
   `created_at` int NOT NULL DEFAULT '0' COMMENT '创建时间',
   `updated_at` int NOT NULL DEFAULT '0' COMMENT '更新时间',
@@ -146,17 +147,19 @@ DROP TABLE IF EXISTS `c_config_openai`;
 CREATE TABLE `c_config_openai` (
   `id` bigint NOT NULL COMMENT 'ID',
   `title` varchar(50) NOT NULL COMMENT '标题',
-  `api_url` varchar(1000) CHARACTER SET utf8mb4  NOT NULL DEFAULT '' COMMENT 'api_url',
-  `api_key` varchar(255) CHARACTER SET utf8mb4  NOT NULL COMMENT 'api_key',
+  `api_url` varchar(1000) NOT NULL DEFAULT '' COMMENT '接口地址',
+  `api_key` varchar(255) NOT NULL COMMENT 'api_key',
   `proxy` varchar(255) NOT NULL DEFAULT '' COMMENT '代理地址',
   `max_tokens` int NOT NULL DEFAULT '500' COMMENT '最大Token',
+  `gpt3_model` varchar(255) NOT NULL DEFAULT '' COMMENT 'gpt3使用模型',
+  `gpt4_model` varchar(255) NOT NULL DEFAULT '' COMMENT 'gpt4使用模型',
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否启用 1启用 0不启用',
   `call_num` int NOT NULL DEFAULT '0' COMMENT '接口调用次数',
   `created_at` int NOT NULL DEFAULT '0' COMMENT '创建时间',
   `updated_at` int NOT NULL DEFAULT '0' COMMENT '更新时间',
   PRIMARY KEY (`id`),
   KEY `status` (`status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4  COMMENT='Midjourney接口配置表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Openai接口配置表';
 
 -- ----------------------------
 -- Table structure for c_config_pay
@@ -186,6 +189,17 @@ CREATE TABLE `c_config_pay_qr` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `amount` (`amount`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='短信转发器支付方式用到的支付二维码';
+
+-- ----------------------------
+-- Table structure for c_config_sensitive_word
+-- ----------------------------
+CREATE TABLE `c_config_sensitive_word` (
+  `id` bigint NOT NULL COMMENT 'ID',
+  `content` varchar(255) NOT NULL COMMENT '敏感词内容',
+  `created_at` int NOT NULL DEFAULT '0' COMMENT '创建时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `content` (`content`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='敏感词';
 
 -- ----------------------------
 -- Table structure for c_config_wallet
@@ -485,6 +499,20 @@ CREATE TABLE `c_user_level_flow` (
   `created_at` int NOT NULL DEFAULT '0' COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- ----------------------------
+-- Table structure for c_user_sensitive_word
+-- ----------------------------
+CREATE TABLE `c_user_sensitive_word` (
+  `id` bigint NOT NULL COMMENT 'ID',
+  `user_id` bigint NOT NULL COMMENT '会员ID',
+  `type` int NOT NULL DEFAULT '1' COMMENT '类型: 1对话 2用户名',
+  `topic_type` int NOT NULL DEFAULT '0' COMMENT '对话类型: 0无 1gpt3 2gpt4 3mj',
+  `content` text COMMENT '触发敏感词原文',
+  `validate_result` text COMMENT '敏感词json',
+  `created_at` int NOT NULL DEFAULT '0' COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='敏感词触发记录';
 
 -- ----------------------------
 -- Table structure for c_wallet
