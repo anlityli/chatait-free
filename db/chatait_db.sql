@@ -652,6 +652,7 @@ INSERT INTO `c_config` (`config_name`, `title`, `unit`, `input_type`, `options`,
 INSERT INTO `c_config` (`config_name`, `title`, `unit`, `input_type`, `options`, `value`, `type`, `sort`, `created_at`, `updated_at`) VALUES ('midjourneyDailyLimit', 'midjourney每天最多提问次数', '次', 1, '', '10', 'midjourney', 7, 0, 0);
 INSERT INTO `c_config` (`config_name`, `title`, `unit`, `input_type`, `options`, `value`, `type`, `sort`, `created_at`, `updated_at`) VALUES ('midjourneyUserProgressSize', 'midjourney会员并发任务数', '', 1, '', '3', 'midjourney',6, 0, 0);
 INSERT INTO `c_config` (`config_name`, `title`, `unit`, `input_type`, `options`, `value`, `type`, `sort`, `created_at`, `updated_at`) VALUES ('gptSystemContent', 'gpt对话式系统身份描述', '', 1, '', 'You are an interesting and helpful assistant who can give accurate answers.', 'conversation', 3, 0, 0);
+INSERT INTO `c_config` (`config_name`, `title`, `unit`, `input_type`, `options`, `value`, `type`, `sort`, `created_at`, `updated_at`) VALUES ('allowTopicType', '开放的对话话题类型', '', 3, '[{\"label\":\"GPT3\",\"value\":\"1\"},{\"label\":\"GPT4\",\"value\":\"2\"},{\"label\":\"Midjourney\",\"value\":\"3\"}]', '[\"1\",\"2\",\"3\"]', 'conversation', 5, 0, 0);
 
 # c_config_level
 INSERT INTO `c_config_level` (`id`, `level_name`, `month_gpt3`, `month_gpt4`, `month_midjourney`) VALUES (1, 'member', 0, 0, 0);

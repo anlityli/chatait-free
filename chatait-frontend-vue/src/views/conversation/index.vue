@@ -11,6 +11,7 @@ import { marked } from 'marked'
 import hljs from 'highlight.js'
 import { EnterIcon, IconFont, LoadingIcon } from 'tdesign-icons-vue-next'
 import { MessagePlugin } from 'tdesign-vue-next'
+import { all } from 'axios'
 import http from '@/utils/network/http'
 import { ResponsePage } from '@/utils/model/response/page'
 import {
@@ -67,6 +68,7 @@ const route = useRoute()
 const midjourneyInputEle = ref<any>(null)
 const pageLoading = ref(true)
 
+const allowTopicType = ref<number[]>([])
 const topicTypes = ref([
   { label: '文字聊天 GPT3.5', value: TopicTypeOpenaiGPT3 },
   { label: '文字聊天 GPT4', value: TopicTypeOpenaiGPT4 },
@@ -75,7 +77,7 @@ const topicTypes = ref([
     value: TopicTypeMidjourney,
   },
 ])
-const currentTopicType = ref(TopicTypeOpenaiGPT3)
+const currentTopicType = ref(0)
 const currentTopicId = ref('0')
 const speakList = reactive<ResponseConversationSpeakItem[]>([])
 const speakListPage = ref(1)
@@ -217,6 +219,19 @@ const handleListenListHeight = (oriListHeight: number) => {
     }
     loopTime++
   }, 10)
+}
+
+const handleGetAllowTopicType = async () => {
+  const configOptionsResponse = await http.getWithoutToken('config/options')
+  if (configOptionsResponse.allowTopicType !== null && configOptionsResponse.allowTopicType !== '') {
+    const allowTopicTypeArr = JSON.parse(configOptionsResponse.allowTopicType) as string[]
+    for (let i = 0; i < allowTopicTypeArr.length; i++) {
+      allowTopicType.value.push(Number(allowTopicTypeArr[i]))
+    }
+  }
+  if (allowTopicType.value.length > 0) {
+    currentTopicType.value = allowTopicType.value[0] as number
+  }
 }
 
 const handleGetTopicDetail = async () => {
@@ -594,6 +609,7 @@ onMounted(async () => {
   currentTopicId.value = route.params.topicId as string
   speakForm.value.topic_id = route.params.topicId as string
   midjourneySpeakForm.value.topic_id = route.params.topicId as string
+  await handleGetAllowTopicType()
   await handleGetTopicDetail()
   await handleGetSpeakListData()
   eventBus.on('conversationMj', handleSpeakOnWsMessage)
@@ -708,14 +724,15 @@ onBeforeUnmount(() => {
           <div class="conversation-explain-title">
             <span>Chat AIT</span>
           </div>
-          <div class="conversation-explain-topic">
+          <div v-if="allowTopicType.length > 0" class="conversation-explain-topic">
             <t-select v-model="currentTopicType" style="width: 200px">
-              <t-option
-                v-for="(item, index) in topicTypes"
-                :key="index"
-                :value="item.value"
-                :label="item.label"
-              ></t-option>
+              <template v-for="(item, index) in topicTypes" :key="index">
+                <t-option
+                  v-if="allowTopicType.indexOf(item.value) !== -1"
+                  :value="item.value"
+                  :label="item.label"
+                ></t-option>
+              </template>
             </t-select>
           </div>
           <div class="conversation-explain-content">

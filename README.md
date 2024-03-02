@@ -6,9 +6,12 @@
 
 ChatAIT是用golang+vue开发的AI对话网站，对话模式模仿ChatGPT(GPT3.5、GPT4)和Midjourney的形式。正式版已经开源，不区分正式版和免费版，所有功能开源。如需定制联系邮箱。
 
-<strong>请自觉遵守当地法律，勿将本项目用于非法目的和用途，本项目仅用于学习使用。</strong>
+<strong>请自觉遵守当地法律，勿将本项目用于非法目的和用途以及商用，本项目仅用于学习使用。</strong>
 
-支持：
+## 感谢：
+特别感谢 “雨” 对本项目的捐赠和账号支持，v1.2.0版本离不开 “雨” 的大力支持。
+
+## 功能：
 - [x] GPT4
 - [x] GPT3.5
 - [x] Midjourney
@@ -49,7 +52,7 @@ ChatAIT是用golang+vue开发的AI对话网站，对话模式模仿ChatGPT(GPT3.
 
 ## 第三方openai配置
 openai 的默认接口为: https://api.openai.com/v1/chat/completions
-在openai配置的apiUrl中替换为第三方接口的地址，如果不填则默认openai接口
+在openai配置的apiUrl中替换为第三方接口的地址，如果不填则默认openai接口，请注意这里的接口地址要写完整。
 
 ## 升级说明
 ### v1.1.1 升级到 v1.1.3
@@ -211,6 +214,7 @@ systemctl start chataitFrontend.service
 来自 | 时间 | 金额 | 备注 
 ---|---|---|---
 胖六斤 | 2023.11.18 | 66.00 | 
+雨 | 2024.2.19 | 700+ | 
 
 ## 联系邮箱
 邮箱: 0838258@gmail.com   

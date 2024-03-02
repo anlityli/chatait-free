@@ -1,12 +1,12 @@
 /*
- * Copyright 2023 Anlity <leo@leocode.net>. All rights reserved.
+ * Copyright 2024 Anlity <leo@leocode.net>. All rights reserved.
  * Use of this source code is governed by a AGPL v3.0 style
  * license that can be found in the LICENSE file.
  */
 
-import { ResponseConfigAllOption } from '@/utils/model/response/config'
+import { ConfigAllOption } from '@/pages/config/model/allOption'
 
 export interface OptionListItem {
   group_name: string
-  group_items: ResponseConfigAllOption[]
+  group_items: ConfigAllOption[]
 }

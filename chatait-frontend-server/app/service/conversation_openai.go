@@ -41,6 +41,9 @@ func (s *conversationOpenaiService) Speak(r *ghttp.Request) (re *response.Conver
 	if err = r.Parse(requestModel); err != nil {
 		return nil, err
 	}
+	if !Conversation.IsAllowTopicType(requestModel.TopicType) {
+		return nil, errors.New("不允许的话题类型")
+	}
 	userId := auth.GetUserId(r)
 	walletType := constant.WalletTypeGpt3
 	amount := 100

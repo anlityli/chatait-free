@@ -32,4 +32,5 @@ CREATE TABLE `c_user_sensitive_word` (
 
 UPDATE `c_config` SET `title`='midjourney整站并发任务数' WHERE `config_name`='midjourneyProgressSize';
 UPDATE `c_config` SET `title`='midjourney整站排队上限' WHERE `config_name`='midjourneyQueueSize';
-INSERT INTO `c_config` (config_name,title,input_type,value,type,sort) VALUES ('midjourneyUserProgressSize','midjourney会员并发任务数',1,3,'midjourney',6);
+INSERT INTO `c_config` (`config_name`, `title`, `unit`, `input_type`, `options`, `value`, `type`, `sort`, `created_at`, `updated_at`) VALUES ('midjourneyUserProgressSize', 'midjourney会员并发任务数', '', 1, '', '3', 'midjourney', 6, 0, 0);
+INSERT INTO `c_config` (`config_name`, `title`, `unit`, `input_type`, `options`, `value`, `type`, `sort`, `created_at`, `updated_at`) VALUES ('allowTopicType', '开放的对话话题类型', '', 3, '[{\"label\":\"GPT3\",\"value\":\"1\"},{\"label\":\"GPT4\",\"value\":\"2\"},{\"label\":\"Midjourney\",\"value\":\"3\"}]', '[\"1\",\"2\",\"3\"]', 'conversation', 5, 0, 0);

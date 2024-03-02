@@ -15,6 +15,7 @@ import (
 	"github.com/anlityli/chatait-free/chatait-public-lib/library/api/baidu"
 	"github.com/anlityli/chatait-free/chatait-public-lib/library/api/baidu/censor"
 	"github.com/anlityli/chatait-free/chatait-public-lib/library/api/midjourney"
+	"github.com/anlityli/chatait-free/chatait-public-lib/library/helper"
 	"github.com/anlityli/chatait-free/chatait-public-lib/library/notice"
 	"github.com/anlityli/chatait-free/chatait-public-lib/library/page"
 	"github.com/anlityli/chatait-free/chatait-public-lib/library/security"
@@ -245,4 +246,26 @@ func (s *conversationService) sensitiveWordsValidateToData(userId int64, validat
 			"created_at":      xtime.GetNowTime(),
 		}).Insert()
 	}
+}
+
+// IsAllowTopicType 是否允许的话题类型
+func (s *conversationService) IsAllowTopicType(topicType int) bool {
+	allowTopicType, err := helper.GetConfig("allowTopicType")
+	if err != nil {
+		return false
+	}
+	if allowTopicType == "" {
+		return false
+	}
+	allowTopicTypeJson, err := gjson.Decode(allowTopicType)
+	if err != nil {
+		return false
+	}
+	allowTopicTypeSlice := gconv.SliceStr(allowTopicTypeJson)
+	for _, item := range allowTopicTypeSlice {
+		if topicType == gconv.Int(item) {
+			return true
+		}
+	}
+	return false
 }

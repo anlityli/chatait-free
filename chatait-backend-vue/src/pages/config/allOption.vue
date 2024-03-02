@@ -1,5 +1,5 @@
 <!--
-  - Copyright 2023 Anlity <leo@leocode.net>. All rights reserved.
+  - Copyright 2024 Anlity <leo@leocode.net>. All rights reserved.
   - Use of this source code is governed by a AGPL v3.0 style
   - license that can be found in the LICENSE file.
   -->
@@ -17,6 +17,22 @@
         >
           <template v-if="itemC.input_type === OptionTypeSelect">
             <t-select v-model="itemC.value" class="edit-input" @change="handleSubmit(itemC.config_name, itemC.value)">
+              <t-option
+                v-for="(optionItem, optionIndex) in itemC.options"
+                :key="optionIndex"
+                :label="optionItem.label"
+                :value="optionItem.value"
+              />
+            </t-select>
+          </template>
+          <template v-else-if="itemC.input_type === OptionTypeCheckbox">
+            <t-select
+              v-model="itemC.value"
+              class="edit-input"
+              multiple
+              @change="handleSubmit(itemC.config_name, itemC.value)"
+            >
+              <t-option label="全选" :check-all="true" />
               <t-option
                 v-for="(optionItem, optionIndex) in itemC.options"
                 :key="optionIndex"
@@ -51,7 +67,7 @@ import { useRoute, useRouter } from 'vue-router'
 import http from '@/utils/network/http'
 import { OptionListItem } from '@/pages/config/model/option'
 import { ResponseConfigAllOption } from '@/utils/model/response/config'
-import { OptionTypeSelect, OptionTypeTextarea } from '@/pages/config/model/constant'
+import { OptionTypeCheckbox, OptionTypeSelect, OptionTypeTextarea } from '@/pages/config/model/constant'
 import tool from '@/utils/tool/tool'
 
 const router = useRouter()
@@ -72,6 +88,8 @@ const handleSubmit = async (configName: string, value: string) => {
     configName === 'midjourneyUseBalance'
   ) {
     value = tool.yuanToCent(value).toString()
+  } else if (configName === 'allowTopicType') {
+    value = JSON.stringify(value)
   }
   const requestData = {
     config_name: configName,
@@ -95,6 +113,8 @@ onMounted(async () => {
       configName === 'midjourneyUseBalance'
     ) {
       response[i].value = tool.centToYuan(Number(response[i].value))
+    } else if (configName === 'allowTopicType') {
+      response[i].value = JSON.parse(response[i].value)
     }
     if (tempGroup === '' || tempGroup !== response[i].type) {
       tempGroup = response[i].type

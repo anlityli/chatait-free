@@ -5,8 +5,8 @@
 
 ## 拉取镜像
 ```
-docker pull anlity/chataitserver:1.1.1
-docker pull anlity/chataitvue:1.1.1
+docker pull anlity/chataitserver:1.2.0
+docker pull anlity/chataitvue:1.2.0
 ```
 
 ## 启动服务端docker

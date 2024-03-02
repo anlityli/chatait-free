@@ -10,7 +10,7 @@ type ConfigOptionItem struct {
 	Unit       string                    `json:"unit"`
 	InputType  int                       `json:"input_type"`
 	Options    []*ConfigOptionItemOption `json:"options"`
-	Value      string                    `json:"value"`
+	Value      interface{}               `json:"value"`
 	Type       string                    `json:"type"`
 	Sort       int                       `json:"sort"`
 	CreatedAt  int                       `json:"created_at"`

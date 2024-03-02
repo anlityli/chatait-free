@@ -45,6 +45,9 @@ func (s *conversationMidjourneyService) Speak(r *ghttp.Request) (re *response.Co
 	if err = r.Parse(requestModel); err != nil {
 		return nil, err
 	}
+	if !Conversation.IsAllowTopicType(constant.TopicTypeMidjourney) {
+		return nil, errors.New("不允许的话题类型")
+	}
 	userId := auth.GetUserId(r)
 	walletType := constant.WalletTypeMidjourney
 	amount := 100

@@ -35,8 +35,13 @@ func (s *configService) Options(r *ghttp.Request) (re map[string]interface{}, er
 	if err != nil {
 		return nil, err
 	}
+	allowTopicType, err := helper.GetConfig("allowTopicType")
+	if err != nil {
+		return nil, err
+	}
 	re = g.Map{
 		"emailCodeEnable": emailCodeEnable,
+		"allowTopicType":  allowTopicType,
 	}
 	return re, nil
 }
