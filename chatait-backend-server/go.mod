@@ -3,7 +3,7 @@ module github.com/anlityli/chatait-free/chatait-backend-server
 go 1.18
 
 require (
-	github.com/anlityli/chatait-free/chatait-public-lib v0.0.0-20240202070740-de5a696dda40
+	github.com/anlityli/chatait-free/chatait-public-lib v0.0.0-20240303080133-40a502aa9f51
 	github.com/gogf/gf v1.16.9
 )
 
