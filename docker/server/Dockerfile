@@ -2,6 +2,7 @@ FROM --platform=$BUILDPLATFORM golang:1.18 as builder
 
 ARG TARGETARCH
 ARG GOPROXY=https://goproxy.cn,direct
+ENV PATH="/usr/local/go/bin:${PATH}"
 
 WORKDIR /app
 RUN mkdir /app/backendServer
@@ -11,9 +12,9 @@ COPY ./backendServer /app/backendServer/
 COPY ./frontendServer /app/frontendServer/
 
 WORKDIR /app/backendServer
-RUN GOOS=linux GOARCH=$TARGETARCH go build -a -o /app/backendServer/chatait-backend-server main.go
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=$TARGETARCH go build -o /app/backendServer/chatait-backend-server main.go
 WORKDIR /app/frontendServer
-RUN GOOS=linux GOARCH=$TARGETARCH go build -a -o /app/frontendServer/chatait-frontend-server /main.go
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=$TARGETARCH go build -o /app/frontendServer/chatait-frontend-server main.go
 
 FROM alpine:3.18
 
@@ -33,6 +34,10 @@ VOLUME /chatait/files/
 COPY --from=builder /app/backendServer/chatait-backend-server /chatait/backendServer
 COPY --from=builder /app/frontendServer/chatait-frontend-server /chatait/frontendServer
 COPY ./docker-run.sh /chatait
+
+RUN chmod +x /chatait/backendServer/chatait-backend-server
+RUN chmod +x /chatait/frontendServer/chatait-frontend-server
+RUN chmod +x /chatait/docker-run.sh
 
 WORKDIR /chatait
 CMD ["/bin/sh", "-c", "/chatait/docker-run.sh"]
