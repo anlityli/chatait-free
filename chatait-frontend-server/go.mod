@@ -1,7 +1,7 @@
 module github.com/anlityli/chatait-free/chatait-frontend-server
 
 require (
-	github.com/anlityli/chatait-free/chatait-public-lib v0.0.0-20230909140239-807c82e6d364
+	github.com/anlityli/chatait-free/chatait-public-lib v0.0.0-20240202070740-de5a696dda40
 	github.com/gogf/gf v1.16.9
 )
 
