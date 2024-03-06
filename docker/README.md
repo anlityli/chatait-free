@@ -11,7 +11,7 @@ docker pull anlity/chataitvue:1.2.0
 
 ## 启动服务端docker
 ```
-docker run -p 18001:18001 -p 18002:18002 -v /root/chatait-free/docker/server/config:/chatait/config -v /root/chatait-free/docker/server/tmp:/chatait/tmp/ -v /root/chatait-free/docker/server/files:/chatait/files/ -d --name chataitServerApp anlity/chataitserver:1.1.1
+docker run -p 18001:18001 -p 18002:18002 -v /root/chatait-free/docker/server/config:/chatait/config -v /root/chatait-free/docker/server/tmp:/chatait/tmp/ -v /root/chatait-free/docker/server/files:/chatait/files/ -d --name chataitServerApp anlity/chataitserver:1.2.0
 ```
 ```/root/chatait-free/docker/server/config```，```/root/chatait-free/docker/server/tmp```，```/root/chatait-free/docker/server/files``` 这三个为本地宿主机目录，用来存放配置文件和midjourney生成的临时文件以及储存目录。   
 
@@ -19,7 +19,7 @@ docker run -p 18001:18001 -p 18002:18002 -v /root/chatait-free/docker/server/con
 
 ## 启动前端docker
 ```
-docker run -p 18003:18003 -p 18004:18004 -d --name chataitVueApp anlity/chataitvue:1.1.1
+docker run -p 18003:18003 -p 18004:18004 -d --name chataitVueApp anlity/chataitvue:1.2.0
 ```
 
 ## 部署nginx
