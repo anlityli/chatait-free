@@ -1,5 +1,8 @@
 # 构建
-docker build -t chataitvue .
+docker build -t anlity/chataitvue:1.2.0 .
+
+# 交叉构建
+docker buildx build -t 'anlity/chataitvue:1.2.0' --platform linux/amd64,linux/arm64 --push .
 
 # 运行
-docker run -p 18003:18003 -p 18004:18004 -d --name chataitVueApp chataitvue
+docker run -p 18003:18003 -p 18004:18004 -d --name chataitVueApp anlity/chataitvue:1.2.0

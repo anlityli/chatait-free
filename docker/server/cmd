@@ -1,5 +1,8 @@
 # 构建
-docker build -t chataitserver .
+docker build -t anlity/chataitserver:1.2.0 . 
+
+# 交叉构建
+docker buildx build -t 'anlity/chataitserver:1.2.0' --platform linux/amd64,linux/arm64 --push .
 
 # 运行
-docker run -p 18001:18001 -p 18002:18002 -v /root/chatait-free/docker/server/config:/chatait/config -v /root/chatait-free/docker/server/tmp:/chatait/tmp/ -v /root/chatait-free/docker/server/files:/chatait/files/ -d --name chataitServerApp chataitserver
+docker run -p 18001:18001 -p 18002:18002 -v /root/chatait-free/docker/server/config:/chatait/config -v /root/chatait-free/docker/server/tmp:/chatait/tmp/ -v /root/chatait-free/docker/server/files:/chatait/files/ -d --name chataitServerApp anlity/chataitserver:1.2.0
