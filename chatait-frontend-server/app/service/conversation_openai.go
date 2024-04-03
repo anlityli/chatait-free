@@ -44,6 +44,13 @@ func (s *conversationOpenaiService) Speak(r *ghttp.Request) (re *response.Conver
 	if !Conversation.IsAllowTopicType(requestModel.TopicType) {
 		return nil, errors.New("不允许的话题类型")
 	}
+	speakContentMaxLength, err := helper.GetConfig("speakContentMaxLength")
+	if err != nil {
+		return nil, err
+	}
+	if gstr.LenRune(requestModel.Content) > gconv.Int(speakContentMaxLength) {
+		return nil, errors.New("提问内容最长" + speakContentMaxLength + "个字符")
+	}
 	userId := auth.GetUserId(r)
 	walletType := constant.WalletTypeGpt3
 	amount := 100

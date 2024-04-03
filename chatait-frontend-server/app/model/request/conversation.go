@@ -24,7 +24,7 @@ type ConversationSpeak struct {
 	TopicType  int    `json:"topic_type" v:"required|in:1,2"`
 	StreamUuid string `json:"stream_uuid" v:"required"`
 	TopicId    string `json:"topic_id" v:"required"`
-	Content    string `json:"content" v:"required|max-length:500#内容必填|最大长度500个字符"`
+	Content    string `json:"content" v:"required#内容必填"`
 }
 
 type ConversationSpeakStream struct {
