@@ -65,3 +65,62 @@ type CensorTextResponseDataHitsItem struct {
 	ModelHitPositions interface{} `json:"modelHitPositions"`
 	WordHitPositions  interface{} `json:"wordHitPositions"`
 }
+
+type WenXinChatCompletionParams struct {
+	Model    string
+	Messages WenXinChatCompletionParamsMessages
+}
+
+type WenXinChatCompletionParamsMessages []*WenXinChatCompletionParamsMessageItem
+
+type WenXinChatCompletionParamsMessageItem struct {
+	Role    string `json:"role"`
+	Content string `json:"content"`
+}
+
+type WenXinChatCompletionCallbackFunc func(originContent string, contentObj *WenXinChatCompletionResponse) error
+
+type WenXinChatCompletionResponse struct {
+	Id      string                                    `json:"id"`
+	Object  string                                    `json:"object"`
+	Created int                                       `json:"created"`
+	Choices WenXinChatCompletionResponseChoices       `json:"choices"`
+	Usage   *WenXinChatCompletionResponseChoicesUsage `json:"usage"`
+}
+
+type WenXinChatCompletionResponseChoices []*WenXinChatCompletionResponseChoicesItem
+
+type WenXinChatCompletionResponseChoicesItem struct {
+	Index        int                                             `json:"index"`
+	Message      *WenXinChatCompletionResponseChoicesItemMessage `json:"message"`
+	Delta        *WenXinChatCompletionResponseChoicesItemMessage `json:"delta"`
+	FinishReason string                                          `json:"finish_reason"`
+}
+
+type WenXinChatCompletionResponseChoicesItemMessage struct {
+	Role    string `json:"role"`
+	Content string `json:"content"`
+}
+
+type WenXinChatCompletionResponseChoicesUsage struct {
+	PromptTokens     int `json:"prompt_tokens"`
+	CompletionTokens int `json:"completion_tokens"`
+	TotalTokens      int `json:"total_tokens"`
+}
+
+type WenXinChatCompletionRequestParams struct {
+	Messages        WenXinChatCompletionParamsMessages `json:"messages"`
+	MaxOutputTokens int                                `json:"max_output_tokens"`
+	Stream          bool                               `json:"stream"`
+}
+
+type WenXinChatCompletionResponseError struct {
+	Error *WenXinChatCompletionResponseErrorData `json:"error"`
+}
+
+type WenXinChatCompletionResponseErrorData struct {
+	Message string      `json:"message"`
+	Type    string      `json:"type"`
+	Param   interface{} `json:"param"`
+	Code    string      `json:"code"`
+}

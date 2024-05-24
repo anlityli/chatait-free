@@ -15,3 +15,9 @@ const (
 	CensorTextConclusionTypeSuspected = 3 // 疑似
 	CensorTextConclusionTypeFail      = 4 // 失败
 )
+
+// 文心一言请求接口
+const (
+	WenXinERNIE4_0_8K = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions_pro"
+	WenXinERNIE3_5_8K = "https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions"
+)

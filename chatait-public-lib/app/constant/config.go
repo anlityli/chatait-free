@@ -23,6 +23,7 @@ const (
 const (
 	ConfigBaiduFeatureTranslate = "translate" // 翻译
 	ConfigBaiduFeatureCensor    = "censor"    // 内容审核
+	ConfigBaiduFeatureWenXin    = "wenXin"    // 文心一言
 )
 
 const (
